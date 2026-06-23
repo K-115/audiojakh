@@ -32,7 +32,7 @@ VALUES
     ('electronic', 'Alan Walker', 'Different World', '698ItKASDavgwZ3WjaWjtz', 'Faded', '2018-12-14', '3nzuGtN3nXARvvecier4K0', 212107),
     ('electronic', 'Calvin Harris', 'Motion', '6YUTL4dYpB9xZO5qExPf05', 'Summer', '2014-10-31', '48zisMeiXniWLzOQghbPqS', 222533),
     ('electronic', 'Avicii', 'Stories', '2P4OICZRVAQcYAV2JReRfj', 'Waiting For Love', '2015-10-02', '7dqftJ3kas6D0VAdmt3k3V', 230613),
-    ('electronic', 'Axwell /\ Ingrosso', 'More Than You Know', '6h5PAsRni4IRlxWr6uDPTP', 'More Than You Know', '2017-07-28', '6Ei5WWek37m1x9AjpSXTcJ', 203000),
+    ('electronic', 'Axwell / Ingrosso', 'More Than You Know', '6h5PAsRni4IRlxWr6uDPTP', 'More Than You Know', '2017-07-28', '6Ei5WWek37m1x9AjpSXTcJ', 203000),
     ('electronic', 'Stromae', 'Cheese', '2GYHyAoLWpkxLVa4oYTVko', 'Alors on danse - Radio Edit', '2010-01-01', '4kEbcH3VT6NYfpv8Wkkk80', 206067),
     ('folk', 'Bon Iver', 'S P E Y S I D E', '6khKJVbTxzfhbGfHMtyOM8', 'S P E Y S I D E', '2024-09-20', '5VFsihsTprFnqRHyrNxMPs', 209078),
     ('folk', 'Noah Kahan', 'Stick Season', '0mflMxspEfB0VbI1kyLiAv', 'Stick Season', '2022-10-14', '50ZenUP4O2Q5eCy2NRNvuz', 182347),
