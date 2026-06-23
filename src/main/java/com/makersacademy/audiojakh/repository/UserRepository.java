@@ -1,6 +1,6 @@
-package com.makersacademy.acebook.repository;
+package com.makersacademy.audiojakh.repository;
 
-import com.makersacademy.acebook.model.User;
+import com.makersacademy.audiojakh.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

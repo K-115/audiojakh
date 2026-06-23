@@ -1,4 +1,4 @@
-package com.makersacademy.acebook.config;
+package com.makersacademy.audiojakh.config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

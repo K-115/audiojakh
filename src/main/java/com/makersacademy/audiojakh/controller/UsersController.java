@@ -1,7 +1,7 @@
-package com.makersacademy.acebook.controller;
+package com.makersacademy.audiojakh.controller;
 
-import com.makersacademy.acebook.model.User;
-import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.audiojakh.model.User;
+import com.makersacademy.audiojakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
