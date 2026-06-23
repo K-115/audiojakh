@@ -1,4 +1,4 @@
-# Acebook
+# Audiojakh
 
 The application uses:
   - `maven` to build the project
@@ -18,7 +18,7 @@ Below, you'll find specific learning objectives for each tool.
 - Open the codebase in an IDE like InteliJ or VSCode
   - If using IntelliJ, accept the prompt to install the Lombok plugin (if you don't get prompted, press command and comma
   to open the Settings and go to Plugins and search for Lombok made by Jetbrains and install).
-- Create two new Postgres databases called `acebook_springboot_development` and `acebook_springboot_test`
+- Create two new Postgres databases called `audiojakh_springboot_development` and `audiojakh_springboot_test`
 - Install Maven `brew install maven`
 - [Set up Auth0](https://journey.makers.tech/pages/auth0) (you only need the "Create an Auth0 app" section)
 - Build the app and start the server, using the Maven command `mvn spring-boot:run`
@@ -29,7 +29,7 @@ Below, you'll find specific learning objectives for each tool.
 
 - Install chromedriver using `brew install chromedriver`
 - Start the server in a terminal session `mvn spring-boot:run -Dspring-boot.run.profiles=test`
-- Open a new terminal session and navigate to the Acebook directory
+- Open a new terminal session and navigate to the audiojakh directory
 - Run your tests in the second terminal session with `mvn test`
 
 > All the tests should pass. If one or more fail, read the next section.
@@ -72,7 +72,7 @@ This app uses the repository pattern. The repository pattern separates the busin
 
 You don't need an in-depth knowledge of each dependency listed above. Once you can tick off these learning goals,
 you're ready to dive in.  It's assumed that you can already TDD the Takeaway Challenge, or something of similar
-complexity, in Java. It's OK if you need to pause here with Acebook and learn how to do that now :)
+complexity, in Java. It's OK if you need to pause here with Audiojakh and learn how to do that now :)
 
 ### Maven
 - [ ] I can explain what pom.xml is for
