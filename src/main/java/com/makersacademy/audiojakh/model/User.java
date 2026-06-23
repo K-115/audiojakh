@@ -36,4 +36,15 @@ public class User {
         this.username = username;
     }
 
+//    public ()
 }
+
+
+//private Long id;
+//private String username;
+//private String profilePicture;
+//private String firstName;
+//private String surname;
+//private String emailAddress;
+//private String followers;
+//private Date dob;
