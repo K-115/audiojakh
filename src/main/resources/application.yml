@@ -1,6 +1,6 @@
 okta:
   oauth2:
-    issuer: abiauth.uk.auth0.com
+    issuer: https://abiauth.uk.auth0.com/
     client-id: UFPnkCBEM5ioJ0oA5SCCsPlBbTq0K9fK
     client-secret: JlEUp4CGMuUE-f5czQyu7QPs77rkPGRf39l9A3qs_rdv0bnSkJy05SU-OUnFeTny
 
