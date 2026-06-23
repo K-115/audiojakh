@@ -1,4 +1,4 @@
-package com.makersacademy.acebook.model;
+package com.makersacademy.audiojakh.model;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;

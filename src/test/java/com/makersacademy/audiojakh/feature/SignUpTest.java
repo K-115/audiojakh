@@ -1,4 +1,4 @@
-package com.makersacademy.acebook.feature;
+package com.makersacademy.audiojakh.feature;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javafaker.Faker;
