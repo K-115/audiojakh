@@ -13,7 +13,7 @@ public class AlbumsController {
     @Autowired
     AlbumRepository albumRepository;
 
-    @GetMapping(/"albums")
+    @GetMapping("/albums")
     public String index(Model model) {
         Iterable<Album> albums = albumRepository.findAll();
         model.addAttribute("albums", albums);
