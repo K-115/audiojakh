@@ -24,24 +24,17 @@ public class UsersController {
                 .getAuthentication()
                 .getPrincipal();
 
-        String emailAddress = (String) principal.getAttributes().get("email");
-//        userRepository
-//                .findUserByUsername(username)
-//                .orElseGet(() -> userRepository.save(new User(username)));
+        String emailAddress = principal.getEmail();
 
+        Optional<User> existingUser = userRepository.findUserByEmailAddress(emailAddress);
 
-        Optional<User> savedUser = userRepository.findUserByEmailAddress(user.getEmailAddress());
-        if (savedUser.isPresent()) {
-            session.setAttribute("profilePicture", savedUser.get().getProfilePicture());
-            session.setAttribute("userId", savedUser.get().getId());
-            session.setAttribute("userUsername", savedUser.get().getUsername());
-
-            return new RedirectView("/posts");
-
-        }
-        else{
+        if (existingUser.isPresent()) {
+            session.setAttribute("profilePicture", existingUser.get().getProfilePicture());
+            session.setAttribute("userId", existingUser.get().getId());
+            session.setAttribute("userUsername", existingUser.get().getUsername());
+            return new RedirectView("/home");
+        } else {
             return new RedirectView("/sign_up");
         }
     }
-
 }
