@@ -22,6 +22,13 @@ public class SongsController {
     @Autowired
     ArtistRepository artistRepository;
 
+    @GetMapping("/songs")
+    public String index(Model model) {
+        Iterable<Track> tracks = trackRepository.findAll();
+        model.addAttribute("tracks", tracks);
+        return "songs/index";
+    }
+
     @GetMapping("/songs/{spotifyId}")
     public String show(@PathVariable String spotifyId, Model model) {
         Track track = trackRepository.findById(spotifyId).orElseThrow();
