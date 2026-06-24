@@ -3,6 +3,7 @@ package com.makersacademy.audiojakh.controller;
 import com.makersacademy.audiojakh.DTOs.DTOProfileJoin;
 import com.makersacademy.audiojakh.model.*;
 import com.makersacademy.audiojakh.repository.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ProfileController {
@@ -34,7 +36,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profile/{username}")
-    public String showUserProfile(@PathVariable String username, Model model) {
+    public String showUserProfile(@PathVariable String username, Model model, HttpSession session) {
         User me = currentUser();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -49,11 +51,13 @@ public class ProfileController {
         DTOProfileJoin profile = new DTOProfileJoin(user, favAlbums, favSongs, favArtists, isOwnProfile);
 
         model.addAttribute("profile", profile);
-        if (uniqueUser.isPresent()){
 
-            session.setAttribute("profilePicture", uniqueUser.get().getProfilePicture());
-            session.setAttribute("userID", uniqueUser.get().getId());
-            session.setAttribute("userUsername", uniqueUser.get().getUsername());
+        Optional<User> savedUser = userRepository.findUserByEmailAddress(user.getEmailAddress());
+        if (savedUser.isPresent()) {
+            session.setAttribute("profilePicture", savedUser.get().getProfilePicture());
+            session.setAttribute("userId", savedUser.get().getId());
+            session.setAttribute("userUsername", savedUser.get().getUsername());
+        }
 
         return "profile";
     }
