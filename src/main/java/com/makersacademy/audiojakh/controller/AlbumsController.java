@@ -30,11 +30,20 @@ public class AlbumsController {
         return "albums/index";
     }
 
-    @GetMapping("/albums/{spotifyId")
+    @GetMapping("/albums/{spotifyId}")
     public String show(@PathVariable String spotifyId, Model model) {
         Album album = albumRepository.findById(spotifyId).orElseThrow();
         List<Track> tracks = trackRepository.findTracksByAlbumId(spotifyId);
         model.addAttribute("album", album);
         model.addAttribute("tracks", tracks);
+
+        if (!tracks.isEmpty() && tracks.get(0).getArtistId() != null) {
+            artistRepository.findById(tracks.get(0).getArtistId())
+                    .ifPresent(artist -> model.addAttribute("artist", artist));
+        }
+
+        return "albums/show";
     }
+
+
 }
