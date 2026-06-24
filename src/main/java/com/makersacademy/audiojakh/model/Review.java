@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "POSTS")
+@Table(name = "REVIEWS")
 public class Post {
 
     @Id
