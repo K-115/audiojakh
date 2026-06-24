@@ -1,9 +1,11 @@
-package com.makersacademy.audiojakh.repository;
-
-import com.makersacademy.audiojakh.model.Post;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
-
-public interface PostRepository extends CrudRepository<Post, Long> {
-
-}
+//package com.makersacademy.audiojakh.repository;
+//
+//import com.makersacademy.audiojakh.model.Review;
+//import org.springframework.data.repository.CrudRepository;
+//
+//import java.util.List;
+//
+//public interface ReviewRepository extends CrudRepository<Review, Long> {
+////    List<Review> findAllByOrderByDateOfReviewDesc();
+////    List<Review> findByReviewerOrderByDateOfReviewDesc(Long user_id);
+//}
