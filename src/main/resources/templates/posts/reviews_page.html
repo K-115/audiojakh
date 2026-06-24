@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+<head lang="en">
+  <meta charset="UTF-8"/>
+  <title>AudioJAKH</title>
+  <link rel="stylesheet" href="/main.css" />
+</head>
+<body>
+
+<h1>Reviews</h1>
+
+<div sec:authorize="isAuthenticated()" id="greeting">
+  Signed in as <span sec:authentication="principal.attributes['email']"></span>
+</div>
+
+<form action="#" th:action="@{/reviews}" th:object="${review}" method="post">
+  <p>Content: <input type="text" th:field="*{content}" /></p>
+  <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+
+<ul th:each="review: ${reviews}">
+  <li th:text="${review.content}" />
+<!--  ${rating}-->
+</ul>
+
+</body>
+</html>
