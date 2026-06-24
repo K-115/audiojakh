@@ -18,6 +18,7 @@ public class UsersController {
 
     @GetMapping("/users/after-login")
     public RedirectView afterLogin(HttpSession session) {
+        User user = new User();
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -28,17 +29,17 @@ public class UsersController {
 //                .findUserByUsername(username)
 //                .orElseGet(() -> userRepository.save(new User(username)));
 
-        Optional<User> uniqueUser = userRepository.findUserByEmailAddress(emailAddress);
 
-        if (uniqueUser.isPresent()) {
-
-            session.setAttribute("profilePicture", uniqueUser.get().getProfilePicture());
-            session.setAttribute("userID", uniqueUser.get().getId());
-            session.setAttribute("userUsername", uniqueUser.get().getUsername());
+        Optional<User> savedUser = userRepository.findUserByEmailAddress(user.getEmailAddress());
+        if (savedUser.isPresent()) {
+            session.setAttribute("profilePicture", savedUser.get().getProfilePicture());
+            session.setAttribute("userId", savedUser.get().getId());
+            session.setAttribute("userUsername", savedUser.get().getUsername());
 
             return new RedirectView("/posts");
 
-        } else {
+        }
+        else{
             return new RedirectView("/sign_up");
         }
     }

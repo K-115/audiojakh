@@ -53,6 +53,7 @@ public class ProfileController {
         model.addAttribute("profile", profile);
 
         Optional<User> savedUser = userRepository.findUserByEmailAddress(user.getEmailAddress());
+
         if (savedUser.isPresent()) {
             session.setAttribute("profilePicture", savedUser.get().getProfilePicture());
             session.setAttribute("userId", savedUser.get().getId());
