@@ -11,16 +11,16 @@
 
 	<body>
 
-		<img class="logo" th:src="@{#pathToLogoHere}" alt="audioJACK logo"/>
+		<img class="logo" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJACK logo"/>
 
 		<div>
 			<h1>Sync in and sign up!</h1>
 
-			<form th:action="@{sign_up/new}"
+			<form th:action="@{/sign_up/new}" th:object="${user}"
 				  method="post" enctype="multipart/form-data">
 
 				<div class="form-fields">
-					<label th:for="${email}">Email Address</label>
+					<label th:for="email">Email Address</label>
 					<input
 						type="email"
 						id="email"
@@ -32,29 +32,63 @@
 				</div>
 
 				<div class="form-fields">
-					<label th:for="${firstName}">FirstName</label>
+					<label th:for="firstName">FirstName</label>
 					<input
 						type="text"
 						id="firstName"
-						name="user.firstName"
+						th:field="${firstName}"
 						th:value="${firstName}"
 						placeholder="Enter your first name">
 					<div class="error" th:if="${firstNamesBlank}">First name is required</div>
 				</div>
 
-			</form>
+				<div class="form-fields">
+					<label th:for="surname">Surname</label>
+					<input
+						type="text"
+						id="surname"
+						th:field="*{surname}"
+						th:value="${surname}"
+						placeholder="Enter your surname">
+					<div class="error" th:if="${surnamesBlank}">Surname is required</div>
+				</div>
 
-			<div>
-				<span th:if="${usernameBlank}">Username is required</span>
-				<span th:if="${usernameExists}">This username is already taken. Try another one.</span>
-				<span th:text="${chosenUsername}">Username required</span>
-				<span th:if="${surnamesBlank}">Surname is required</span>
-				<span th:if="${bothNamesBlank}">Both first and last names are required</span>
-				<span th:if="${imageSize}">Image file is too large. Maximum size is 10MB</span>
-				<span th:if="${namesBlank}">Name information is required</span>
-			</div>
+				<div class="error" th:if="${bothNamesBlank}">Both first and last names are required</div>
+
+				<div class="form-fields">
+					<label th:for="${username}">Username</label>
+					<input
+						type="text"
+						id="username"
+						th:field="${username}"
+						placeholder="Choose a unique username"
+						required>
+					<div class="error" th:if="${usernameBlank}">
+						 Username is required</div>
+					<div class="error" th:if="${usernameExists}">
+						The username <span th:text="${chosenUsername}"></span> is already taken. Try another one.
+					</div>
+				</div>
+
+				<div class="form-fields">
+					<label th:for="profilePicture">Profile Picture (Optional)</label>
+					<input
+						type="file"
+						id="profilePicture"
+						name="profile_picture"
+						accept="image/*">
+					<p>Max size: 10MB</p>
+					<div class="error" th:if="${imageSize}">Image file is too large. Maximum size is 10MB</div>
+				</div>
+
+				<div class="error" th:if="${namesBlank}">
+					Name information is required
+				</div>
+
+				<button type="submit">Sync In...</button>
+
+			</form>
 		</div>
 
 	</body>
-
 </html>
