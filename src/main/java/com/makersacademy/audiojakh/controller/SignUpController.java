@@ -1,27 +1,187 @@
-//package com.makersacademy.audiojakh.controller;
-//
-//
-//import com.makersacademy.audiojakh.model.User;
-//import com.makersacademy.audiojakh.repository.UserRepository;
-//import jakarta.servlet.http.HttpSession;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.servlet.ModelAndView;
-//
-//@RestController
-//public class SignUpController {
-//    @Autowired
-//    UserRepository userRepository;
-//
-//    @GetMapping("/sign_up")
-//    public ModelAndView signUp(HttpSession session){
-//        User user = new User();
-//    }
-//
-//    @PostMapping("/sign_up/new")
-//
-//}
-//
-//
+package com.makersacademy.audiojakh.controller;
+
+import com.makersacademy.audiojakh.model.User;
+import com.makersacademy.audiojakh.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Optional;
+
+@RestController
+public class SignUpController {
+    @Autowired
+    UserRepository userRepository;
+
+    @GetMapping("/sign_up")
+    public ModelAndView signUp(HttpSession session){
+        User user = new User();
+
+        // Retrieve authenticated user from Auth0
+        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        String emailAddress = principal.getEmail();
+
+        // Check if user exists
+        Optional<User> existingUser = userRepository.findUserByEmailAddress(emailAddress);
+        if (existingUser.isPresent()) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        // Setting up sign-up form
+        ModelAndView signUp = new ModelAndView("sign-up");
+        signUp.addObject("user", new User());
+        signUp.addObject("emailAddress", emailAddress);
+
+        // Fill first/surname from Auth0
+        if (principal.getGivenName() != null) {
+            signUp.addObject("firstName", principal.getGivenName());
+            } else {
+            signUp.addObject("firstName", "Enter First Name");
+        }
+
+        if (principal.getFamilyName() != null) {
+            signUp.addObject("surname", principal.getFamilyName());
+        } else {
+            signUp.addObject("surname", "Enter Surname");
+        }
+
+        // Display validation errors from session
+        if (session.getAttribute("namesBlank") != null) {
+            signUp.addObject("namesBlank", true);
+            session.setAttribute("namesBlank", null);
+        }
+
+        if (session.getAttribute("usernameBlank") != null) {
+            signUp.addObject("usernameBlank", true);
+            session.setAttribute("usernameBlank", null);
+        }
+
+        if (session.getAttribute("usernameExists") != null) {
+            signUp.addObject("usernameExists", true);
+            signUp.addObject("chosenUsername", session.getAttribute("chosenUsername"));
+            session.setAttribute("usernameExists", null);
+        }
+
+        if (session.getAttribute("imageSize") != null) {
+            signUp.addObject("imageSize", true);
+            session.setAttribute("imageSize", null);
+        }
+
+        return signUp;
+    }
+
+    @PostMapping("/sign_up/new")
+    public RedirectView create (
+            @ModelAttribute User user,
+            HttpSession session,
+            @RequestParam("profile_picture") MultipartFile image
+            ) throws IOException {
+
+        // Retrieves authenticated user from Auth0
+        DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        // Validate username is not blank
+        if (user.getUsername() == null || user.getUsername().isBlank()) {
+            session.setAttribute("usernameBlank", true);
+            return new RedirectView("/sign_up");
+        }
+
+        // Validation of unique username
+        Optional<User> uniqueUser = userRepository.findUserByUsername(user.getUsername());
+        if (uniqueUser.isPresent()) {
+            session.setAttribute("usernameExists", true);
+            session.setAttribute("chosenUsername", user.getUsername());
+            return new RedirectView("/sign_up");
+        }
+
+        // Validation of first/surname
+        if ((user.getFirstName() == null || user.getFirstName().isBlank()) &&
+                (user.getSurname() == null || user.getSurname().isBlank())) {
+
+            // Both names blank - attempt retrieval from Auth0
+            if (principal.getGivenName() != null && principal.getFamilyName() != null) {
+                user.setFirstName(principal.getGivenName());
+                user.setSurname(principal.getFamilyName());
+            } else {
+                session.setAttribute("bothNamesBlank", true);
+                return new RedirectView("/sign_up");
+            }
+
+        // Only first name is blank - retrieve from Autho0
+        } else if (user.getFirstName() == null || user.getFirstName().isBlank()) {
+            if (principal.getGivenName() != null) {
+                user.setFirstName(principal.getGivenName());
+            } else {
+                session.setAttribute("firstNamesBlank", true);
+                return new RedirectView("/sign_up");
+            }
+
+        // Only surname is blank - retrieve from Autho0
+        } else if (user.getSurname() == null || user.getSurname().isBlank()) {
+            if (principal.getFamilyName() != null) {
+                user.setSurname(principal.getFamilyName());
+            } else {
+                session.setAttribute("surnamesBlank", true);
+                return new RedirectView("/sign_up");
+            }
+        }
+
+        // Profile picture upload - validates file size (10MB limit) and generate uq filename
+        if (!image.isEmpty()) {
+            if (image.getSize() < 10000000) {
+                String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+                Path uploadDir = Paths.get("images");
+                Files.createDirectories((uploadDir));
+                Path filePath = uploadDir.resolve(filename);
+                Files.copy(
+                        image.getInputStream(),
+                        filePath,
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+                user.setProfilePicture(filename);
+            } else {
+                session.setAttribute("imageSize", true);
+                return new RedirectView("/sign_up");
+            }
+
+        } else {
+            //Set default profile picture if user doesn't provide one
+            user.setProfilePicture("default-avatar.png");
+        }
+
+        // Set email from Auth0
+        user.setEmailAddress(principal.getEmail());
+
+        // Save user to the database
+        userRepository.save(user);
+
+        //Retrieve saved user and store in session
+        Optional<User> savedUser = userRepository.findUserByEmailAddress(user.getEmailAddress());
+        if (savedUser.isPresent()) {
+            session.setAttribute("profilePicture", savedUser.get().getProfilePicture());
+            session.setAttribute("userId", savedUser.get().getId());
+            session.setAttribute("userUsername", savedUser.get().getUsername());
+        }
+
+        return new RedirectView("/home");
+    }
+}
+
+
