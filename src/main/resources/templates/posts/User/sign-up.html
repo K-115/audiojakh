@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>Sign Up to AudioJAKH</title>
+		<link rel="stylesheet" th:href="@{/main.css}">
+	</head>
+
+	<body>
+
+		<img class="logo" th:src="@{#pathToLogoHere}" alt="audioJACK logo"/>
+
+		<div>
+			<h1>Sync in and sign up!</h1>
+
+			<form th:action="@{sign_up/new}"
+				  method="post" enctype="multipart/form-data">
+
+				<div class="form-fields">
+					<label th:for="${email}">Email Address</label>
+					<input
+						type="email"
+						id="email"
+						name="emailAddress"
+						th:value="${emailAddress}"
+						readonly
+						class="read-only">
+					<p class="success">Verified with Auth0</p>
+				</div>
+
+				<div class="form-fields">
+					<label th:for="${firstName}">FirstName</label>
+					<input
+						type="text"
+						id="firstName"
+						name="user.firstName"
+						th:value="${firstName}"
+						placeholder="Enter your first name">
+					<div class="error" th:if="${firstNamesBlank}">First name is required</div>
+				</div>
+
+			</form>
+
+			<div>
+				<span th:if="${usernameBlank}">Username is required</span>
+				<span th:if="${usernameExists}">This username is already taken. Try another one.</span>
+				<span th:text="${chosenUsername}">Username required</span>
+				<span th:if="${surnamesBlank}">Surname is required</span>
+				<span th:if="${bothNamesBlank}">Both first and last names are required</span>
+				<span th:if="${imageSize}">Image file is too large. Maximum size is 10MB</span>
+				<span th:if="${namesBlank}">Name information is required</span>
+			</div>
+		</div>
+
+	</body>
+
+</html>
