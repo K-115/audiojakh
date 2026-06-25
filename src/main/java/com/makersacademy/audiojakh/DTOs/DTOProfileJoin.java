@@ -10,11 +10,11 @@ public class DTOProfileJoin {
     private User user;
 //    private List<Review> reviews;
     private List<Album> favouriteAlbums;
-    private List<Song> favouriteSongs;
+    private List<Track> favouriteSongs;
     private List<Artist> favouriteArtists;
     private boolean isOwnProfile;
 
-    public DTOProfileJoin(User user, List<Album> favouriteAlbums, List<Song> favouriteSongs, List<Artist> favouriteArtists, boolean isOwnProfile) {
+    public DTOProfileJoin(User user, List<Album> favouriteAlbums, List<Track> favouriteSongs, List<Artist> favouriteArtists, boolean isOwnProfile) {
         this.user = user;
 //        this.reviews = reviews;
         this.favouriteAlbums = favouriteAlbums;
