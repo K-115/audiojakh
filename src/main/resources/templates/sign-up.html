@@ -54,6 +54,17 @@
 				<div class="error" th:if="${bothNamesBlank}">Both first and last names are required</div>
 
 				<div class="form-fields">
+					<label th:for="dob">Date of Birth</label>
+					<input
+							type="date"
+							id="dob"
+							th:field="*{dob}"
+							required>
+					<div class="error" th:if="${dobBlank}">Date of birth is required</div>
+					<div class="error" th:if="${underAge}">You must be at least 16 years old to join AudioJAKH.</div>
+				</div>
+
+				<div class="form-fields">
 					<label th:for="username">Username</label>
 					<input
 						type="text"

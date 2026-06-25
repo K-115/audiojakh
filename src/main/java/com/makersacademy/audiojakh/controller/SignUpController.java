@@ -16,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Period;
 import java.util.Optional;
+import java.time.LocalDate;
 
 @RestController
 public class SignUpController {
@@ -74,6 +76,16 @@ public class SignUpController {
             signUp.addObject("usernameExists", true);
             signUp.addObject("chosenUsername", session.getAttribute("chosenUsername"));
             session.setAttribute("usernameExists", null);
+        }
+
+        if (session.getAttribute("dobBlank") != null) {
+            signUp.addObject("dobBlank", true);
+            session.setAttribute("dobBlank", null);
+        }
+
+        if (session.getAttribute("underAge") != null) {
+            signUp.addObject("underAge", true);
+            session.setAttribute("underAge", null);
         }
 
         if (session.getAttribute("imageSize") != null) {
@@ -141,6 +153,19 @@ public class SignUpController {
                 session.setAttribute("surnamesBlank", true);
                 return new RedirectView("/sign_up");
             }
+        }
+
+        // Validation of date of birth including 16+ verification
+        if (user.getDob() == null) {
+            session.setAttribute("dobBlank", true);
+            return new RedirectView("/sign_up");
+        }
+
+        LocalDate today = LocalDate.now();
+        int age = Period.between(user.getDob(), today). getYears();
+        if (age < 16) {
+            session.setAttribute("underAge", true);
+            return new RedirectView("/sign_up");
         }
 
         // Profile picture upload - validates file size (10MB limit) and generate uq filename
