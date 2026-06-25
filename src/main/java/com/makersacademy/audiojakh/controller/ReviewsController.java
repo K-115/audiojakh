@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
+
 @Controller
 public class ReviewsController {
 
@@ -29,15 +31,23 @@ public class ReviewsController {
     AlbumRepository albumRepository;
 
     @GetMapping("/reviews")
-    public String index(Model model) {
+    public String index(@RequestParam(value = "albumId", required = false) String albumId, Model model) {
         Iterable<Review> reviews = reviewRepository.findAll();
         model.addAttribute("reviews", reviews);
         model.addAttribute("review", new Review());
-
-        model.addAttribute("allTracks", trackRepository.findAll());
         model.addAttribute("allAlbums", albumRepository.findAll());
+
+        if (albumId != null && !albumId.trim().isEmpty()) {
+            model.addAttribute("allTracks", trackRepository.findTracksByAlbumId(albumId));
+            model.addAttribute("selectedAlbumId", albumId);
+        } else {
+            model.addAttribute("allTracks", List.of());
+            model.addAttribute("selectedAlbumId", null);
+        }
+
         return "posts/reviews_page";
     }
+
 
     @PostMapping("/reviews")
     public RedirectView create(@RequestParam(value = "trackId", required = false) String trackId,

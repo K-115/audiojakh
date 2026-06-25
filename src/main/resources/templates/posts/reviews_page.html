@@ -8,16 +8,33 @@
 </head>
 <body>
 
+<div th:replace="~{navbar :: navbar}"></div>
+
 <h1>Reviews</h1>
 
 <div sec:authorize="isAuthenticated()" id="greeting">
   Signed in as <span sec:authentication="principal.attributes['email']"></span>
 </div>
 
-<form action="#" th:action="@{/reviews}" th:object="${review}" method="post">
-  <p>Content: <input type="text" th:field="*{content}" /></p>
+<form method="get" action="/reviews">
+  <p>
+    1. Select an Album to Review:
+    <select name="albumId" onchange="this.form.submit()">
+      <option value="">-- Choose an Album --</option>
+      <option th:each="album : ${allAlbums}"
+              th:value="${album.spotifyId}"
+              th:text="${album.name}"
+              th:selected="${album.spotifyId == selectedAlbumId}"></option>
+    </select>
+    <button type="submit" th:if="${selectedAlbumId == null}">Next Step</button>
+  </p>
+</form>
 
-  <!-- Added: Rating Selection -->
+<form th:if="${selectedAlbumId != null}" th:action="@{/reviews}" th:object="${review}" method="post">
+  <input type="hidden" name="albumId" th:value="${selectedAlbumId}" />
+
+  <p>Content: <input type="text" th:field="*{content}" required /></p>
+
   <p>
     Rating:
     <select th:field="*{rating}" required>
@@ -30,46 +47,46 @@
     </select>
   </p>
 
-<!-- Added: Track Selection -->
-<p>
-  Review a Song:
-  <select name="trackId" id="trackId">
-    <option th:value="${null}">-- None (Reviewing an album instead) --</option>
-    <option th:each="track : ${allTracks}"
-            th:value="${track.spotifyId}"
-            th:text="${track.name}"></option>
-  </select>
-</p>
+  <p>
+    2. Choose a Song from this Album (Optional):
+    <select name="trackId">
+      <option value="">-- None (Reviewing the entire album) --</option>
+      <option th:each="track : ${allTracks}"
+              th:value="${track.spotifyId}"
+              th:text="${track.name}"></option>
+    </select>
+  </p>
 
-<!-- Added: Album Selection -->
-<p>
-  Review an Album:
-  <select name="albumId" id="albumId">
-    <option th:value="${null}">-- None (Reviewing a song instead) --</option>
-    <option th:each="album : ${allAlbums}"
-            th:value="${album.spotifyId}"
-            th:text="${album.name}"></option>
-  </select>
-</p>
+<!--  <p>-->
+<!--    <input type="submit" value="Submit Review" />-->
+<!--    <a href="/reviews">Reset / Change Album</a>-->
+<!--  </p>-->
+<!--</form>-->
 
-<p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+  <p>
+    <input type="submit" value="Submit Review" />
+  </p>
 </form>
+
+<form method="get" action="/reviews" style="display: inline;">
+  <button type="submit">Reset / Change Album</button>
+</form>
+
+
 <ul>
   <li th:each="review: ${reviews}">
     <strong th:text="${review.content}"></strong>
     <span th:if="${review.rating != null}" th:text="' (' + ${review.rating} + '★)'"></span>
 
-    <!-- If it's a song review -->
     <span th:if="${review.track != null}">
       <small th:text="' - Song: ' + ${review.track.name}"></small>
     </span>
 
-    <!-- If it's an album review -->
     <span th:if="${review.album != null}">
       <small th:text="' - Album: ' + ${review.album.name}"></small>
     </span>
   </li>
 </ul>
-
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>
