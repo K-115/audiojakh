@@ -7,7 +7,6 @@
 </head>
 <body>
 <header>
-  <img class="logo" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJACK logo"/>
   <div th:replace="~{navbar :: navbar}"></div>
   <div th:if="${currentUser != null}">
     <p id="greeting">Welcome back, <a th:href="@{/profile/{username}(username=${currentUser.username})}" th:text="${currentUser.username}">User</a>!</p>
