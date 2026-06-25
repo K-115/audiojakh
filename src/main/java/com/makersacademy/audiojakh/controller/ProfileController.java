@@ -43,7 +43,7 @@ public class ProfileController {
 
 //        List<Review> reviews = reviewRepository.findByReviewerOrderByDateOfReviewDesc(user.getId());
         List<Album> favAlbums = favouriteAlbumRepository.findFavouriteAlbumsByUserId(me.getId());
-        List<Song> favSongs = favouriteTracksRepository.findFavouriteTracksByUserId(user.getId());
+        List<Track> favSongs = favouriteTracksRepository.findFavouriteTracksByUserId(user.getId());
         List<Artist> favArtists = favouriteArtistRepository.findFavouriteArtistsByUserId(user.getId());
 
         boolean isOwnProfile = me != null && me.getId().equals(user.getId());

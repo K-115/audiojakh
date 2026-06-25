@@ -32,7 +32,7 @@ public class UsersController {
             session.setAttribute("profilePicture", existingUser.get().getProfilePicture());
             session.setAttribute("userId", existingUser.get().getId());
             session.setAttribute("userUsername", existingUser.get().getUsername());
-            return new RedirectView("/home");
+            return new RedirectView("/");
 
         } else {
             return new RedirectView("/sign_up");

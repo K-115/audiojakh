@@ -38,7 +38,7 @@ public class SignUpController {
         // Check if user exists
         Optional<User> existingUser = userRepository.findUserByEmailAddress(emailAddress);
         if (existingUser.isPresent()) {
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/");
         }
 
         // Setting up sign-up form
@@ -180,7 +180,7 @@ public class SignUpController {
             session.setAttribute("userUsername", savedUser.get().getUsername());
         }
 
-        return new RedirectView("/home");
+        return new RedirectView("/");
     }
 }
 
