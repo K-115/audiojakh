@@ -11,7 +11,7 @@
 
 	<body>
 
-		<img class="logo" th:src="@{/images/default-avatar.png}" alt="audioJAKH logo"/>
+		<img class="logo" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJAKH logo"/>
 
 		<div>
 			<h1>Sync in and sign up!</h1>
@@ -36,8 +36,7 @@
 					<input
 						type="text"
 						id="firstName"
-						th:field="${firstName}"
-						th:value="${firstName}"
+						th:field="*{firstName}"
 						placeholder="Enter your first name">
 					<div class="error" th:if="${firstNamesBlank}">First name is required</div>
 				</div>
@@ -48,7 +47,6 @@
 						type="text"
 						id="surname"
 						th:field="*{surname}"
-						th:value="${surname}"
 						placeholder="Enter your surname">
 					<div class="error" th:if="${surnamesBlank}">Surname is required</div>
 				</div>
@@ -56,7 +54,7 @@
 				<div class="error" th:if="${bothNamesBlank}">Both first and last names are required</div>
 
 				<div class="form-fields">
-					<label th:for="username-input">Username</label>
+					<label th:for="username">Username</label>
 					<input
 						type="text"
 						id="username"
