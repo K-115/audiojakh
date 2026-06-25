@@ -16,6 +16,10 @@
   Signed in as <span sec:authentication="principal.attributes['email']"></span>
 </div>
 
+<div th:if="${errorMessage}" style="color: red; background-color: #ffe6e6; padding: 10px; border: 1px solid red; margin-bottom: 15px;">
+  <p th:text="${errorMessage}"></p>
+</div>
+
 <form method="get" action="/reviews">
   <p>
     1. Select an Album to Review:
@@ -57,12 +61,6 @@
     </select>
   </p>
 
-<!--  <p>-->
-<!--    <input type="submit" value="Submit Review" />-->
-<!--    <a href="/reviews">Reset / Change Album</a>-->
-<!--  </p>-->
-<!--</form>-->
-
   <p>
     <input type="submit" value="Submit Review" />
   </p>
@@ -87,6 +85,8 @@
     </span>
   </li>
 </ul>
+
 <div th:replace="~{footer :: footer}"></div>
+
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.makersacademy.audiojakh.controller;
 
+import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.TrackRepository;
 import com.makersacademy.audiojakh.repository.AlbumRepository;
 import com.makersacademy.audiojakh.model.Review;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
@@ -53,17 +55,10 @@ public class ReviewsController {
     public RedirectView create(@RequestParam(value = "trackId", required = false) String trackId,
                                @RequestParam(value = "albumId", required = false) String albumId,
                                @ModelAttribute Review review,
-                               @AuthenticationPrincipal OAuth2User principal) {
+                               @AuthenticationPrincipal OAuth2User principal,
+                               RedirectAttributes redirectAttributes) {
         if (principal == null) {
             return new RedirectView("/login");
-        }
-
-        if (trackId != null && !trackId.trim().isEmpty()) {
-            trackRepository.findById(trackId).ifPresent(review::setTrack);
-        }
-
-        if (albumId != null && !albumId.trim().isEmpty()) {
-            albumRepository.findById(albumId).ifPresent(review::setAlbum);
         }
 
         String username = principal.getAttribute("email");
@@ -71,18 +66,30 @@ public class ReviewsController {
             username = principal.getAttribute("preferred_username");
         }
 
-        userRepository.findUserByUsername(username)
-                .ifPresentOrElse(
-                        user -> review.setUserId(user.getId()),
-                        () -> review.setUserId(1L)
-                );
+        Long currentUserId = userRepository.findUserByUsername(username)
+                .map(User::getId)
+                .orElse(1L);
 
+        if (trackId != null && !trackId.trim().isEmpty()) {
+            if (reviewRepository.existsByUserIdAndTrackSpotifyId(currentUserId, trackId)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "You have already reviewed this song!");
+                return new RedirectView("/reviews?albumId=" + albumId);
+            }
+            trackRepository.findById(trackId).ifPresent(review::setTrack);
+        } else if (albumId != null && !albumId.trim().isEmpty()) {
+            if (reviewRepository.existsByUserIdAndAlbumSpotifyId(currentUserId, albumId)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "You have already reviewed this album!");
+                return new RedirectView("/reviews?albumId=" + albumId);
+            }
+            albumRepository.findById(albumId).ifPresent(review::setAlbum);
+        }
+
+        review.setUserId(currentUserId);
         review.setLikes(0);
         reviewRepository.save(review);
 
         return new RedirectView("/reviews");
     }
-
 }
 
 
