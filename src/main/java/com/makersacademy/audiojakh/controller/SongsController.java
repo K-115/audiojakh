@@ -4,6 +4,7 @@ import com.makersacademy.audiojakh.model.Track;
 import com.makersacademy.audiojakh.repository.AlbumRepository;
 import com.makersacademy.audiojakh.repository.ArtistRepository;
 import com.makersacademy.audiojakh.repository.TrackRepository;
+import com.makersacademy.audiojakh.service.SpotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,9 @@ public class SongsController {
     @Autowired
     ArtistRepository artistRepository;
 
+    @Autowired
+    SpotifyService spotifyService;
+
     @GetMapping("/songs")
     public String index(Model model) {
         Iterable<Track> tracks = trackRepository.findAll();
@@ -31,7 +35,7 @@ public class SongsController {
 
     @GetMapping("/songs/{spotifyId}")
     public String show(@PathVariable String spotifyId, Model model) {
-        Track track = trackRepository.findById(spotifyId).orElseThrow();
+        Track track = spotifyService.getOrCacheTrack(spotifyId);
         model.addAttribute("track", track);
 
         if (track.getAlbumId() != null) {
@@ -40,7 +44,7 @@ public class SongsController {
         }
 
         if (track.getArtistId() != null) {
-            artistRepository.findById(track.getArtistId())
+            artistRepository.findById(String.valueOf(track.getArtistId()))
                     .ifPresent(artist -> model.addAttribute("artist", artist));
         }
         return "songs/show";

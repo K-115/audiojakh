@@ -38,7 +38,7 @@ public class AlbumsController {
         model.addAttribute("tracks", tracks);
 
         if (!tracks.isEmpty() && tracks.get(0).getArtistId() != null) {
-            artistRepository.findById(tracks.get(0).getArtistId())
+            artistRepository.findById(String.valueOf(tracks.get(0).getArtistId()))
                     .ifPresent(artist -> model.addAttribute("artist", artist));
         }
 
