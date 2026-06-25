@@ -18,9 +18,9 @@
 
     <!-- Member search. -->
     <form class="navbar-search" th:action="@{/search}" method="get">
-        <input type="text" name="userSearch" minlength="3"
-               placeholder="Search members…" required/>
-        <button type="submit" class="search-btn">Search</button>
+        <input type="text" name="query" minlength="3"
+               placeholder="Search for members…" required/>
+        <button class="search-btn" type="submit">Search</button>
     </form>
 
     <!-- Profile icon + hover dropdown -->
