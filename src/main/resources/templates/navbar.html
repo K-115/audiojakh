@@ -35,7 +35,7 @@
                     <p sec:authentication="principal.attributes['email']">user@email.com</p>
                 </div>
                 <hr/>
-                <a th:href="@{/profile/{username}username=${currentUsername}}" class="sub-menu-link">
+                <a th:href="@{/profile/{username}(username=${currentUsername})}" class="sub-menu-link">
                     <p>Profile</p><span>&gt;</span>
                 </a>
                 <a th:href="@{/logout}" id="sign-out" class="sub-menu-link">

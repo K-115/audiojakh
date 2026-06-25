@@ -21,6 +21,7 @@ public class SearchController {
 
         model.addAttribute("searchResults", results);
         model.addAttribute("searchTerm", query);
+        model.addAttribute("currentUsername");
 
         return "members/search_results";
     }
