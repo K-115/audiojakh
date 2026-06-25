@@ -36,7 +36,7 @@
 					<input
 						type="text"
 						id="firstName"
-						th:field="${firstName}"
+						th:field="*{firstName}"
 						th:value="${firstName}"
 						placeholder="Enter your first name">
 					<div class="error" th:if="${firstNamesBlank}">First name is required</div>
@@ -60,7 +60,7 @@
 					<input
 						type="text"
 						id="username"
-						th:field="${username}"
+						th:field="*{username}"
 						placeholder="Choose a unique username"
 						required>
 					<div class="error" th:if="${usernameBlank}">

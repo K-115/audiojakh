@@ -33,6 +33,7 @@ public class UsersController {
             session.setAttribute("userId", existingUser.get().getId());
             session.setAttribute("userUsername", existingUser.get().getUsername());
             return new RedirectView("/home");
+
         } else {
             return new RedirectView("/sign_up");
         }

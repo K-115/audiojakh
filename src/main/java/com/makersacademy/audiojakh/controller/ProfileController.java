@@ -42,7 +42,7 @@ public class ProfileController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
 //        List<Review> reviews = reviewRepository.findByReviewerOrderByDateOfReviewDesc(user.getId());
-        List<Album> favAlbums = favouriteAlbumRepository.findFavouriteAlbumsByUserId(user.getId());
+        List<Album> favAlbums = favouriteAlbumRepository.findFavouriteAlbumsByUserId(me.getId());
         List<Song> favSongs = favouriteTracksRepository.findFavouriteTracksByUserId(user.getId());
         List<Artist> favArtists = favouriteArtistRepository.findFavouriteArtistsByUserId(user.getId());
 
