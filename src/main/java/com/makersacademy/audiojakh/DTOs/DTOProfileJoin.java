@@ -13,14 +13,23 @@ public class DTOProfileJoin {
     private List<Track> favouriteSongs;
     private List<Artist> favouriteArtists;
     private boolean isOwnProfile;
+    private boolean isFollowing;
+    private long followerCount;
+    private long followingCount;
+//    private long reviewCount;
 
-    public DTOProfileJoin(User user, List<Album> favouriteAlbums, List<Track> favouriteSongs, List<Artist> favouriteArtists, boolean isOwnProfile) {
+    public DTOProfileJoin(User user, List<Album> favouriteAlbums, List<Track> favouriteSongs,
+                          List<Artist> favouriteArtists, boolean isOwnProfile, boolean isFollowing,
+                          long followerCount, long followingCount) {
         this.user = user;
 //        this.reviews = reviews;
         this.favouriteAlbums = favouriteAlbums;
         this.favouriteSongs = favouriteSongs;
         this.favouriteArtists = favouriteArtists;
         this.isOwnProfile = isOwnProfile;
+        this.isFollowing = isFollowing;
+        this.followerCount = followerCount;
+        this.followingCount = followingCount;
     }
 }
 

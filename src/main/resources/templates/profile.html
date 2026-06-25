@@ -1,26 +1,64 @@
 <!DOCTYPE html>
-
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!--  <h3>My Reviews</h3>-->
-<!--    <ul>-->
-<!--      <li th:each="review : ${reviews}">-->
-<!--        <p th:text="${review.content}">Review content</p>-->
-<!--      </li>-->
-<!--    </ul>-->
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${profile.user.username} + ' - Profile'">Profile</title>
+  <link rel="stylesheet" th:href="@{/main.css}">
+</head>
+<body>
+<div th:replace="~{navbar :: navbar}"></div>
+
+<img th:if="${profile.user.profilePicture != null}" th:src="${profile.user.profilePicture}"/>
+<div>
+  <h1 th:text="${profile.isOwnProfile} ? 'Your Profile' : |${profile.user.username}'s Profile|">User Profile</h1>
+
+  <div class="profile-stats" style="display: flex; gap: 15px; margin-bottom: 10px; font-weight: bold;">
+    <span th:text="${profile.followerCount} + ' Followers'">0 Followers</span>
+    <span th:text="${profile.followingCount} + ' Following'">0 Following</span>
+<!--    <span th:text="${profile.reviewCount} + ' Reviews'">0 Reviews</span>-->
+  </div>
+</div>
+</div>
 
 
-  <h3>Favourite Albums</h3>
-    <ul>
-      <li th:each="album : ${profile.favouriteAlbums}" th:text="${album.name}">Album Name</li>
-    </ul>
 
-  <h3>Favourite Songs</h3>
-    <ul>
-      <li th:each="song : ${profile.favouriteSongs}" th:text="${song.name}">Song Name</li>
-    </ul>
+<div th:if="${currentUser != null && !profile.isOwnProfile}">
 
-  <h3>Favourite Artists</h3>
-    <ul>
-      <li th:each="artist : ${profile.favouriteArtists}" th:text="${artist.name}">Artist Name</li>
-    </ul>
+  <div th:if="${profile.isFollowing}">
+    <form th:action="@{/profile/{username}/unfollow(username=${profile.user.username})}" method="post">
+      <button type="submit" class="btn-unfollow">Unfollow</button>
+    </form>
+  </div>
+
+  <div th:unless="${profile.isFollowing}">
+    <form th:action="@{/profile/{username}/follow(username=${profile.user.username})}" method="post">
+      <button type="submit" class="btn-follow">Follow</button>
+    </form>
+  </div>
+
+</div>
+
+<h3>Favourite Albums</h3>
+<ul>
+  <li th:each="album : ${profile.favouriteAlbums}">
+    <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album Name</a>
+  </li>
+</ul>
+
+<h3>Favourite Songs</h3>
+<ul>
+  <li th:each="song : ${profile.favouriteSongs}">
+    <a th:href="@{/songs/{id}(id=${song.spotifyId})}" th:text="${song.name}">Song Name</a>
+  </li>
+</ul>
+
+<h3>Favourite Artists</h3>
+<ul>
+  <li th:each="artist : ${profile.favouriteArtists}">
+    <span th:text="${artist.name}">Artist Name</span>
+  </li>
+</ul>
+
+<div th:replace="~{footer :: footer}"></div>
+</body>
 </html>
