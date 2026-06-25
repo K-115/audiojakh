@@ -1,11 +1,8 @@
 package com.makersacademy.audiojakh.controller;
 
-import com.makersacademy.audiojakh.model.Track;
-import com.makersacademy.audiojakh.model.Album;
 import com.makersacademy.audiojakh.repository.TrackRepository;
 import com.makersacademy.audiojakh.repository.AlbumRepository;
 import com.makersacademy.audiojakh.model.Review;
-import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.ReviewRepository;
 import com.makersacademy.audiojakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.Optional;
 
 @Controller
 public class ReviewsController {
@@ -45,41 +40,39 @@ public class ReviewsController {
     }
 
     @PostMapping("/reviews")
-    public RedirectView create(@ModelAttribute Review review, @AuthenticationPrincipal OAuth2User principal) {
+    public RedirectView create(@RequestParam(value = "trackId", required = false) String trackId,
+                               @RequestParam(value = "albumId", required = false) String albumId,
+                               @ModelAttribute Review review,
+                               @AuthenticationPrincipal OAuth2User principal) {
         if (principal == null) {
             return new RedirectView("/login");
         }
 
-//        // 1. Safe extraction tailored for Okta OpenID Connect attributes
-//        String username = principal.getAttribute("preferred_username");
-//
-//        if (username == null) {
-//            username = principal.getAttribute("email"); // If your app treats the email as the username
-//        }
-//        if (username == null) {
-//            username = principal.getAttribute("sub"); // Okta unique numeric/alphanumeric identifier
-//        }
-//
-//        // 2. Prevent the 500 database crash if no string was resolved
-//        if (username == null) {
-//            throw new IllegalStateException("Could not extract an identification attribute from Okta. Profile attributes: " + principal.getAttributes());
-//        }
-//
-//        // 3. Find the user inside your local users table
-//        Optional<User> userOptional = userRepository.findUserByUsername(username);
-//
-//        if (userOptional.isPresent()) {
-//            User currentUser = userOptional.get();
-//            review.setUserId(currentUser.getId());
-//            review.setLikes(0);
-//            reviewRepository.save(review);
-//        } else {
-//            // This fails gracefully with an explicit message if your user sync step was skipped
-//            throw new RuntimeException("Authenticated Okta user '" + username + "' is missing from the local database users table.");
-//        }
-//
+        if (trackId != null && !trackId.trim().isEmpty()) {
+            trackRepository.findById(trackId).ifPresent(review::setTrack);
+        }
+
+        if (albumId != null && !albumId.trim().isEmpty()) {
+            albumRepository.findById(albumId).ifPresent(review::setAlbum);
+        }
+
+        String username = principal.getAttribute("email");
+        if (username == null) {
+            username = principal.getAttribute("preferred_username");
+        }
+
+        userRepository.findUserByUsername(username)
+                .ifPresentOrElse(
+                        user -> review.setUserId(user.getId()),
+                        () -> review.setUserId(1L)
+                );
+
+        review.setLikes(0);
+        reviewRepository.save(review);
+
         return new RedirectView("/reviews");
     }
+
 }
 
 

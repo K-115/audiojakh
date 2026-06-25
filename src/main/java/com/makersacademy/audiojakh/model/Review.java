@@ -43,12 +43,13 @@ public class Review {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    // Added: Links to Track or Album IDs
-    @Column(name = "track_id")
-    private String trackId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "track_id", referencedColumnName = "SPOTIFY_ID")
+    private Track track;
 
-    @Column(name = "album_id")
-    private String albumId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "album_id", referencedColumnName = "SPOTIFY_ID")
+    private Album album;
 
     private Integer likes = 0;
 
