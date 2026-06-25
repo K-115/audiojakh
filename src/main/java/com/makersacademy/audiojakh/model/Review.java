@@ -1,27 +1,3 @@
-//package com.makersacademy.audiojakh.model;
-//
-//import jakarta.persistence.*;
-//
-//import lombok.Data;
-//
-//@Data
-//@Entity
-//@Table(name = "reviews")
-//public class Review {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//    private String content;
-//
-//    public Review() {}
-//
-//    public Review(String content) {
-//        this.content = content;
-//    }
-//
-//}
-
 package com.makersacademy.audiojakh.model;
 
 import jakarta.persistence.*;
