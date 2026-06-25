@@ -27,6 +27,8 @@ public class ProfileController {
     private FavouriteArtistRepository favouriteArtistRepository;
     @Autowired
     private FavouriteTracksRepository favouriteTracksRepository;
+    @Autowired
+    private FollowRepository followRepository;
 
     private User currentUser(){
         var auth = SecurityContextHolder.getContext().getAuthentication();
@@ -40,17 +42,25 @@ public class ProfileController {
         User me = currentUser();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        boolean isOwnProfile = me != null && me.getId().equals(user.getId());
+        boolean isFollowingThisUser = false;
+
+        if (me != null && !isOwnProfile) {
+            isFollowingThisUser = followRepository.isFollowing(me.getId(), user.getId()) > 0;
+        }
 
 //        List<Review> reviews = reviewRepository.findByReviewerOrderByDateOfReviewDesc(user.getId());
         List<Album> favAlbums = favouriteAlbumRepository.findFavouriteAlbumsByUserId(user.getId());
         List<Track> favSongs = favouriteTracksRepository.findFavouriteTracksByUserId(user.getId());
         List<Artist> favArtists = favouriteArtistRepository.findFavouriteArtistsByUserId(user.getId());
+        long followers = followRepository.countFollowersByUserId(user.getId());
+        long following = followRepository.countFollowingByUserId(user.getId());
 
-        boolean isOwnProfile = me != null && me.getId().equals(user.getId());
-
-        DTOProfileJoin profile = new DTOProfileJoin(user, favAlbums, favSongs, favArtists, isOwnProfile);
+        DTOProfileJoin profile = new DTOProfileJoin(user, favAlbums, favSongs, favArtists, isOwnProfile, isFollowingThisUser, followers, following);
 
         model.addAttribute("profile", profile);
+        model.addAttribute("isOwnProfile", isOwnProfile);
+        model.addAttribute("isFollowing", isFollowingThisUser);
 
         Optional<User> savedUser = userRepository.findUserByEmailAddress(user.getEmailAddress());
 
@@ -58,6 +68,7 @@ public class ProfileController {
             session.setAttribute("profilePicture", savedUser.get().getProfilePicture());
             session.setAttribute("userId", savedUser.get().getId());
             session.setAttribute("userUsername", savedUser.get().getUsername());
+            model.addAttribute("currentUser", me);
         }
 
         return "profile";
