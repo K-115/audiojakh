@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.sql.Time;
 
 import static java.lang.Boolean.TRUE;
@@ -30,10 +31,11 @@ public class User {
     @Column (name = "EMAIL_ADDRESS")
     private String emailAddress;
     private String followers;
-    private Date dob;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dob;
 
 
-    public User(String username, String profilePicture, String firstName, String surname, String emailAddress, String followers, Date dob){
+    public User(String username, String profilePicture, String firstName, String surname, String emailAddress, String followers, LocalDate dob){
         this.username = username;
         this.profilePicture = profilePicture;
         this.firstName = firstName;
