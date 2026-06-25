@@ -7,12 +7,8 @@
     <link rel="stylesheet" href="/main.css" />
 </head>
 <body>
+<div th:replace="~{navbar :: navbar}"></div>
 
-<nav>
-    <a th:href="@{/posts}">Posts</a>
-    <a th:href="@{/albums}">Albums</a>
-    <a th:href="@{/songs}">Songs</a>
-</nav>
 
 <div sec:authorize="isAuthenticated()" id="greeting">
     Signed in as <span sec:authentication="principal.attributes['email']"></span>
@@ -26,5 +22,6 @@
     </li>
 </ul>
 
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

@@ -7,12 +7,7 @@
     <link rel="stylesheet" href="/main.css" />
 </head>
 <body>
-
-<nav>
-    <a th:href="@{/posts}">Posts</a> |
-    <a th:href="@{/albums}">Albums</a> |
-    <a th:href="@{/songs}">Songs</a>
-</nav>
+<div th:replace="~{navbar :: navbar}"></div>
 
 <h1 id="album-name" th:text="${album.name}">Album name</h1>
 
@@ -30,5 +25,6 @@
     <li th:if="${tracks.isEmpty()}">No tracks found for this album.</li>
 </ul>
 
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>
