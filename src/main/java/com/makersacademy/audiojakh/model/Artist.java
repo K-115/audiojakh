@@ -1,29 +1,26 @@
 package com.makersacademy.audiojakh.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Getter;
+import jakarta.persistence.*;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
-@Table(name = "artists")
+@NoArgsConstructor
+@Table(name = "ARTISTS")
 
 public class Artist {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
-    @Column(name = "artist_image")
+
+    @Column(name = "ARTIST_IMAGE")
     private String artistImage;
 
-    public Artist(String name, String artistImage) {
+    public Artist(String name) {
         this.name = name;
-        this.artistImage = artistImage;
     }
 }
-
