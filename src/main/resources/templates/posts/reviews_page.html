@@ -16,12 +16,55 @@
 
 <form action="#" th:action="@{/reviews}" th:object="${review}" method="post">
   <p>Content: <input type="text" th:field="*{content}" /></p>
-  <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+
+  <!-- Added: Rating Selection -->
+  <p>
+    Rating:
+    <select th:field="*{rating}" required>
+      <option value="" disabled selected>Select stars</option>
+      <option value="1">⭐ (1)</option>
+      <option value="2">⭐⭐ (2)</option>
+      <option value="3">⭐⭐⭐ (3)</option>
+      <option value="4">⭐⭐⭐⭐ (4)</option>
+      <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+    </select>
+  </p>
+
+<!-- Added: Track Selection -->
+<p>
+  Review a Song:
+  <select th:field="*{trackId}">
+    <option value="">-- None (Reviewing an album instead) --</option>
+    <option th:each="track : ${allTracks}"
+            th:value="${track.spotify_id}"
+            th:text="${track.name}"></option>
+  </select>
+</p>
+
+<!-- Added: Album Selection -->
+<p>
+  Review an Album:
+  <select th:field="*{albumId}">
+    <option value="">-- None (Reviewing a song instead) --</option>
+    <option th:each="album : ${allAlbums}"
+            th:value="${album.spotify_id}"
+            th:text="${album.name}"></option>
+  </select>
+</p>
+
+<p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
 </form>
 
-<ul th:each="review: ${reviews}">
-  <li th:text="${review.content}" />
-<!--  ${rating}-->
+<!-- Updated Feed Display -->
+<ul>
+  <li th:each="review: ${reviews}">
+    <strong th:text="${review.content}"></strong>
+    <span th:if="${review.rating != null}" th:text="' (' + ${review.rating} + '★)'"></span>
+
+    <!-- Show what was reviewed -->
+    <small th:if="${review.trackId != null}" th:text="' [Song ID: ' + ${review.trackId} + ']'"></small>
+    <small th:if="${review.albumId != null}" th:text="' [Album ID: ' + ${review.albumId} + ']'"></small>
+  </li>
 </ul>
 
 </body>

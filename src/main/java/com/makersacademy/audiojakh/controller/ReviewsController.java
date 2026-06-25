@@ -1,38 +1,9 @@
-//package com.makersacademy.audiojakh.controller;
-//
-//import com.makersacademy.audiojakh.model.Review;
-//import com.makersacademy.audiojakh.repository.ReviewRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.servlet.view.RedirectView;
-//
-//import java.util.List;
-//
-//@Controller
-//public class ReviewsController {
-//
-//    @Autowired
-//    ReviewRepository repository;
-//
-//    @GetMapping("/reviews")
-//    public String index(Model model) {
-//        Iterable<Review> reviews = repository.findAll();
-//        model.addAttribute("reviews", reviews);
-//        model.addAttribute("review", new Review());
-//        return "posts/reviews_page";
-//    }
-//
-//    @PostMapping("/reviews")
-//    public RedirectView create(@ModelAttribute Review review) {
-//        repository.save(review);
-//        return new RedirectView("/reviews");
-//    }
-//}
-
 package com.makersacademy.audiojakh.controller;
 
+import com.makersacademy.audiojakh.model.Track;
+import com.makersacademy.audiojakh.model.Album;
+import com.makersacademy.audiojakh.repository.TrackRepository;
+import com.makersacademy.audiojakh.repository.AlbumRepository;
 import com.makersacademy.audiojakh.model.Review;
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.ReviewRepository;
@@ -56,13 +27,22 @@ public class ReviewsController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    TrackRepository trackRepository;
+
+    @Autowired
+    AlbumRepository albumRepository;
+
     // Handles loading the page (GET /reviews)
     @GetMapping("/reviews")
     public String index(Model model) {
         Iterable<Review> reviews = reviewRepository.findAll();
         model.addAttribute("reviews", reviews);
         model.addAttribute("review", new Review());
-        return "posts/reviews_page"; // Points to your HTML file location
+        // Pass tracks and albums to the frontend dropdowns
+        model.addAttribute("allTracks", trackRepository.findAll());
+        model.addAttribute("allAlbums", albumRepository.findAll());
+        return "posts/reviews_page";
     }
 
     @PostMapping("/reviews")
