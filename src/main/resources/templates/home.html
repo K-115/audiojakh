@@ -9,7 +9,7 @@
 <header>
   <img class="logo" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJACK logo"/>
   <div th:if="${currentUser != null}">
-    <p>Welcome back, <a th:href="@{/profile/{username}(username=${currentUser.username})}" th:text="${currentUser.username}">User</a>!</p>
+    <p id="greeting">Welcome back, <a th:href="@{/profile/{username}(username=${currentUser.username})}" th:text="${currentUser.username}">User</a>!</p>
   </div>
 </header>
 
