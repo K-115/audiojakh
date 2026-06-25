@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Songs - AudioJAKH</title>
+    <link rel="stylesheet" href="/main.css" />
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/posts}">Posts</a> |
+    <a th:href="@{/albums}">Albums</a> |
+    <a th:href="@{/songs}">Songs</a>
+</nav>
+
+<div sec:authorize="isAuthenticated()" id="greeting">
+    Signed in as <span sec:authentication="principal.attributes['email']"></span>
+</div>
+
+<h1>Songs</h1>
+
+<ul class="songs-list">
+    <li th:each="track : ${tracks}" class="song-card">
+        <a th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.name}">Song name</a>
+    </li>
+</ul>
+
+</body>
+</html>
