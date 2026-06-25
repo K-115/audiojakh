@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="/main.css" />
     </head>
     <body>
+    <div th:replace="~{navbar :: navbar}"></div>
 
     <h1>Posts</h1>
 
@@ -23,5 +24,6 @@
         <li th:text="${post.content}" />
     </ul>
 
+    <div th:replace="~{footer :: footer}"></div>
     </body>
 </html>
