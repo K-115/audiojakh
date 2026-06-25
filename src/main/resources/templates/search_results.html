@@ -14,24 +14,21 @@
 
 		<h1>Search Results</h1>
 
-		<ul th:if="${searchResults != null and !searchResults.isEmpty()}">
+		<ul class="search-list" th:if="${searchResults != null and !searchResults.isEmpty()}">
 			<li th:each="user : ${searchResults}">
 				<div class="search-card">
 					<a th:href="@{/profile/{username}(username=${user.username})}">
 						<img th:src="${user.profilePicture != null ? '/images/' + user.profilePicture : 'images/default-avatar.png'}"
 						     class="logo"
 						     alt="Profile Picture" />
-						<p class="username-tag" th:text="'Username: ' + ${user.username}"></p>
+						<span class="name-tag" th:text="${user.firstName} + ' ' + ${user.surname}"></span>
 					</a>
-
-					<p class="name-tag" th:text="'Name: ' + ${user.firstName} + ' ' + ${user.surname}"></p>
+					<span class="username-tag" th:text="' (' + ${user.username} + ')'"></span>
 				</div>
 
-				<div>
-					<a th:href="@{/profile/{username}(username=${user.username})}">
-						<button type="button">View Profile</button>
-					</a>
-				</div>
+				<a th:href="@{/profile/{username}(username=${user.username})}">
+					<button class="view-profile-btn" type="button">View Profile</button>
+				</a>
 			</li>
 		</ul>
 
@@ -39,7 +36,9 @@
 			<p class="no-result">No users found...</p>
 		</div>
 
-		<a th:href="@{/members}">Back to Members Page</a>
+		<a th:href="@{/members}">
+			<button class="members-button" type="button">Go to Members Page</button>
+		</a>
 	</body>
 
 </html>

@@ -161,3 +161,57 @@
     color: #fff;
     text-decoration: none;
 }
+
+/* ===== Search page ===== */
+
+.name-tag {
+    margin-left: 12px;
+}
+
+.search-list {
+    list-style: none;
+    padding-right: 50px;
+    padding-left: 50px;
+    margin: 0;
+}
+
+.search-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.search-card {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.search-card a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.username-tag {
+    margin-left: 4px;
+}
+
+.view-profile-btn {
+    margin-top: 10px;
+
+}
+
+.members-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 10px 10px;
+    margin: 30px auto;
+    width: max-content;
+    cursor: pointer;
+}
