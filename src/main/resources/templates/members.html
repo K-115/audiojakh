@@ -13,7 +13,7 @@
     <a th:href="@{/}">Home</a> |
     <a th:href="@{/songs}">Songs</a> |
     <a th:href="@{/albums}">Albums</a> |
-    <a th:if="${currentUser != null}" th:href="@{/profile/{username}(username=${currentUser.username})}">My Profile</a>
+    <a th:if="${currentUser != null}" th:href="@{/profile/{username}(username=${currentUsername})}">My Profile</a>
   </nav>
 </header>
 
