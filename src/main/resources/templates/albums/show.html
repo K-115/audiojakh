@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title th:text="${album.name} + ' - AudioJAKH'">Album - AudioJAKH</title>
+    <link rel="stylesheet" href="/main.css" />
+</head>
+<body>
+<div th:replace="~{navbar :: navbar}"></div>
+
+<h1 id="album-name" th:text="${album.name}">Album name</h1>
+
+<p th:if="${artist}">Artist: <span th:text="${artist.name}">Artist name</span></p>
+<p th:if="${album.releaseDate}">
+    Released: <span th:text="${#dates.format(album.releaseDate, 'd MMMM yyyy')}">date</span>
+</p>
+
+<h2>Tracks</h2>
+<ul class="tracks-list">
+    <li th:each="track : ${tracks}" class="track-item">
+        <a class="track-link" th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.name}">Track name</a>
+        <span th:if="${track.formattedDuration != ''}" th:text="' (' + ${track.formattedDuration} + ')'"></span>
+    </li>
+    <li th:if="${tracks.isEmpty()}">No tracks found for this album.</li>
+</ul>
+
+<div th:replace="~{footer :: footer}"></div>
+</body>
+</html>

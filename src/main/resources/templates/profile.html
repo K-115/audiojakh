@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--  <h3>My Reviews</h3>-->
+<!--    <ul>-->
+<!--      <li th:each="review : ${reviews}">-->
+<!--        <p th:text="${review.content}">Review content</p>-->
+<!--      </li>-->
+<!--    </ul>-->
+
+
+  <h3>Favourite Albums</h3>
+    <ul>
+      <li th:each="album : ${profile.favouriteAlbums}" th:text="${album.name}">Album Name</li>
+    </ul>
+
+  <h3>Favourite Songs</h3>
+    <ul>
+      <li th:each="song : ${profile.favouriteSongs}" th:text="${song.name}">Song Name</li>
+    </ul>
+
+  <h3>Favourite Artists</h3>
+    <ul>
+      <li th:each="artist : ${profile.favouriteArtists}" th:text="${artist.name}">Artist Name</li>
+    </ul>
+</html>

@@ -32,8 +32,17 @@ public class User {
     private String followers;
     private Date dob;
 
-    public User(String username) {
+
+    public User(String username, String profilePicture, String firstName, String surname, String emailAddress, String followers, Date dob){
         this.username = username;
+        this.profilePicture = profilePicture;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.emailAddress = emailAddress;
+        this.followers = followers;
+        this.dob = dob;
     }
 
 }
+
+

@@ -1,5 +1,6 @@
 package com.makersacademy.audiojakh.feature;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
@@ -8,6 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class SignUpTest {
 
@@ -28,14 +34,24 @@ public class SignUpTest {
 
     @Test
     public void successfulSignUpAlsoLogsInUser() {
-        String email = faker.name().username() + "@email.com";
+        String newEmail = faker.internet().emailAddress();
 
         driver.get("http://localhost:8081/");
         driver.findElement(By.linkText("Sign up")).click();
-        driver.findElement(By.name("email")).sendKeys(email);
+        driver.findElement(By.name("email")).sendKeys(newEmail);
         driver.findElement(By.name("password")).sendKeys("P@55qw0rd");
         driver.findElement(By.name("action")).click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(driver -> driver.findElement(By.id("username")));
+        driver.findElement(By.id("username")).sendKeys("testuser" + System.currentTimeMillis());
+        driver.findElement(By.id("firstName")).sendKeys("Test");
+        driver.findElement(By.id("surname")).sendKeys("User");
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("submit"))).click();
+
+        wait.until(driver -> driver.findElement(By.id("greeting")));
         String greetingText = driver.findElement(By.id("greeting")).getText();
-        assertEquals("Signed in as " + email, greetingText);
+        assertTrue(greetingText.contains("Welcome back"));
     }
 }

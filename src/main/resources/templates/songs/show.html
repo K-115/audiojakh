@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title th:text="${track.name} + ' - AudioJAKH'">Song - AudioJAKH</title>
+    <link rel="stylesheet" href="/main.css" />
+</head>
+<body>
+<div th:replace="~{navbar :: navbar}"></div>
+
+
+<h1 id="song-name" th:text="${track.name}">Song name</h1>
+
+<p th:if="${artist}">Artist: <span th:text="${artist.name}">Artist name</span></p>
+<p th:if="${album}">
+    From the album:
+    <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album name</a>
+</p>
+<p th:if="${track.formattedDuration != ''}">Duration: <span th:text="${track.formattedDuration}">0:00</span></p>
+<p th:if="${track.genre}">Genre: <span th:text="${track.genre}">genre</span></p>
+
+<div th:replace="~{footer :: footer}"></div>
+</body>
+</html>
