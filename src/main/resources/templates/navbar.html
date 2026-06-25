@@ -7,10 +7,10 @@
 <nav class="navbar" th:fragment="navbar">
 
     <!-- Logo / home link. Text placeholder. -->
-    <a th:href="@{/posts}" class="navbar-logo">AudioJAKH</a>
+    <a th:href="@{/}" class="navbar-logo">AudioJAKH</a>
 
     <ul class="navbar-links">
-        <li><a th:href="@{/posts}">Home</a></li>
+        <li><a th:href="@{/}">Home</a></li>
         <li><a th:href="@{/albums}">Albums</a></li>
         <li><a th:href="@{/songs}">Songs</a></li>
         <li><a th:href="@{/members}">Members</a></li>
@@ -35,7 +35,7 @@
                     <p sec:authentication="principal.attributes['email']">user@email.com</p>
                 </div>
                 <hr/>
-                <a th:href="@{/profile}" class="sub-menu-link">
+                <a th:href="@{/profile/{username}(username=${currentUsername])}" class="sub-menu-link">
                     <p>Profile</p><span>&gt;</span>
                 </a>
                 <a th:href="@{/logout}" id="sign-out" class="sub-menu-link">
