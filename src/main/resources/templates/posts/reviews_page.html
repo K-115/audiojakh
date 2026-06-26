@@ -72,38 +72,41 @@
 
 <!--add profile pic and username-->
 <ul>
-  <li th:each="review: ${reviews}">
+    <li th:each="rv : ${reviewViews}">
 
-    <div>
-      <a th:if="${review.user != null}" th:href="@{/profile/{username}(username=${review.user.username})}">
-      <img th:if="${review.user != null && review.user.profilePicture != null}"
-           th:src="${review.user.profilePicture}"
-      </a>
+        <div>
+            <a th:if="${rv.review.user != null}"
+               th:href="@{/profile/{username}(username=${rv.review.user.username})}">
+                <img th:if="${rv.review.user.profilePicture != null}"
+                     th:src="@{'/images/' + ${rv.review.user.profilePicture}}" alt="Avatar"/>
+            </a>
+            <img th:if="${rv.review.user == null or rv.review.user.profilePicture == null}"
+                 th:src="@{/images/default-avatar.png}" alt="Default Avatar"/>
+        </div>
 
-      <img th:if="${review.user == null || review.user.profilePicture == null}"
-           src="images/default-avatar.png"
-           alt="Default Avatar"/>
-    </div>
+        <div>
+      <span th:if="${rv.review.user != null}">
+        <a th:href="@{/profile/{username}(username=${rv.review.user.username})}">
+          <strong th:text="${rv.review.user.username}"></strong>
+        </a>
+      </span>
 
-<!-- ______________________-->
+            <p th:text="${rv.review.content}"></p>
 
-    <div>
-      <div>
-        <span th:if="${review.user != null}">
-          <a th:href="@{/profile/{username}(username=${review.user.username})}">
-            <strong th:text="${review.user.username}"></strong>
-          </a>
-        </span>
+            <div>
+                <span th:if="${rv.review.track != null}" th:text="'🎵 Song: ' + ${rv.review.track.name}"></span>
+                <span th:if="${rv.review.track == null and rv.review.album != null}" th:text="'💿 Album: ' + ${rv.review.album.name}"></span>
+            </div>
 
-      <p th:text="${review.content}"></p>
+            <span class="review-actions">
+        <form th:action="@{/reviews/{id}/like(id=${rv.review.id})}" method="post" style="display:inline">
+          <button type="submit" class="heart-btn" th:text="${rv.likedByMe} ? '❤️' : '🤍'"></button>
+        </form>
+        <span class="like-count" th:text="${rv.likeCount}"></span> likes
+      </span>
+        </div>
 
-      <div>
-        <span th:if="${review.track != null}" th:text="'🎵 Song: ' + ${review.track.name}"></span>
-        <span th:if="${review.track == null && review.album != null}" th:text="'💿 Album: ' + ${review.album.name}"></span>
-      </div>
-    </div>
-
-  </li>
+    </li>
 </ul>
 
 <div th:replace="~{footer :: footer}"></div>
