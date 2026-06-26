@@ -30,8 +30,18 @@
 
 				<div th:unless="${#lists.isEmpty(trendingReviews)}">
 					<div th:each="review : ${trendingReviews}" class="review-card" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 5px;">
+						<div class="review-author" style="font-weight: bold; margin-bottom: 5px;">
+							Posted by:
+							<a th:if="${review.userId != null}"
+							   th:href="@{/profile/{username}(username=${review.userId})}"
+							   th:text="${review.userId}">Username</a>
+						</div>
+						<p style="font-style: italic;">
+							<a th:href="@{/reviews}" style="text-decoration: none; color: inherit;">
+								"<span th:text="${review.content}">Review content text goes here</span>"
+							</a>
+						</p>
 
-						<p style="font-style: italic;">"<span th:text="${review.content}">Review content text goes here</span>"</p>
 
 						<div class="review-meta" style="font-size: 0.9em; color: #555;">
 							<span th:text="${review.likes} + ' Likes'">0 Likes</span>
