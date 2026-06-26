@@ -72,18 +72,20 @@
 
 
 <ul>
-  <li th:each="review: ${reviews}">
-    <strong th:text="${review.content}"></strong>
-    <span th:if="${review.rating != null}" th:text="' (' + ${review.rating} + '★)'"></span>
+    <li th:each="rv : ${reviewViews}">
+        <strong th:text="${rv.review.content}"></strong>
+        <span th:if="${rv.review.rating != null}" th:text="' (' + ${rv.review.rating} + '★)'"></span>
+        <span th:if="${rv.review.track != null}"><small th:text="' - Song: ' + ${rv.review.track.name}"></small></span>
+        <span th:if="${rv.review.album != null}"><small th:text="' - Album: ' + ${rv.review.album.name}"></small></span>
 
-    <span th:if="${review.track != null}">
-      <small th:text="' - Song: ' + ${review.track.name}"></small>
+        <!-- LIKE SECTION (mirrors Acebook posts.html) -->
+        <span class="review-actions">
+      <form th:action="@{/reviews/{id}/like(id=${rv.review.id})}" method="post" style="display:inline">
+        <button type="submit" class="heart-btn" th:text="${rv.likedByMe} ? '❤️' : '🤍'"></button>
+      </form>
+      <span class="like-count" th:text="${rv.likeCount}"></span> likes
     </span>
-
-    <span th:if="${review.album != null}">
-      <small th:text="' - Album: ' + ${review.album.name}"></small>
-    </span>
-  </li>
+    </li>
 </ul>
 
 <div th:replace="~{footer :: footer}"></div>
