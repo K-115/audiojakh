@@ -20,6 +20,8 @@ public class Artist {
     @Column(name = "ARTIST_IMAGE")
     private String artistImage;
 
+    private String description; //
+
     public Artist(String name) {
         this.name = name;
     }

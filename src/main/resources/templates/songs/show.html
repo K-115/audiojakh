@@ -12,7 +12,9 @@
 
 <h1 id="song-name" th:text="${track.name}">Song name</h1>
 
-<p th:if="${artist}">Artist: <span th:text="${artist.name}">Artist name</span></p>
+<p th:if="${artist}">Artist:
+    <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist name</a>
+</p>
 <p th:if="${album}">
     From the album:
     <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album name</a>
