@@ -11,7 +11,9 @@
 
 <h1 id="album-name" th:text="${album.name}">Album name</h1>
 
-<p th:if="${artist}">Artist: <span th:text="${artist.name}">Artist name</span></p>
+<p th:if="${artist}">Artist:
+    <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist name</a>
+</p>
 <p th:if="${album.releaseDate}">
     Released: <span th:text="${#dates.format(album.releaseDate, 'd MMMM yyyy')}">date</span>
 </p>

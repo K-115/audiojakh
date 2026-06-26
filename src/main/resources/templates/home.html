@@ -30,7 +30,9 @@
 <section>
   <h2>Trending Artists</h2>
   <ul>
-    <li th:each="artist : ${trendingArtists}" th:text="${artist.name}">Artist Name</li>
+    <li th:each="artist : ${trendingArtists}">
+        <a th:href="@{/artists/{id}(id=${artist.id})}" th:text=${artist.name}">Artist Name</a>
+    </li>
   </ul>
 </section>
 

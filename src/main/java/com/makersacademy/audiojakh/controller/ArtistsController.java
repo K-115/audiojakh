@@ -21,6 +21,7 @@ public class ArtistsController {
 
     @GetMapping("/artists/{id}")
     public String show(@PathVariable Long id, Model model) {
+        Artist artist = artistRepository.findById(id).orElseThrow();
         model.addAttribute("artist", artist);
         model.addAttribute("albums", albumRepository.findAlbumsByArtistId(id));
 
