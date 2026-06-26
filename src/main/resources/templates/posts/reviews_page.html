@@ -35,7 +35,7 @@
 </form>
 
 <form th:if="${selectedAlbumId != null}" th:action="@{/reviews}" th:object="${review}" method="post">
-  <input type="hidden" name="albumId" th:value="${selectedAlbumId}" />
+  <input type="hidden" th:value="${selectedAlbumId}" name="albumId" id="albumId" />
 
   <p>Content: <input type="text" th:field="*{content}" required /></p>
 
@@ -70,23 +70,39 @@
   <button type="submit">Reset / Change Album</button>
 </form>
 
-
+<!--add profile pic and username-->
 <ul>
   <li th:each="review: ${reviews}">
-    <strong th:text="${review.content}"></strong>
-    <span th:if="${review.rating != null}" th:text="' (' + ${review.rating} + '★)'"></span>
 
-    <span th:if="${review.track != null}">
-      <small th:text="' - Song: ' + ${review.track.name}"></small>
-    </span>
+    <div>
+      <a th:if="${review.user != null}" th:href="@{/profile/{username}(username=${review.user.username})}">
+      <img th:if="${review.user != null && review.user.profilePicture != null}"
+           th:src="${review.user.profilePicture}">
+      </a>
 
-    <span th:if="${review.album != null}">
-      <small th:text="' - Album: ' + ${review.album.name}"></small>
-    </span>
-  <li th:each="comment : ${review.comments}" style="padding: 5px 0; border-bottom: 1px dashed #eee; font-size: 0.95em;">
-    <!-- Displays comment poster details if linked, or plain content -->
-    <span th:text="${comment.content}">Comment text</span>
-    <small style="color: #999; display: block;" th:text="${#temporals.format(comment.dateOfComment, 'dd MMM yyyy HH:mm')}">Date</small>
+      <img th:if="${review.user == null || review.user.profilePicture == null}"
+           src="images/default-avatar.png"
+           alt="Default Avatar"/>
+    </div>
+
+<!-- ______________________-->
+
+    <div>
+      <div>
+        <span th:if="${review.user != null}">
+          <a th:href="@{/profile/{username}(username=${review.user.username})}">
+            <strong th:text="${review.user.username}"></strong>
+          </a>
+        </span>
+
+      <p th:text="${review.content}"></p>
+
+      <div>
+        <span th:if="${review.track != null}" th:text="'🎵 Song: ' + ${review.track.name}"></span>
+        <span th:if="${review.track == null && review.album != null}" th:text="'💿 Album: ' + ${review.album.name}"></span>
+      </div>
+    </div>
+
   </li>
   <div sec:authorize="isAuthenticated()" style="margin-top: 10px;">
     <form th:action="@{/comments}" method="post" style="display: flex; gap: 10px;">
