@@ -146,4 +146,51 @@ public class ReviewsController {
         }
         return new RedirectView("/reviews");
     }
+
+    @GetMapping("/reviews/{id}/edit")
+    public String editForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        User me = currentUser();
+        if (me == null) {
+            return "redirect:/login";
+        }
+
+        var reviewOpt = reviewRepository.findById(id);
+        if (reviewOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Review not found.");
+            return "redirect:/reviews";
+        }
+
+        Review review = reviewOpt.get();
+        if (review.getUser() == null || !review.getUser().getId().equals(me.getId())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You do not have permission to edit this review.");
+            return "redirect:/reviews";
+        }
+
+        model.addAttribute("review", review);
+        return "posts/edit_review_page";
+    }
+
+    @PostMapping("/reviews/{id}/edit")
+    public RedirectView updateReview(@PathVariable Long id,
+                                     @RequestParam("content") String content,
+                                     @RequestParam("rating") Integer rating,
+                                     RedirectAttributes redirectAttributes) {
+        User me = currentUser();
+        if (me == null) {
+            return new RedirectView("/login");
+        }
+
+        reviewRepository.findById(id).ifPresentOrElse(review -> {
+            if (review.getUser() != null && review.getUser().getId().equals(me.getId())) {
+                review.setContent(content);
+                review.setRating(rating);
+                reviewRepository.save(review);
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Unauthorized action.");
+            }
+        }, () -> redirectAttributes.addFlashAttribute("errorMessage", "Review not found."));
+
+        return new RedirectView("/reviews");
+    }
+
 }

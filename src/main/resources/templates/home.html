@@ -54,6 +54,15 @@
         					</span>
 						</div>
 
+						<div class="review-actions">
+							<form th:if="${currentUser != null and review.user != null and currentUser.id == review.user.id}"
+							      th:action="@{/reviews/{id}/edit(id=${review.id})}"
+							      method="get"
+							      style="display: inline;">
+								<button type="submit">✏️ Edit</button>
+							</form>
+						</div>
+
 					</div>
 				</div>
 			</section>

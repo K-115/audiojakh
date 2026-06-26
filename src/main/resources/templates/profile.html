@@ -74,6 +74,15 @@
 					<span th:text="${review.likes} + ' Likes'">0 Likes</span> |
 					<span th:text="${#temporals.format(review.dateOfReview, 'dd MMM yyyy HH:mm')}">Date</span>
 				</small>
+
+				<div class="review-actions">
+					<form th:if="${currentUser != null and profile.isOwnProfile}"
+					      th:action="@{/reviews/{id}/edit(id=${review.id})}"
+					      method="get"
+					      style="display: inline;">
+						<button type="submit">✏️ Edit</button>
+					</form>
+				</div>
 			</li>
 		</ul>
 		<div th:replace="~{footer :: footer}"></div>

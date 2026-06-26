@@ -102,6 +102,9 @@
             </span>
 
             <span class="review-actions">
+                    <a th:if="${currentUser != null and rv.review.user != null and currentUser.id == rv.review.user.id}"
+                       th:href="@{/reviews/{id}/edit(id=${rv.review.id})}">✏️ Edit</a>
+
         <form th:action="@{/reviews/{id}/like(id=${rv.review.id})}" method="post" style="display:inline">
           <button type="submit" class="heart-btn" th:text="${rv.likedByMe} ? '❤️' : '🤍'"></button>
         </form>
