@@ -83,7 +83,22 @@
     <span th:if="${review.album != null}">
       <small th:text="' - Album: ' + ${review.album.name}"></small>
     </span>
+  <li th:each="comment : ${review.comments}" style="padding: 5px 0; border-bottom: 1px dashed #eee; font-size: 0.95em;">
+    <!-- Displays comment poster details if linked, or plain content -->
+    <span th:text="${comment.content}">Comment text</span>
+    <small style="color: #999; display: block;" th:text="${#temporals.format(comment.dateOfComment, 'dd MMM yyyy HH:mm')}">Date</small>
   </li>
+  <div sec:authorize="isAuthenticated()" style="margin-top: 10px;">
+    <form th:action="@{/comments}" method="post" style="display: flex; gap: 10px;">
+      <input type="hidden" name="reviewId" th:value="${review.id}" />
+      <input type="text" name="content" placeholder="Write a comment..." required
+             style="flex-grow: 1; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
+      <button type="submit" style="padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Reply
+      </button>
+    </form>
+  </div>
+
 </ul>
 
 <div th:replace="~{footer :: footer}"></div>
