@@ -1,3 +1,17 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-page-container {
+    margin: 50px;
+    box-sizing: border-box;
+}
+
 .posts-main {
     border-collapse: collapse;
 }
@@ -13,33 +27,34 @@
 .navbar {
     background: #1a1a1a;
     width: 100%;
-    padding: 15px 60px;
+    padding: 15px 40px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     position: sticky;   /* AC: stays visible when you scroll */
     top: 0;
     z-index: 1000;
     box-sizing: border-box;
+    gap: 40px;
 }
 
-.navbar-logo {
-    color: #fff;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
+.navbar > a:first-child {
+    display: inline-flex;
+    align-items: center;
+    margin-right: auto;
 }
 
-.logo {                 /* used once placehold swapped for img */
-    width: 50px;
-    height: 50px;
+.logo {                 /* used once placeholder swapped for img */
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     object-fit: cover;
+    display: block;
 }
 
 .navbar-links {
     display: flex;
-    gap: 15px;
+    align-items: center;
+    gap: 10px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -51,22 +66,11 @@
     padding: 8px 16px;
     border-radius: 4px;
     transition: background-color 0.3s ease;
+    display: inline-block;
 }
 
 .navbar-links a:hover {
     background-color: #000;
-}
-
-.navbar-search input {
-    padding: 6px 8px;
-    border: none;
-    border-radius: 4px;
-}
-
-.search-btn {
-    padding: 6px 12px;
-    margin-left: 6px;
-    cursor: pointer;
 }
 
 /* ===== Profile dropdown (hover) ===== */
@@ -87,7 +91,7 @@
 .sub-menu-wrap {
     position: absolute;
     top: 100%;
-    right: 0;
+    right: -10px;
     width: 280px;
     max-height: 0;             /* collapsed by default */
     overflow: hidden;
@@ -130,11 +134,34 @@
 
 .sub-menu-link p {
     width: 100%;
-    margin: 0;
+}
+
+.sub-menu-link img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    background: #e5e5e5;
+    padding: 8px;
+    border-radius: 50%;
+    margin-right: 15px;
+    box-sizing: content-box;
+}
+
+.sub-menu-link span {
+    font-size: 22px;
+    transition: transform 0.2s;
+}
+
+.sub-menu-link:hover span {
+    transform: translateX(5px);
 }
 
 .sub-menu-link:hover p {
     font-weight: 600;
+}
+
+.sub-menu-link #sign-out img {
+    display: inline-block;
 }
 
 /* ===== Footer ===== */
@@ -142,16 +169,23 @@
     background: #1a1a1a;
     color: #fff;
     padding: 20px 60px;
-    margin-top: 40px;
+    margin-top: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
+    width: 100%;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
 }
 
 .footer-links {
     display: flex;
-    gap: 15px;
+    align-items: center;
+    gap: 10px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -159,5 +193,122 @@
 
 .footer-links a {
     color: #fff;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    background-color: #000;
+}
+
+/* ===== Nav bar Search ===== */
+
+/* Wrapper keeps search bar and absolute icon tracked together */
+.navbar-search {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    max-width: 200px;
+}
+
+/* Updated input text selector to target the textbox precisely */
+.navbar-search input[type="text"] {
+    width: 100%;
+    padding: 8px 36px 8px 12px;
+    border: 1px solid #444;
+    border-radius: 20px;
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
+    background-color: #2a2a2a;
+    color: #fff;
+}
+
+/* Placeholder text color adjustment */
+.navbar-search input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+/* Floats the button directly on top of the textbox element */
+.navbar-search .search-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: #ccc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover affect when cursor over the magnifying glass */
+.navbar-search .search-btn:hover {
+    color: #fff;
+}
+
+/* ===== Search page ===== */
+
+.name-tag {
+    margin-left: 12px;
+}
+
+.search-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.search-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.search-card {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.search-card a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.username-tag {
+    margin-left: 4px;
+}
+
+.view-profile-btn {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.members-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 10px 10px;
+    margin: 30px auto;
+    width: max-content;
+    cursor: pointer;
+}
+
+a:has(> .members-button) {
     text-decoration: none;
 }
