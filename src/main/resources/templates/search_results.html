@@ -27,7 +27,20 @@
 						</a>
 						<span class="username-tag" th:text="' (' + ${user.username} + ')'"></span>
 					</div>
+					<div class="search-follow-actions" th:if="${currentUserEntity != null and currentUserEntity.id != user.id}" style="margin: 10px 0;">
+						<div th:if="${followedUserIds != null and #lists.contains(followedUserIds, user.id)}">
+							<form th:action="@{/profile/{username}/unfollow(username=${user.username})}" method="post">
+								<button class="view-profile-btn" type="submit">Unfollow</button>
+							</form>
+						</div>
 
+						<div th:unless="${followedUserIds != null and #lists.contains(followedUserIds, user.id)}">
+							<form th:action="@{/profile/{username}/follow(username=${user.username})}" method="post">
+								<button class="view-profile-btn" type="submit">Follow</button>
+							</form>
+						</div>
+
+					</div>
 					<a th:href="@{/profile/{username}(username=${user.username})}">
 						<button class="view-profile-btn" type="button">View Profile</button>
 					</a>

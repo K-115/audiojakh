@@ -3,6 +3,7 @@ package com.makersacademy.audiojakh.controller;
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.FollowRepository;
 import com.makersacademy.audiojakh.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -27,24 +28,29 @@ public class FollowController {
     }
 
     @PostMapping("/profile/{username}/follow")
-    public String followUser(@PathVariable String username) {
+    public String followUser(@PathVariable String username, HttpServletRequest request) {
         User me = currentUser();
         User targetUser = userRepository.findUserByUsername(username).orElseThrow();
 
         if (me != null && !me.getId().equals(targetUser.getId())) {
             followRepository.follow(me.getId(), targetUser.getId());
         }
-        return "redirect:/profile/" + username;
+        String referer = request.getHeader("Referer");
+        return referer != null ? "redirect:" + referer : "redirect:/profile/" + username;
+//        return "redirect:/profile/" + username;
     }
 
     @PostMapping("/profile/{username}/unfollow")
-    public String unfollowUser(@PathVariable String username) {
+    public String unfollowUser(@PathVariable String username, HttpServletRequest request) {
         User me = currentUser();
         User targetUser = userRepository.findUserByUsername(username).orElseThrow();
 
         if (me != null && !me.getId().equals(targetUser.getId())) {
             followRepository.unfollow(me.getId(), targetUser.getId());
         }
-        return "redirect:/profile/" + username;
+
+        String referer = request.getHeader("Referer");
+        return referer != null ? "redirect:" + referer : "redirect:/profile/" + username;
+//        return "redirect:/profile/" + username;
     }
 }
