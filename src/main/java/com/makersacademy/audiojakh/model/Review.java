@@ -16,8 +16,9 @@ public class Review {
     private String content;
     private Integer rating;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "track_id", referencedColumnName = "SPOTIFY_ID")
@@ -34,10 +35,10 @@ public class Review {
 
     public Review() {}
 
-    public Review(String content, Integer rating, Long userId) {
+    public Review(String content, Integer rating, User user) {
         this.content = content;
         this.rating = rating;
-        this.userId = userId;
+        this.user = user;
     }
 }
 
