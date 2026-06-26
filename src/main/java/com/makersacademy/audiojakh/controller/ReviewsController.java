@@ -1,11 +1,10 @@
 package com.makersacademy.audiojakh.controller;
 
+import com.makersacademy.audiojakh.model.ReviewLike;
+import com.makersacademy.audiojakh.model.ReviewView;
 import com.makersacademy.audiojakh.model.User;
-import com.makersacademy.audiojakh.repository.TrackRepository;
-import com.makersacademy.audiojakh.repository.AlbumRepository;
+import com.makersacademy.audiojakh.repository.*;
 import com.makersacademy.audiojakh.model.Review;
-import com.makersacademy.audiojakh.repository.ReviewRepository;
-import com.makersacademy.audiojakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -33,6 +33,9 @@ public class ReviewsController {
 
     @Autowired
     AlbumRepository albumRepository;
+
+    @Autowired
+    ReviewLikeRepository reviewLikeRepository;
 
     private User currentUser() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
@@ -56,6 +59,14 @@ public class ReviewsController {
 
         model.addAttribute("allAlbums", albumRepository.findAll());
 
+        List<ReviewView> reviewViews = new ArrayList<>();
+        for (Review r : reviewRepository.findAll()) {
+            long count = reviewLikeRepository.countByReviewId(r.getId());
+            boolean liked = me != null && reviewLikeRepository.existsByReviewIdAndUserId(r.getId(), me.getId());
+            reviewViews.add(new ReviewView(r, count, liked));
+        }
+        model.addAttribute("reviewViews", reviewViews);
+
         if (albumId != null && !albumId.trim().isEmpty()) {
             model.addAttribute("allTracks", trackRepository.findTracksByAlbumId(albumId));
             model.addAttribute("selectedAlbumId", albumId);
@@ -73,8 +84,6 @@ public class ReviewsController {
                                @ModelAttribute Review review,
                                @AuthenticationPrincipal OAuth2User principal,
                                RedirectAttributes redirectAttributes) {
-        User me = currentUser();
-        Long currentUserId = me.getId();
         User currentUser = currentUser();
         if (principal == null) {
             return new RedirectView("/login");
@@ -119,6 +128,22 @@ public class ReviewsController {
         review.setLikes(0);
         reviewRepository.save(review);
 
+        return new RedirectView("/reviews");
+    }
+
+    @PostMapping("/reviews/{id}/like")
+    public RedirectView like(@PathVariable Long id) {
+        User me = currentUser();
+        if (me != null) {
+            reviewLikeRepository.findByReviewIdAndUserId(id, me.getId()).ifPresentOrElse(
+                    reviewLikeRepository::delete,                                  // already liked -> unlike
+                    () -> reviewLikeRepository.save(new ReviewLike(me.getId(), id))); // not yet -> like
+            // keep reviews.likes in sync (home "Trending Reviews", profile, and the ORDER BY likes query read it)
+            reviewRepository.findById(id).ifPresent(r -> {
+                r.setLikes((int) reviewLikeRepository.countByReviewId(id));
+                reviewRepository.save(r);
+            });
+        }
         return new RedirectView("/reviews");
     }
 }
