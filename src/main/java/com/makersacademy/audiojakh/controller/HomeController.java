@@ -26,8 +26,8 @@ public class HomeController {
 	@Autowired
 	private AlbumRepository albumRepository;
 
-	// @Autowired
-	// private ReviewRepository reviewRepository;
+	@Autowired
+	private ReviewRepository reviewRepository;
 
 	private User currentUser() {
 		var auth = SecurityContextHolder.getContext().getAuthentication();
@@ -46,12 +46,12 @@ public class HomeController {
 		List<Track> trendingSongs = tracksRepository.findTop5ByOrderBySpotifyIdDesc();
 		List<Artist> trendingArtists = artistRepository.findTop5ByOrderByNameAsc();
 		List<Album> trendingAlbums = albumRepository.findTop5ByOrderByReleaseDateDesc();
-		// List<Review> trendingReviews = reviewRepository.findTop5ByOrderByDateOfReviewDesc();
+		List<Review> trendingReviews = reviewRepository.findTop5TrendingReviewsThisWeek();
 
 		model.addAttribute("trendingSongs", trendingSongs);
 		model.addAttribute("trendingArtists", trendingArtists);
 		model.addAttribute("trendingAlbums", trendingAlbums);
-		// model.addAttribute("trendingReviews", trendingReviews);
+		model.addAttribute("trendingReviews", trendingReviews);
 
 		return "home";
 	}
