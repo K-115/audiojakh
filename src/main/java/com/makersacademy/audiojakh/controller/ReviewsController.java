@@ -47,12 +47,16 @@ public class ReviewsController {
     }
 
     @GetMapping("/reviews")
-    public String index(@RequestParam(value = "albumId", required = false) String albumId, Model model) {
+    public String index(@RequestParam(value = "albumId", required = false) String albumId, Model model, @ModelAttribute("errorMessage") String errorMessage) {
         User me = currentUser();
         model.addAttribute("currentUser", me);
         Iterable<Review> reviews = reviewRepository.findAll();
         model.addAttribute("reviews", reviews);
-        model.addAttribute("review", new Review());
+
+        if (!model.containsAttribute("review")) {
+            model.addAttribute("review", new Review());
+        }
+
         model.addAttribute("allAlbums", albumRepository.findAll());
 
         List<ReviewView> reviewViews = new ArrayList<>();
@@ -74,19 +78,29 @@ public class ReviewsController {
         return "posts/reviews_page";
     }
 
-
     @PostMapping("/reviews")
     public RedirectView create(@RequestParam(value = "trackId", required = false) String trackId,
                                @RequestParam(value = "albumId", required = false) String albumId,
                                @ModelAttribute Review review,
                                @AuthenticationPrincipal OAuth2User principal,
                                RedirectAttributes redirectAttributes) {
-        User me = currentUser();
-        Long currentUserId = me.getId();
+        User currentUser = currentUser();
         if (principal == null) {
             return new RedirectView("/login");
         }
+// String emailAddress = null;
+//         if (principal instanceof DefaultOidcUser) {
+//             emailAddress = ((DefaultOidcUser) principal).getEmail();
+//         } else {
+//             emailAddress = principal.getAttribute("email");
+//         }
 
+//         if (emailAddress == null) {
+//             emailAddress = principal.getAttribute("preferred_username");
+//         }
+
+//         User currentUser = userRepository.findUserByEmailAddress(emailAddress)
+//                 .orElseThrow(() -> new IllegalStateException("Authenticated user record not found in the database."));
 //        String username = principal.getAttribute("email");
 //        if (username == null) {
 //            username = principal.getAttribute("preferred_username");
@@ -97,20 +111,20 @@ public class ReviewsController {
 //                .orElse(1L);
 
         if (trackId != null && !trackId.trim().isEmpty()) {
-            if (reviewRepository.existsByUserIdAndTrackSpotifyId(currentUserId, trackId)) {
+            if (reviewRepository.existsByUserIdAndTrackSpotifyId(currentUser.getId(), trackId)) {
                 redirectAttributes.addFlashAttribute("errorMessage", "You have already reviewed this song!");
                 return new RedirectView("/reviews?albumId=" + albumId);
             }
             trackRepository.findById(trackId).ifPresent(review::setTrack);
         } else if (albumId != null && !albumId.trim().isEmpty()) {
-            if (reviewRepository.existsByUserIdAndAlbumSpotifyId(currentUserId, albumId)) {
+            if (reviewRepository.existsByUserIdAndAlbumSpotifyId(currentUser.getId(), albumId)) {
                 redirectAttributes.addFlashAttribute("errorMessage", "You have already reviewed this album!");
                 return new RedirectView("/reviews?albumId=" + albumId);
             }
             albumRepository.findById(albumId).ifPresent(review::setAlbum);
         }
 
-        review.setUserId(currentUserId);
+        review.setUser(currentUser);
         review.setLikes(0);
         reviewRepository.save(review);
 
@@ -133,6 +147,3 @@ public class ReviewsController {
         return new RedirectView("/reviews");
     }
 }
-
-
-

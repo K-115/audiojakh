@@ -16,7 +16,7 @@
   Signed in as <span sec:authentication="principal.attributes['email']"></span>
 </div>
 
-<div th:if="${errorMessage}" style="color: red; background-color: #ffe6e6; padding: 10px; border: 1px solid red; margin-bottom: 15px;">
+<div th:if="${errorMessage}">
   <p th:text="${errorMessage}"></p>
 </div>
 
@@ -35,7 +35,7 @@
 </form>
 
 <form th:if="${selectedAlbumId != null}" th:action="@{/reviews}" th:object="${review}" method="post">
-  <input type="hidden" name="albumId" th:value="${selectedAlbumId}" />
+  <input type="hidden" th:value="${selectedAlbumId}" name="albumId" id="albumId" />
 
   <p>Content: <input type="text" th:field="*{content}" required /></p>
 
@@ -70,25 +70,44 @@
   <button type="submit">Reset / Change Album</button>
 </form>
 
-
+<!--add profile pic and username-->
 <ul>
-    <li th:each="rv : ${reviewViews}">
-        <strong th:text="${rv.review.content}"></strong>
-        <span th:if="${rv.review.rating != null}" th:text="' (' + ${rv.review.rating} + '★)'"></span>
-        <span th:if="${rv.review.track != null}"><small th:text="' - Song: ' + ${rv.review.track.name}"></small></span>
-        <span th:if="${rv.review.album != null}"><small th:text="' - Album: ' + ${rv.review.album.name}"></small></span>
+  <li th:each="review: ${reviews}">
 
-        <!-- LIKE SECTION (mirrors Acebook posts.html) -->
-        <span class="review-actions">
-      <form th:action="@{/reviews/{id}/like(id=${rv.review.id})}" method="post" style="display:inline">
-        <button type="submit" class="heart-btn" th:text="${rv.likedByMe} ? '❤️' : '🤍'"></button>
-      </form>
-      <span class="like-count" th:text="${rv.likeCount}"></span> likes
-    </span>
-    </li>
+    <div>
+      <a th:if="${review.user != null}" th:href="@{/profile/{username}(username=${review.user.username})}">
+      <img th:if="${review.user != null && review.user.profilePicture != null}"
+           th:src="${review.user.profilePicture}"
+      </a>
+
+      <img th:if="${review.user == null || review.user.profilePicture == null}"
+           src="images/default-avatar.png"
+           alt="Default Avatar"/>
+    </div>
+
+<!-- ______________________-->
+
+    <div>
+      <div>
+        <span th:if="${review.user != null}">
+          <a th:href="@{/profile/{username}(username=${review.user.username})}">
+            <strong th:text="${review.user.username}"></strong>
+          </a>
+        </span>
+
+      <p th:text="${review.content}"></p>
+
+      <div>
+        <span th:if="${review.track != null}" th:text="'🎵 Song: ' + ${review.track.name}"></span>
+        <span th:if="${review.track == null && review.album != null}" th:text="'💿 Album: ' + ${review.album.name}"></span>
+      </div>
+    </div>
+
+  </li>
 </ul>
 
 <div th:replace="~{footer :: footer}"></div>
 
 </body>
 </html>
+
