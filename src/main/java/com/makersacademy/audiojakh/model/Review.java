@@ -3,6 +3,7 @@ package com.makersacademy.audiojakh.model;
 import jakarta.persistence.*;
         import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -32,6 +33,12 @@ public class Review {
 
     @Column(name = "date_of_review", insertable = false, updatable = false)
     private LocalDateTime dateOfReview;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "review")
+    @OrderBy("date_of_comment ASC")
+    private List<Comment> comments;
+
 
     public Review() {}
 
