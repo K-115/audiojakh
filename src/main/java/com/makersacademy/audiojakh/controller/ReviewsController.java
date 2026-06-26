@@ -73,8 +73,7 @@ public class ReviewsController {
                                @ModelAttribute Review review,
                                @AuthenticationPrincipal OAuth2User principal,
                                RedirectAttributes redirectAttributes) {
-        User me = currentUser();
-        Long currentUserId = me.getId();
+        User currentUser = currentUser();
         if (principal == null) {
             return new RedirectView("/login");
         }
