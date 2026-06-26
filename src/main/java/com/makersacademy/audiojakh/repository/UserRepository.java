@@ -18,7 +18,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
                 SELECT *
                 FROM users
                 WHERE username ILIKE CONCAT('%', :search, '%')
-                    OR firstName ILIKE CONCAT('%', :search, '%')
+                    OR first_name ILIKE CONCAT('%', :search, '%')
                     OR surname ILIKE CONCAT('%', :search, '%')
             """,
             nativeQuery = true

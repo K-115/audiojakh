@@ -1,49 +1,55 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>AudioJAKH - Discover Music</title>
-  <link rel="stylesheet" th:href="@{/main.css}">
-</head>
-<body>
-<header>
-  <img class="logo" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJACK logo"/>
-  <div th:replace="~{navbar :: navbar}"></div>
-  <div th:if="${currentUser != null}">
-    <p id="greeting">Welcome back, <a th:href="@{/profile/{username}(username=${currentUser.username})}" th:text="${currentUser.username}">User</a>!</p>
-  </div>
-</header>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<h1>Trending Right Now</h1>
+	<head>
+		<meta charset="UTF-8">
+		<title>AudioJAKH - Discover Music</title>
+		<link rel="stylesheet" th:href="@{/main.css}">
+	</head>
+
+	<body>
+
+		<div th:replace="~{navbar :: navbar}"></div>
+
+		<div class="main-page-container">
+			<header>
+				<div th:if="${currentUser != null}">
+					<p id="greeting">Welcome back, <a th:href="@{/profile/{username}(username=${currentUser.username})}"
+					                                  th:text="${currentUser.username}">User</a>!</p>
+				</div>
+			</header>
+
+			<h1>Trending Right Now</h1>
+
+			<section>
+				<h2>Trending Songs</h2>
+				<ul>
+					<li th:each="song : ${trendingSongs}">
+						<a th:href="@{/songs/{id}(id=${song.spotifyId})}" th:text="${song.name}">Song Title</a>
+					</li>
+				</ul>
+			</section>
 
 
-<section>
-  <h2>Trending Songs</h2>
-  <ul>
-    <li th:each="song : ${trendingSongs}">
-      <a th:href="@{/songs/{id}(id=${song.spotifyId})}" th:text="${song.name}">Song Title</a>
-    </li>
-  </ul>
-</section>
+			<section>
+				<h2>Trending Artists</h2>
+				<ul>
+					<li th:each="artist : ${trendingArtists}" th:text="${artist.name}">Artist Name</li>
+				</ul>
+			</section>
 
+			<section>
+				<h2>Trending Albums</h2>
+				<ul>
+					<li th:each="album : ${trendingAlbums}">
+						<a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album Name</a>
+					</li>
+				</ul>
+			</section>
 
-<section>
-  <h2>Trending Artists</h2>
-  <ul>
-    <li th:each="artist : ${trendingArtists}">
-        <a th:href="@{/artists/{id}(id=${artist.id})}" th:text=${artist.name}">Artist Name</a>
-    </li>
-  </ul>
-</section>
+		</div>
 
-<section>
-  <h2>Trending Albums</h2>
-  <ul>
-    <li th:each="album : ${trendingAlbums}">
-      <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album Name</a>
-    </li>
-  </ul>
-</section>
-<div th:replace="~{footer :: footer}"></div>
-</body>
+		<div th:replace="~{footer :: footer}"></div>
+
+	</body>
 </html>

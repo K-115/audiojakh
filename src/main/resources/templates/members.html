@@ -1,47 +1,59 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>AudioJAKH - Members Directory</title>
-  <link rel="stylesheet" th:href="@{/main.css}">
-</head>
-<body>
-<div th:replace="~{navbar :: navbar}"></div>
-<header>
-  <img class="logo" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJACK logo"/>
-  <nav>
-    <a th:href="@{/}">Home</a> |
-    <a th:href="@{/songs}">Songs</a> |
-    <a th:href="@{/albums}">Albums</a> |
-    <a th:if="${currentUser != null}" th:href="@{/profile/{username}(username=${currentUser.username})}">My Profile</a>
-  </nav>
-</header>
 
-<main>
-  <h1>AudioJAKH Members</h1>
-  <p>Find other music lovers to follow and explore their reviews.</p>
+	<head>
+		<meta charset="UTF-8">
+		<title>AudioJAKH - Members Directory</title>
+		<link rel="stylesheet" th:href="@{/main.css}">
+	</head>
 
-  <div class="members-grid">
-    <ul>
+	<body>
 
-      <li th:each="member : ${members}" class="member-card">
+		<div th:replace="~{navbar :: navbar}"></div>
 
-        <img th:if="${member.profilePicture != null}" th:src="${member.profilePicture}" />
-        <img th:unless="${member.profilePicture != null}" th:src="@{/images/default-avatar.png}"/>
+		<div class="main-page-container">
+			<header>
+				<nav>
+					<a th:href="@{/}">Home</a> |
+					<a th:href="@{/songs}">Songs</a> |
+					<a th:href="@{/albums}">Albums</a> |
+					<a th:if="${currentUser != null}" th:href="@{/profile/{username}(username=${currentUsername})}">My
+						Profile</a>
+				</nav>
+			</header>
 
-        <div class="member-info">
+			<main>
+				<h1>AudioJAKH Members</h1>
 
-          <a th:href="@{/profile/{username}(username=${member.username})}"
-             th:text="${member.username}"
-             class="member-link">Username</a>
+				<p>Find other music lovers to follow and explore their reviews.</p>
+
+				<div class="members-grid">
+					<ul>
+
+						<li th:each="member : ${members}" class="member-card">
+
+							<img th:if="${member.profilePicture != null}" th:src="${member.profilePicture}"/>
+							<img th:unless="${member.profilePicture != null}" th:src="@{/images/default-avatar.png}"/>
+
+							<div class="member-info">
+
+								<a th:href="@{/profile/{username}(username=${member.username})}"
+								   th:text="${member.username}"
+								   class="member-link">Username</a>
 
 
-          <span th:if="${currentUser != null && currentUser.id == member.id}" class="badge-me">(You)</span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div th:replace="~{footer :: footer}"></div>
-</main>
-</body>
+								<span th:if="${currentUser != null && currentUser.id == member.id}"
+								      class="badge-me">(You)</span>
+							</div>
+
+						</li>
+
+					</ul>
+				</div>
+			</main>
+		</div>
+
+		<div th:replace="~{footer :: footer}"></div>
+
+	</body>
 </html>

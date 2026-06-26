@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/main.css"/>
+
+		<title>Search Results</title>
+	</head>
+
+	<body>
+		<div th:replace="~{navbar :: navbar}"></div>
+
+		<div class="main-page-container">
+
+			<h1>Search Results</h1>
+
+			<ul class="search-list" th:if="${searchResults != null and !searchResults.isEmpty()}">
+				<li th:each="user : ${searchResults}">
+					<div class="search-card">
+						<a th:href="@{/profile/{username}(username=${user.username})}">
+							<img th:src="${user.profilePicture != null ? '/images/' + user.profilePicture : 'images/default-avatar.png'}"
+							     class="logo"
+							     alt="Profile Picture"/>
+							<span class="name-tag" th:text="${user.firstName} + ' ' + ${user.surname}"></span>
+						</a>
+						<span class="username-tag" th:text="' (' + ${user.username} + ')'"></span>
+					</div>
+
+					<a th:href="@{/profile/{username}(username=${user.username})}">
+						<button class="view-profile-btn" type="button">View Profile</button>
+					</a>
+				</li>
+			</ul>
+
+			<div th:if="${searchResults == null or searchResults.isEmpty()}">
+				<p class="no-result">No users found...</p>
+			</div>
+
+			<a th:href="@{/members}">
+				<button class="members-button" type="button">Go to Members Page</button>
+			</a>
+		</div>
+
+		<div th:replace="~{footer :: footer}"></div>
+
+	</body>
+
+</html>
