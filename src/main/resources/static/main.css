@@ -312,3 +312,11 @@ html, body {
 a:has(> .members-button) {
     text-decoration: none;
 }
+
+/* ===== Search page ===== */
+
+.artist-image {
+    max-width: 240px;
+    height: auto;
+    border-radius: 8px;
+}
