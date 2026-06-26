@@ -323,7 +323,7 @@ a:has(> .members-button) {
 
 /* ===== Search page ===== */
 
-.review-actions { margin-left: 8px; }
+.review_actions { margin-left: 8px; }
 
 .review_actions .heart-btn {
     background: none;
@@ -333,4 +333,4 @@ a:has(> .members-button) {
     padding: 0;
 }
 
-.review-actions .like-count { font-weight: 700; }
+.review_actions .like-count { font-weight: 700; }

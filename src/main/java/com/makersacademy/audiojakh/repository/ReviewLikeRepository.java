@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ReviewLikeRepository extends CrudRepository<ReviewLike, Long> {
     long countByReviewId(Long reviewId);
-    Optional<ReviewLike> findByReviewAndUserId(Long reviewId, Long userId);
-    boolean existsByReviewAndUserId(Long reviewId, Long userId);
+    Optional<ReviewLike> findByReviewIdAndUserId(Long reviewId, Long userId);
+    boolean existsByReviewIdAndUserId(Long reviewId, Long userId);
 }
