@@ -8,6 +8,8 @@ import com.makersacademy.audiojakh.repository.ReviewRepository;
 import com.makersacademy.audiojakh.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +34,19 @@ public class ReviewsController {
     @Autowired
     AlbumRepository albumRepository;
 
+    private User currentUser() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof DefaultOidcUser oidc)) {
+            return null;
+        }
+        String email = (String) oidc.getAttributes().get("email");
+        return userRepository.findUserByEmailAddress(email).orElse(null);
+    }
+
     @GetMapping("/reviews")
     public String index(@RequestParam(value = "albumId", required = false) String albumId, Model model) {
+        User me = currentUser();
+        model.addAttribute("currentUser", me);
         Iterable<Review> reviews = reviewRepository.findAll();
         model.addAttribute("reviews", reviews);
         model.addAttribute("review", new Review());
@@ -57,18 +70,20 @@ public class ReviewsController {
                                @ModelAttribute Review review,
                                @AuthenticationPrincipal OAuth2User principal,
                                RedirectAttributes redirectAttributes) {
+        User me = currentUser();
+        Long currentUserId = me.getId();
         if (principal == null) {
             return new RedirectView("/login");
         }
 
-        String username = principal.getAttribute("email");
-        if (username == null) {
-            username = principal.getAttribute("preferred_username");
-        }
+//        String username = principal.getAttribute("email");
+//        if (username == null) {
+//            username = principal.getAttribute("preferred_username");
+//        }
 
-        Long currentUserId = userRepository.findUserByUsername(username)
-                .map(User::getId)
-                .orElse(1L);
+//        Long currentUserId = userRepository.findUserByUsername(username)
+//                .map(User::getId)
+//                .orElse(1L);
 
         if (trackId != null && !trackId.trim().isEmpty()) {
             if (reviewRepository.existsByUserIdAndTrackSpotifyId(currentUserId, trackId)) {
