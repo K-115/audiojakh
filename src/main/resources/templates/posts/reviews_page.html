@@ -70,6 +70,8 @@
   <button type="submit">Reset / Change Album</button>
 </form>
 
+
+
 <!--add profile pic and username-->
 <ul>
   <li th:each="review: ${reviews}">
@@ -101,6 +103,9 @@
         <span th:if="${review.track != null}" th:text="'🎵 Song: ' + ${review.track.name}"></span>
         <span th:if="${review.track == null && review.album != null}" th:text="'💿 Album: ' + ${review.album.name}"></span>
       </div>
+        <strong th:text="${review.content}"></strong>
+        <span th:if="${review.rating != null}" th:text="' (' + ${review.rating} + '★)'"></span>
+    </div>
     </div>
 
   </li>

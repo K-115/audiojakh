@@ -75,6 +75,7 @@ public class ReviewsController {
                                RedirectAttributes redirectAttributes) {
         User me = currentUser();
         Long currentUserId = me.getId();
+        User currentUser = currentUser();
         if (principal == null) {
             return new RedirectView("/login");
         }
