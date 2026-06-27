@@ -1,47 +1,92 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>AudioJAKH - Discover Music</title>
-  <link rel="stylesheet" th:href="@{/main.css}">
-</head>
-<body>
-<header>
-  <img class="logo" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJACK logo"/>
-  <div th:replace="~{navbar :: navbar}"></div>
-  <div th:if="${currentUser != null}">
-    <p id="greeting">Welcome back, <a th:href="@{/profile/{username}(username=${currentUser.username})}" th:text="${currentUser.username}">User</a>!</p>
-  </div>
-</header>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<h1>Trending Right Now</h1>
+	<head>
+		<meta charset="UTF-8">
+		<title>AudioJAKH - Discover Music</title>
+		<link rel="stylesheet" th:href="@{/main.css}">
+	</head>
+
+	<body>
+
+		<div th:replace="~{navbar :: navbar}"></div>
+
+		<div class="main-page-container">
+			<header>
+				<div th:if="${currentUser != null}">
+					<p id="greeting">Welcome back, <a th:href="@{/profile/{username}(username=${currentUser.username})}"
+					                                  th:text="${currentUser.username}">User</a>!</p>
+				</div>
+			</header>
+
+			<h1>Trending Right Now</h1>
+
+			<section class="trending-reviews-section">
+				<h2>Trending Reviews This Week</h2>
+
+				<div th:if="${#lists.isEmpty(trendingReviews)}">
+					<p>No reviews have been written this week yet. Be the first to add one!</p>
+				</div>
+
+				<div th:unless="${#lists.isEmpty(trendingReviews)}">
+					<div th:each="review : ${trendingReviews}" class="review-card" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 5px;">
+						<div class="review-author" style="font-weight: bold; margin-bottom: 5px;">
+							Posted by:
+							<a th:if="${review.user != null}"
+							   th:href="@{/profile/{username}(username=${review.user.username})}"
+							   th:text="${review.user.username}">Username</a>
+						</div>
+						<p style="font-style: italic;">
+							<a th:href="@{/reviews}" style="text-decoration: none; color: inherit;">
+								"<span th:text="${review.content}">Review content text goes here</span>"
+							</a>
+						</p>
 
 
-<section>
-  <h2>Trending Songs</h2>
-  <ul>
-    <li th:each="song : ${trendingSongs}">
-      <a th:href="@{/songs/{id}(id=${song.spotifyId})}" th:text="${song.name}">Song Title</a>
-    </li>
-  </ul>
-</section>
+						<div class="review-meta" style="font-size: 0.9em; color: #555;">
+							<span th:text="${review.likes} + ' Likes'">0 Likes</span>
+
+							<span th:if="${review.track != null}">
+            					Song: <a th:href="@{/songs/{id}(id=${review.track.spotifyId})}" th:text="${review.track.name}">Song Name</a>
+        					</span>
+							<span th:if="${review.album != null}">
+            					Album: <a th:href="@{/albums/{id}(id=${review.album.spotifyId})}" th:text="${review.album.name}">Album Name</a>
+        					</span>
+						</div>
+
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2>Trending Songs</h2>
+				<ul>
+					<li th:each="song : ${trendingSongs}">
+						<a th:href="@{/songs/{id}(id=${song.spotifyId})}" th:text="${song.name}">Song Title</a>
+					</li>
+				</ul>
+			</section>
 
 
-<section>
-  <h2>Trending Artists</h2>
-  <ul>
-    <li th:each="artist : ${trendingArtists}" th:text="${artist.name}">Artist Name</li>
-  </ul>
-</section>
+			<section>
+				<h2>Trending Artists</h2>
+				<ul>
+					<li th:each="artist : ${trendingArtists}" th:text="${artist.name}">Artist Name</li>
+				</ul>
+			</section>
 
-<section>
-  <h2>Trending Albums</h2>
-  <ul>
-    <li th:each="album : ${trendingAlbums}">
-      <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album Name</a>
-    </li>
-  </ul>
-</section>
-<div th:replace="~{footer :: footer}"></div>
-</body>
+			<section>
+				<h2>Trending Albums</h2>
+				<ul>
+					<li th:each="album : ${trendingAlbums}">
+						<a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album Name</a>
+					</li>
+				</ul>
+			</section>
+
+		</div>
+
+		<div th:replace="~{footer :: footer}"></div>
+
+	</body>
 </html>

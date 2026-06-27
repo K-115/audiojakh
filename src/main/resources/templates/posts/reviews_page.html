@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+<head lang="en">
+  <meta charset="UTF-8"/>
+  <title>AudioJAKH</title>
+  <link rel="stylesheet" href="/main.css" />
+</head>
+<body>
+
+<div th:replace="~{navbar :: navbar}"></div>
+
+<h1>Reviews</h1>
+
+<div sec:authorize="isAuthenticated()" id="greeting">
+  Signed in as <span sec:authentication="principal.attributes['email']"></span>
+</div>
+
+<div th:if="${errorMessage}">
+  <p th:text="${errorMessage}"></p>
+</div>
+
+<form method="get" action="/reviews">
+  <p>
+    1. Select an Album to Review:
+    <select name="albumId" onchange="this.form.submit()">
+      <option value="">-- Choose an Album --</option>
+      <option th:each="album : ${allAlbums}"
+              th:value="${album.spotifyId}"
+              th:text="${album.name}"
+              th:selected="${album.spotifyId == selectedAlbumId}"></option>
+    </select>
+    <button type="submit" th:if="${selectedAlbumId == null}">Next Step</button>
+  </p>
+</form>
+
+<form th:if="${selectedAlbumId != null}" th:action="@{/reviews}" th:object="${review}" method="post">
+  <input type="hidden" th:value="${selectedAlbumId}" name="albumId" id="albumId" />
+
+  <p>Content: <input type="text" th:field="*{content}" required /></p>
+
+  <p>
+    Rating:
+    <select th:field="*{rating}" required>
+      <option value="" disabled selected>Select stars</option>
+      <option value="1">⭐ (1)</option>
+      <option value="2">⭐⭐ (2)</option>
+      <option value="3">⭐⭐⭐ (3)</option>
+      <option value="4">⭐⭐⭐⭐ (4)</option>
+      <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+    </select>
+  </p>
+
+  <p>
+    2. Choose a Song from this Album (Optional):
+    <select name="trackId">
+      <option value="">-- None (Reviewing the entire album) --</option>
+      <option th:each="track : ${allTracks}"
+              th:value="${track.spotifyId}"
+              th:text="${track.name}"></option>
+    </select>
+  </p>
+
+  <p>
+    <input type="submit" value="Submit Review" />
+  </p>
+</form>
+
+<form method="get" action="/reviews" style="display: inline;">
+  <button type="submit">Reset / Change Album</button>
+</form>
+
+<!--add profile pic and username-->
+<ul>
+    <li th:each="rv : ${reviewViews}">
+
+        <div>
+            <a th:if="${rv.review.user != null}"
+               th:href="@{/profile/{username}(username=${rv.review.user.username})}">
+                <img th:if="${rv.review.user.profilePicture != null}"
+                     th:src="@{'/images/' + ${rv.review.user.profilePicture}}" alt="Avatar"/>
+            </a>
+            <img th:if="${rv.review.user == null or rv.review.user.profilePicture == null}"
+                 th:src="@{/images/default-avatar.png}" alt="Default Avatar"/>
+        </div>
+
+        <div>
+      <span th:if="${rv.review.user != null}">
+        <a th:href="@{/profile/{username}(username=${rv.review.user.username})}">
+          <strong th:text="${rv.review.user.username}"></strong>
+        </a>
+      </span>
+
+            <p th:text="${rv.review.content}"></p>
+
+            <div>
+                <span th:if="${rv.review.track != null}" th:text="'🎵 Song: ' + ${rv.review.track.name}"></span>
+                <span th:if="${rv.review.track == null and rv.review.album != null}" th:text="'💿 Album: ' + ${rv.review.album.name}"></span>
+            </div>
+            <span th:if="${rv.review.rating != null}" th:text="' (' + ${rv.review.rating} + '★)'">
+
+            </span>
+
+            <span class="review-actions">
+        <form th:action="@{/reviews/{id}/like(id=${rv.review.id})}" method="post" style="display:inline">
+          <button type="submit" class="heart-btn" th:text="${rv.likedByMe} ? '❤️' : '🤍'"></button>
+        </form>
+        <span class="like-count" th:text="${rv.likeCount}"></span> likes
+      </span>
+        </div>
+
+
+  <div sec:authorize="isAuthenticated()" style="margin-top: 10px;">
+    <form th:action="@{/comments}" method="post" style="display: flex; gap: 10px;">
+      <input type="hidden" name="reviewId" th:value="${rv.review.id}" />
+      <input type="text" name="content" placeholder="Write a comment..." required
+             style="flex-grow: 1; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
+      <button type="submit" style="padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Reply
+      </button>
+    </form>
+  </div>
+    </li>
+
+</ul>
+
+<div th:replace="~{footer :: footer}"></div>
+
+</body>
+</html>
+
