@@ -4,6 +4,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 @layer theme {
   :root, :host {
+    --font-sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --color-red-300: #e9726f;
+    --color-red-400: #df524f;
     --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-black: #000;
@@ -12,9 +15,12 @@
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
     --font-weight-bold: 700;
-    --radius-md: 0.375rem;
+    --radius-md: 10px;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --color-cream-200: #e9ceab;
+    --color-canvas: #100807;
+    --font-display: "Bricolage Grotesque", "Archivo", system-ui, sans-serif;
   }
 }
 @layer utilities {
@@ -143,6 +149,25 @@
         background-color: var(--color-black);
       }
     }
+  }
+}
+@layer base {
+  body.bg-canvas {
+    color: var(--color-cream-200);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  body.bg-canvas :is(h1, h2, h3, h4) {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-cream-200);
+  }
+  body.bg-canvas a {
+    color: var(--color-red-400);
+  }
+  body.bg-canvas a:hover {
+    color: var(--color-red-300);
   }
 }
 @property --tw-rotate-x {
