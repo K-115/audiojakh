@@ -1,0 +1,8 @@
+/* tailwind v4 input, is not served. Output goes to static/css/app.css */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+/* preflight left out on purpose. re-add @import "tailwindcss/preflight.css" layer(base);
+   once main.css is removed */
+
+@source "../resources/templates";
