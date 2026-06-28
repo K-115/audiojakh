@@ -1,5 +1,10 @@
 /* tailwind v4 input, is not served. Output goes to static/css/app.css */
 @layer theme, base, components, utilities;
+
+/* Brand webfonts — Google Fonts substitutions:
+   Bricolage Grotesque = display · Archivo = UI/body · Space Mono = metadata */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 /* preflight left out on purpose. re-add @import "tailwindcss/preflight.css" layer(base);
