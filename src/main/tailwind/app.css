@@ -105,3 +105,81 @@
   body.bg-canvas a       { color: var(--color-red-400); }
   body.bg-canvas a:hover { color: var(--color-red-300); }
 }
+
+@layer components {
+  /* Eyebrow / tracked uppercase label */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-cream-400);
+  }
+
+  /* Buttons — pill shaped */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background-color .2s var(--ease-brand),
+                border-color .2s var(--ease-brand),
+                transform .12s var(--ease-brand);
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary       { background: var(--color-red-500); color: var(--color-cream-50); }
+  .btn-primary:hover { background: var(--color-red-400); }
+
+  .btn-secondary       { background: transparent; color: var(--color-cream-200); border-color: var(--color-ink-500); }
+  .btn-secondary:hover { border-color: var(--color-red-700); }
+
+  .btn-ghost       { background: transparent; color: var(--color-cream-300); }
+  .btn-ghost:hover { background: var(--color-ink-700); }
+
+  /* Card surface */
+  .brand-card {
+    background: var(--color-surface-card);
+    border: 1.5px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Genre / descriptor chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.7rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--color-hairline);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-cream-400);
+  }
+  .chip:hover { border-color: var(--color-red-700); color: var(--color-cream-200); }
+
+  /* Star rating glyphs (gold). Use on a <span> wrapping ★ chars. */
+  .stars       { color: var(--color-rating); letter-spacing: 0.06em; font-size: 1rem; }
+  .stars-empty { color: var(--color-ink-500); }
+
+  /* Pill input (search, etc.) */
+  .input-pill {
+    background: var(--color-surface-inset);
+    border: 1.5px solid var(--color-hairline);
+    border-radius: var(--radius-pill);
+    color: var(--color-cream-200);
+    padding: 0.5rem 1rem;
+    outline: none;
+    transition: border-color .2s var(--ease-brand);
+  }
+  .input-pill:focus { border-color: var(--color-red-700); }
+}

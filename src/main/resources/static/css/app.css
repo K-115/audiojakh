@@ -5,8 +5,11 @@
 @layer theme {
   :root, :host {
     --font-sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
     --color-red-300: #e9726f;
     --color-red-400: #df524f;
+    --color-red-500: #d2282b;
+    --color-red-700: #7c1719;
     --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-black: #000;
@@ -16,11 +19,24 @@
     --text-sm--line-height: calc(1.25 / 0.875);
     --font-weight-bold: 700;
     --radius-md: 10px;
+    --radius-lg: 16px;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --color-ink-700: #2a1d18;
+    --color-ink-500: #4d3a31;
+    --color-cream-50: #fbf6ee;
     --color-cream-200: #e9ceab;
-    --color-canvas: #100807;
+    --color-cream-300: #d8bd96;
+    --color-cream-400: #c3a47b;
+    --color-surface-card: #2a1d18;
+    --color-surface-inset: #17100d;
+    --color-hairline: #3a2a23;
+    --color-rating: #d99e36;
     --font-display: "Bricolage Grotesque", "Archivo", system-ui, sans-serif;
+    --text-eyebrow: 0.75rem;
+    --radius-pill: 999px;
+    --shadow-card: 0 6px 20px rgba(0,0,0,0.5);
+    --ease-brand: cubic-bezier(0.32, 0.72, 0, 1);
   }
 }
 @layer utilities {
@@ -168,6 +184,96 @@
   }
   body.bg-canvas a:hover {
     color: var(--color-red-300);
+  }
+}
+@layer components {
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-cream-400);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background-color .2s var(--ease-brand), border-color .2s var(--ease-brand), transform .12s var(--ease-brand);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn-primary {
+    background: var(--color-red-500);
+    color: var(--color-cream-50);
+  }
+  .btn-primary:hover {
+    background: var(--color-red-400);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-cream-200);
+    border-color: var(--color-ink-500);
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-red-700);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-cream-300);
+  }
+  .btn-ghost:hover {
+    background: var(--color-ink-700);
+  }
+  .brand-card {
+    background: var(--color-surface-card);
+    border: 1.5px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.7rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--color-hairline);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-cream-400);
+  }
+  .chip:hover {
+    border-color: var(--color-red-700);
+    color: var(--color-cream-200);
+  }
+  .stars {
+    color: var(--color-rating);
+    letter-spacing: 0.06em;
+    font-size: 1rem;
+  }
+  .stars-empty {
+    color: var(--color-ink-500);
+  }
+  .input-pill {
+    background: var(--color-surface-inset);
+    border: 1.5px solid var(--color-hairline);
+    border-radius: var(--radius-pill);
+    color: var(--color-cream-200);
+    padding: 0.5rem 1rem;
+    outline: none;
+    transition: border-color .2s var(--ease-brand);
+  }
+  .input-pill:focus {
+    border-color: var(--color-red-700);
   }
 }
 @property --tw-rotate-x {
