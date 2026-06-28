@@ -3,7 +3,7 @@
 
     <head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
 
-	<body>
+	<body class="bg-canvas">
 
 		<div th:replace="~{navbar :: navbar}"></div>
 
@@ -14,7 +14,7 @@
 				<h1 th:text="${profile.isOwnProfile} ? 'Your Profile' : |${profile.user.username}'s Profile|">User
 					Profile</h1>
 
-				<div class="profile-stats" style="display: flex; gap: 15px; margin-bottom: 10px; font-weight: bold;">
+                <div class="flex gap-6 mb-2.5 font-mono text-sm text-cream-400">
 					<span th:text="${profile.followerCount} + ' Followers'">0 Followers</span>
 					<span th:text="${profile.followingCount} + ' Following'">0 Following</span>
 					<span th:text="${profile.reviewCount} + ' Reviews'">0 Reviews</span>

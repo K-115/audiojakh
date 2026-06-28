@@ -5,7 +5,7 @@
 <head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
 
 
-<body>
+<body class="bg-canvas">
 <div th:replace="~{navbar :: navbar}"></div>
 
 <h1 id="album-name" th:text="${album.name}">Album name</h1>
@@ -18,9 +18,11 @@
 </p>
 
 <h2>Tracks</h2>
-<ul class="tracks-list">
-    <li th:each="track : ${tracks}" class="track-item">
-        <a class="track-link" th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.name}">Track name</a>
+<ul class="brand-card list-none m-0 p-0 overflow-hidden">
+    <li th:each="track, it : ${tracks}"
+        class="flex items-center justify-between gap-4 px-5 py-3 border-t border-ink-700 first:border-0">
+        <a class="text-cream-200 no-underline hover:text-red-300 flex items-center gap-3"
+           th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.name}">Track name</a>
         <span th:if="${track.formattedDuration != ''}" th:text="' (' + ${track.formattedDuration} + ')'"></span>
     </li>
     <li th:if="${tracks.isEmpty()}">No tracks found for this album.</li>
