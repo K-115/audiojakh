@@ -61,6 +61,9 @@
 <h2>Albums</h2>
 <ul class="albums-list">
     <li th:each="album : ${albums}" class="album-card">
+        <img class="album-cover-art"
+             th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
+             th:alt="${album.name}" />
         <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album name</a>
     </li>
     <li th:if="${albums == null || albums.isEmpty()}">No albums found for this artist.</li>
