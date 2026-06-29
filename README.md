@@ -52,6 +52,24 @@ This app's CSS is built with **Tailwind CSS** (v4), compiled by the Tailwind CLI
 
 > Tailwind's base reset ("Preflight") is intentionally disabled for now, so Tailwind can coexist with the legacy `main.css` while pages are migrated one at a time. It will be re-enabled once `main.css` has been fully removed.
 
+## Working with Tailwind vs the old vanilla CSS
+
+- **You style in the HTML, not in a `.css` file.** Instead of writing a rule for `.review-card` in `main.css`, put utility classes on the element: `class="brand-card p-5 flex gap-4"`. Styling = composing small utilities.
+- **There's a build step now.** `static/css/app.css` is **generated** by the Tailwind CLI from the classes it finds in the templates. Keep this watcher active while working, it rebuilds on save.
+- **Two `app.css` files, they are not the same:**
+    - `src/main/tailwind/app.css` = **input** (brand tokens + component classes, edit here for theme/shared styles).
+    - `src/main/resources/static/css/app.css` = **output** (generated, served, **never hand-edit**).
+- **Commit the regenerated output with your HTML change**. If you forget the rebuilt CSS, then the site breaks for everyone.
+- **Use the brand tokens, not raw hex.** `bg-canvas`, `text-cream-200/300/400`, `text-red`, `border-hairline`, `font-display`/`font-mono`, and component classes `btn btn-primary`, `brand-card`, `chip`, `input-pill`, `eyebrow`. Cheat-sheet: DS `integration/tailwind/README.md`. Keeps everything on-brand + themeable.
+- **Class names must be literal strings.**
+- **Two temporary migration quirks:**
+    - Tailwind's reset (**Preflight**) is OFF so the legacy `main.css` still works on unmigrated pages. Add manual resets (`list-none m-0 p-0`, `box-border`) when you add lists/boxes.
+    - Every page `<body>` now has `bg-canvas` (dark) with cream default text. Both normalise at the final cutover.
+- **Handling merge conflicts:** on a `static/css/app.css` conflict, **regenerate** (re-run the CLI), do not manually merge. Avoid editing a template someone is actively working on.
+- **Reuse** = a component class (`.btn`, `.brand-card`) or a Thymeleaf fragment, not a brand new CSS rule.
+ 
+
+
 ## Running the tests
 
 - Install chromedriver using `brew install chromedriver`
