@@ -18,7 +18,7 @@
 
 <ul class="albums-list">
     <li th:each="album : ${albums}" class="album-card">
-        <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album name</a>
+        <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album name</a>
     </li>
 </ul>
 

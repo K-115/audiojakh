@@ -15,9 +15,14 @@ public interface ReviewRepository extends CrudRepository<Review, Long> {
             nativeQuery = true)
     List<Review> findTop5TrendingReviewsThisWeek();
     List<Review> findByUserIdOrderByDateOfReviewDesc(Long userId);
+
     @Query(
             value = "SELECT COUNT(*) FROM reviews WHERE user_id = :userId", nativeQuery = true)
     long countReviewsByUserId(@Param("userId") Long userId);
+    List<Review> findAllByOrderByIdDesc();
+
+    List<Review> findAllByOrderByLikesDesc();
+
 }
 
 

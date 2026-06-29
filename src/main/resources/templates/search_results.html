@@ -1,63 +1,137 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+
+<!--	<head>-->
+<!--		<meta charset="UTF-8"/>-->
+<!--		<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--		<link rel="stylesheet" href="/main.css"/>-->
+
+<!--		<title>Search Results</title>-->
+<!--	</head>-->
+
+<!--	<body>-->
+<!--		<div th:replace="~{navbar :: navbar}"></div>-->
+
+<!--		<div class="main-page-container">-->
+
+<!--			<h1>Search Results</h1>-->
+
+<!--			<ul class="search-list" th:if="${searchResults != null and !searchResults.isEmpty()}">-->
+<!--				<li th:each="user : ${searchResults}">-->
+<!--					<div class="search-card">-->
+<!--						<a th:href="@{/profile/{username}(username=${user.username})}">-->
+<!--							<img th:src="${user.profilePicture != null ? '/images/' + user.profilePicture : 'images/default-avatar.png'}"-->
+<!--							     class="logo"-->
+<!--							     alt="Profile Picture"/>-->
+<!--							<span class="name-tag" th:text="${user.firstName} + ' ' + ${user.surname}"></span>-->
+<!--						</a>-->
+<!--						<span class="username-tag" th:text="' (' + ${user.username} + ')'"></span>-->
+<!--					</div>-->
+<!--					<div class="search-follow-actions" th:if="${currentUserEntity != null and currentUserEntity.id != user.id}" style="margin: 10px 0;">-->
+<!--						<div th:if="${followedUserIds != null and #lists.contains(followedUserIds, user.id)}">-->
+<!--							<form th:action="@{/profile/{username}/unfollow(username=${user.username})}" method="post">-->
+<!--								<button class="view-profile-btn" type="submit">Unfollow</button>-->
+<!--							</form>-->
+<!--						</div>-->
+
+<!--						<div th:unless="${followedUserIds != null and #lists.contains(followedUserIds, user.id)}">-->
+<!--							<form th:action="@{/profile/{username}/follow(username=${user.username})}" method="post">-->
+<!--								<button class="view-profile-btn" type="submit">Follow</button>-->
+<!--							</form>-->
+<!--						</div>-->
+
+<!--					</div>-->
+<!--					<a th:href="@{/profile/{username}(username=${user.username})}">-->
+<!--						<button class="view-profile-btn" type="button">View Profile</button>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--			</ul>-->
+
+<!--			<div th:if="${searchResults == null or searchResults.isEmpty()}">-->
+<!--				<p class="no-result">No users found...</p>-->
+<!--			</div>-->
+
+<!--			<a th:href="@{/members}">-->
+<!--				<button class="members-button" type="button">Go to Members Page</button>-->
+<!--			</a>-->
+<!--		</div>-->
+
+<!--		<div th:replace="~{footer :: footer}"></div>-->
+
+<!--	</body>-->
+
+<!--</html>-->
+
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Search Results - AudioJAKH</title>
+	<link rel="stylesheet" th:href="@{/main.css}">
+</head>
+<body>
 
-	<head>
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="/main.css"/>
+<div th:replace="~{navbar :: navbar}"></div>
 
-		<title>Search Results</title>
-	</head>
+<div class="main-page-container">
 
-	<body>
-		<div th:replace="~{navbar :: navbar}"></div>
+	<h1>Search Results</h1>
+	<p th:if="${query}" class="result-item-meta" th:text="|Showing results matching: '${query}'|"></p>
 
-		<div class="main-page-container">
 
-			<h1>Search Results</h1>
+	<div th:if="${query == null}" class="search-section-box">
+		<p>Type a name, song title, or album in the navigation bar search input to discover items.</p>
+	</div>
 
-			<ul class="search-list" th:if="${searchResults != null and !searchResults.isEmpty()}">
-				<li th:each="user : ${searchResults}">
-					<div class="search-card">
-						<a th:href="@{/profile/{username}(username=${user.username})}">
-							<img th:src="${user.profilePicture != null ? '/images/' + user.profilePicture : 'images/default-avatar.png'}"
-							     class="logo"
-							     alt="Profile Picture"/>
-							<span class="name-tag" th:text="${user.firstName} + ' ' + ${user.surname}"></span>
-						</a>
-						<span class="username-tag" th:text="' (' + ${user.username} + ')'"></span>
-					</div>
-					<div class="search-follow-actions" th:if="${currentUserEntity != null and currentUserEntity.id != user.id}" style="margin: 10px 0;">
-						<div th:if="${followedUserIds != null and #lists.contains(followedUserIds, user.id)}">
-							<form th:action="@{/profile/{username}/unfollow(username=${user.username})}" method="post">
-								<button class="view-profile-btn" type="submit">Unfollow</button>
-							</form>
-						</div>
+	<div th:if="${query != null}">
 
-						<div th:unless="${followedUserIds != null and #lists.contains(followedUserIds, user.id)}">
-							<form th:action="@{/profile/{username}/follow(username=${user.username})}" method="post">
-								<button class="view-profile-btn" type="submit">Follow</button>
-							</form>
-						</div>
-
-					</div>
-					<a th:href="@{/profile/{username}(username=${user.username})}">
-						<button class="view-profile-btn" type="button">View Profile</button>
-					</a>
+		<div class="search-section-box">
+			<h2>Members</h2>
+			<p th:if="${#lists.isEmpty(userResults)}" class="result-item-meta">No platform profiles match your request.</p>
+			<ul th:unless="${#lists.isEmpty(userResults)}">
+				<li th:each="member : ${userResults}">
+					<a class="result-item-link" th:href="@{/profile/{username}(username=${member.username})}" th:text="${member.username}">Username</a>
 				</li>
 			</ul>
-
-			<div th:if="${searchResults == null or searchResults.isEmpty()}">
-				<p class="no-result">No users found...</p>
-			</div>
-
-			<a th:href="@{/members}">
-				<button class="members-button" type="button">Go to Members Page</button>
-			</a>
 		</div>
 
-		<div th:replace="~{footer :: footer}"></div>
+		<div class="search-section-box">
+			<h2>Songs</h2>
+			<p th:if="${#lists.isEmpty(trackResults)}" class="result-item-meta">No matching tracks discovered.</p>
+			<ul th:unless="${#lists.isEmpty(trackResults)}">
+				<li th:each="track : ${trackResults}">
+					<a class="result-item-link" th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>
+					<div class="result-item-meta" th:text="${track.artists != null && track.artists.length > 0} ? 'Track by ' + ${track.artists[0].name} : 'Unknown Artist'">Artist</div>
+				</li>
+			</ul>
+		</div>
 
-	</body>
+		<div class="search-section-box">
+			<h2>Artists</h2>
+			<p th:if="${#lists.isEmpty(artistResults)}" class="result-item-meta">No matching artists found.</p>
+			<ul th:unless="${#lists.isEmpty(artistResults)}">
+				<li th:each="artist : ${artistResults}">
+					<a class="result-item-link" th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+				</li>
+			</ul>
+		</div>
 
+		<div class="search-section-box">
+			<h2>Albums</h2>
+			<p th:if="${#lists.isEmpty(albumResults)}" class="result-item-meta">No matching albums found.</p>
+			<ul th:unless="${#lists.isEmpty(albumResults)}">
+				<li th:each="album : ${albumResults}">
+					<a class="result-item-link" th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album Name</a>
+					<div class="result-item-meta" th:text="${album.artists != null && album.artists.length > 0} ? 'Album by ' + ${album.artists[0].name} : ''">Artist</div>
+				</li>
+			</ul>
+		</div>
+
+	</div>
+
+</div>
+
+<div th:replace="~{footer :: footer}"></div>
+
+</body>
 </html>

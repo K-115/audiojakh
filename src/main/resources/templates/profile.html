@@ -1,81 +1,198 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+
+<!--	<head>-->
+<!--		<meta charset="UTF-8">-->
+<!--		<title th:text="${profile.user.username} + ' - Profile'">Profile</title>-->
+<!--		<link rel="stylesheet" th:href="@{/main.css}">-->
+<!--	</head>-->
+
+<!--	<body>-->
+
+<!--		<div th:replace="~{navbar :: navbar}"></div>-->
+
+<!--		<div class="main-page-container">-->
+
+<!--			<img th:if="${profile.user.profilePicture != null}" th:src="${profile.user.profilePicture}"/>-->
+<!--			<div>-->
+<!--				<h1 th:text="${profile.isOwnProfile} ? 'Your Profile' : |${profile.user.username}'s Profile|">User-->
+<!--					Profile</h1>-->
+
+<!--				<div class="profile-stats" style="display: flex; gap: 15px; margin-bottom: 10px; font-weight: bold;">-->
+<!--					<span th:text="${profile.followerCount} + ' Followers'">0 Followers</span>-->
+<!--					<span th:text="${profile.followingCount} + ' Following'">0 Following</span>-->
+<!--					<span th:text="${profile.reviewCount} + ' Reviews'">0 Reviews</span>-->
+<!--				</div>-->
+<!--			</div>-->
+
+<!--			<div th:if="${currentUser != null && !profile.isOwnProfile}">-->
+
+<!--				<div th:if="${profile.isFollowing}">-->
+<!--					<form th:action="@{/profile/{username}/unfollow(username=${profile.user.username})}" method="post">-->
+<!--						<button type="submit" class="btn-unfollow">Unfollow</button>-->
+<!--					</form>-->
+<!--				</div>-->
+
+<!--				<div th:unless="${profile.isFollowing}">-->
+<!--					<form th:action="@{/profile/{username}/follow(username=${profile.user.username})}" method="post">-->
+<!--						<button type="submit" class="btn-follow">Follow</button>-->
+<!--					</form>-->
+<!--				</div>-->
+
+<!--			</div>-->
+
+<!--			<h3>Favourite Albums</h3>-->
+<!--			<ul>-->
+<!--				<li th:each="album : ${profile.favouriteAlbums}">-->
+<!--					<a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album Name</a>-->
+<!--				</li>-->
+<!--			</ul>-->
+
+<!--			<h3>Favourite Songs</h3>-->
+<!--			<ul>-->
+<!--				<li th:each="song : ${profile.favouriteSongs}">-->
+<!--					<a th:href="@{/songs/{id}(id=${song.spotifyId})}" th:text="${song.name}">Song Name</a>-->
+<!--				</li>-->
+<!--			</ul>-->
+
+<!--			<h3>Favourite Artists</h3>-->
+<!--			<ul>-->
+<!--				<li th:each="artist : ${profile.favouriteArtists}">-->
+<!--					<span th:text="${artist.name}">Artist Name</span>-->
+<!--				</li>-->
+<!--			</ul>-->
+<!--		</div>-->
+<!--		<h3>Reviews</h3>-->
+<!--		<div th:if="${#lists.isEmpty(profile.reviews)}">-->
+<!--			<p>No reviews posted yet.</p>-->
+<!--		</div>-->
+
+<!--		<ul th:unless="${#lists.isEmpty(profile.reviews)}">-->
+<!--			<li th:each="review : ${profile.reviews}">-->
+<!--				<p th:text="${review.content}" style="font-style: italic;">Review content</p>-->
+<!--				<small>-->
+<!--					<span th:text="${review.likes} + ' Likes'">0 Likes</span> |-->
+<!--					<span th:text="${#temporals.format(review.dateOfReview, 'dd MMM yyyy HH:mm')}">Date</span>-->
+<!--				</small>-->
+<!--			</li>-->
+<!--		</ul>-->
+<!--		<div th:replace="~{footer :: footer}"></div>-->
+<!--	</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-	<head>
-		<meta charset="UTF-8">
-		<title th:text="${profile.user.username} + ' - Profile'">Profile</title>
-		<link rel="stylesheet" th:href="@{/main.css}">
-	</head>
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${profile.user.username} + ' - Profile'">Profile</title>
+	<link rel="stylesheet" th:href="@{/main.css}">
+</head>
 
-	<body>
+<body>
 
-		<div th:replace="~{navbar :: navbar}"></div>
+<div th:replace="~{navbar :: navbar}"></div>
 
-		<div class="main-page-container">
+<div class="main-page-container">
 
-			<img th:if="${profile.user.profilePicture != null}" th:src="${profile.user.profilePicture}"/>
-			<div>
-				<h1 th:text="${profile.isOwnProfile} ? 'Your Profile' : |${profile.user.username}'s Profile|">User
-					Profile</h1>
+	<img th:if="${profile.user.profilePicture != null}" th:src="${profile.user.profilePicture}"/>
+	<div>
+		<h1 th:text="${profile.isOwnProfile} ? 'Your Profile' : |${profile.user.username}'s Profile|">User Profile</h1>
 
-				<div class="profile-stats" style="display: flex; gap: 15px; margin-bottom: 10px; font-weight: bold;">
-					<span th:text="${profile.followerCount} + ' Followers'">0 Followers</span>
-					<span th:text="${profile.followingCount} + ' Following'">0 Following</span>
-					<span th:text="${profile.reviewCount} + ' Reviews'">0 Reviews</span>
-				</div>
-			</div>
-
-			<div th:if="${currentUser != null && !profile.isOwnProfile}">
-
-				<div th:if="${profile.isFollowing}">
-					<form th:action="@{/profile/{username}/unfollow(username=${profile.user.username})}" method="post">
-						<button type="submit" class="btn-unfollow">Unfollow</button>
-					</form>
-				</div>
-
-				<div th:unless="${profile.isFollowing}">
-					<form th:action="@{/profile/{username}/follow(username=${profile.user.username})}" method="post">
-						<button type="submit" class="btn-follow">Follow</button>
-					</form>
-				</div>
-
-			</div>
-
-			<h3>Favourite Albums</h3>
-			<ul>
-				<li th:each="album : ${profile.favouriteAlbums}">
-					<a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album Name</a>
-				</li>
-			</ul>
-
-			<h3>Favourite Songs</h3>
-			<ul>
-				<li th:each="song : ${profile.favouriteSongs}">
-					<a th:href="@{/songs/{id}(id=${song.spotifyId})}" th:text="${song.name}">Song Name</a>
-				</li>
-			</ul>
-
-			<h3>Favourite Artists</h3>
-			<ul>
-				<li th:each="artist : ${profile.favouriteArtists}">
-					<span th:text="${artist.name}">Artist Name</span>
-				</li>
-			</ul>
+		<div class="profile-stats">
+			<span th:text="${profile.followerCount} + ' Followers'">0 Followers</span>
+			<span th:text="${profile.followingCount} + ' Following'">0 Following</span>
+			<span th:text="${profile.reviewCount} + ' Reviews'">0 Reviews</span>
 		</div>
-		<h3>Reviews</h3>
-		<div th:if="${#lists.isEmpty(profile.reviews)}">
-			<p>No reviews posted yet.</p>
-		</div>
+	</div>
 
-		<ul th:unless="${#lists.isEmpty(profile.reviews)}">
-			<li th:each="review : ${profile.reviews}" style="border-bottom: 1px solid #ddd; padding: 10px 0; list-style-type: none;">
-				<p th:text="${review.content}" style="font-style: italic;">Review content</p>
-				<small style="color: #666;">
-					<span th:text="${review.likes} + ' Likes'">0 Likes</span> |
-					<span th:text="${#temporals.format(review.dateOfReview, 'dd MMM yyyy HH:mm')}">Date</span>
-				</small>
+	<div th:if="${currentUser != null && !profile.isOwnProfile}">
+		<div th:if="${profile.isFollowing}">
+			<form th:action="@{/profile/{username}/unfollow(username=${profile.user.username})}" method="post">
+				<button type="submit" class="btn-unfollow">Unfollow</button>
+			</form>
+		</div>
+		<div th:unless="${profile.isFollowing}">
+			<form th:action="@{/profile/{username}/follow(username=${profile.user.username})}" method="post">
+				<button type="submit" class="btn-follow">Follow</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="favourites-box">
+		<div class="favourites-header-flex">
+			<h3>Favourite Album</h3>
+			<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='album')}" class="search-action-btn">+ Search Albums</a>
+		</div>
+		<div th:if="${#lists.isEmpty(profile.favouriteAlbums)}" class="empty-text">No favourite album added yet.</div>
+		<ul th:unless="${#lists.isEmpty(profile.favouriteAlbums)}" class="favourites-list">
+			<li th:each="album : ${profile.favouriteAlbums}" class="favourite-item-flex">
+				<img class="favourite-cover-art"
+				     th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
+				     alt="Album Cover" />
+				<div>
+					<a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album Name</a>
+					<div class="item-meta-artist" th:text="${album.artists != null && album.artists.length > 0} ? 'Album by ' + ${album.artists[0].name} : ''"></div>
+				</div>
 			</li>
 		</ul>
-		<div th:replace="~{footer :: footer}"></div>
-	</body>
+	</div>
+
+	<div class="favourites-box">
+		<div class="favourites-header-flex">
+			<h3>Favourite Song</h3>
+			<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='track')}" class="search-action-btn">+ Search Songs</a>
+		</div>
+		<div th:if="${#lists.isEmpty(profile.favouriteSongs)}" class="empty-text">No favourite song added yet.</div>
+		<ul th:unless="${#lists.isEmpty(profile.favouriteSongs)}" class="favourites-list">
+			<li th:each="song : ${profile.favouriteSongs}" class="favourite-item-flex">
+				<img class="favourite-cover-art"
+				     th:src="${song.album != null && song.album.images != null && song.album.images.length > 0} ? ${song.album.images[0].url} : '/images/default-album.png'"
+				     alt="Song Cover" />
+				<div>
+					<a th:href="@{/songs/{id}(id=${song.id})}" th:text="${song.name}">Song Name</a>
+					<div class="item-meta-artist" th:text="${song.artists != null && song.artists.length > 0} ? 'Track by ' + ${song.artists[0].name} : ''"></div>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div class="favourites-box">
+		<div class="favourites-header-flex">
+			<h3>Favourite Artist</h3>
+			<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='artist')}" class="search-action-btn">+ Search Artists</a>
+		</div>
+		<div th:if="${#lists.isEmpty(profile.favouriteArtists)}" class="empty-text">No favourite artist added yet.</div>
+		<ul th:unless="${#lists.isEmpty(profile.favouriteArtists)}" class="favourites-list">
+			<li th:each="artist : ${profile.favouriteArtists}" class="favourite-item-flex">
+				<img class="favourite-artist-art"
+				     th:src="${artist.images != null && artist.images.length > 0} ? ${artist.images[0].url} : '/images/default-artist.png'"
+				     alt="Artist Profile" />
+				<div>
+					<a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<h3>Reviews</h3>
+	<div th:if="${#lists.isEmpty(profile.reviews)}">
+		<p>No reviews posted yet.</p>
+	</div>
+
+	<ul th:unless="${#lists.isEmpty(profile.reviews)}">
+		<li th:each="review : ${profile.reviews}">
+			<p th:text="${review.content}" style="font-style: italic;">Review content</p>
+			<small>
+				<span th:text="${review.likes} + ' Likes'">0 Likes</span> |
+				<span th:text="${#temporals.format(review.dateOfReview, 'dd MMM yyyy HH:mm')}">Date</span>
+			</small>
+		</li>
+	</ul>
+</div>
+
+<div th:replace="~{footer :: footer}"></div>
+</body>
 </html>
+

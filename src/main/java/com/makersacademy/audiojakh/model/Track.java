@@ -24,6 +24,9 @@ public class Track {
 
     private String name;
 
+    @Column(name = "artist_name")
+    private String artistName;
+
     @Column(name = "ALBUM_ID")
     private String albumId;
 
@@ -33,7 +36,7 @@ public class Track {
     private String genre;
 
     @Column(name = "ARTIST_ID")
-    private Long artistId;
+    private String artistId;
 
     public Track(String spotifyId, String name) {
         this.spotifyId = spotifyId;
@@ -46,5 +49,6 @@ public class Track {
         int totalSeconds = durationMs / 1000;
         return String.format("%d:%02d", totalSeconds / 60, totalSeconds % 60);
     }
+
 
 }

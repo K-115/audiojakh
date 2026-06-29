@@ -1,0 +1,104 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Write a Review - AudioJAKH</title>-->
+<!--    <link rel="stylesheet" href="/main.css" />-->
+<!--</head>-->
+<!--<body>-->
+<!--<div th:replace="~{navbar :: navbar}"></div>-->
+
+<!--    <p><a th:href="@{/reviews}">&larr; Back to Timeline</a></p>-->
+<!--    <h1>Write a New Review</h1>-->
+
+<!--    &lt;!&ndash; Flash Error Alert Box &ndash;&gt;-->
+<!--    <div th:if="${errorMessage}" th:text="${errorMessage}"></div>-->
+
+<!--    &lt;!&ndash; Step 1: Spotify Search Form &ndash;&gt;-->
+<!--    <form th:action="@{/reviews/new}" method="get" style="margin-bottom: 30px;">-->
+<!--        <label>Step 1: Search for a track to review</label><br/>-->
+<!--        <input type="text" name="query" th:value="${query}" placeholder="Type a song title..." required>-->
+<!--        <button type="submit">Search</button>-->
+<!--    </form>-->
+
+<!--    <form th:action="@{/reviews}" th:object="${review}" method="post" th:if="${not #lists.isEmpty(searchTracks)}">-->
+<!--        <label for="trackId">Step 2: Select the correct song</label><br/>-->
+<!--        <select name="trackId" id="trackId" required>-->
+<!--            <option th:each="track : ${searchTracks}"-->
+<!--                    th:value="${track.id}"-->
+<!--                    th:text="${track.name} + ' — By ' + ${track.artists[0].name}">Track option</option>-->
+<!--        </select>-->
+
+<!--        <label for="body">Step 3: Share your thoughts</label><br/>-->
+<!--        <textarea th:field="*{content}" id="body" placeholder="What do you think of this track?..." required></textarea>-->
+
+<!--        <br/><br/>-->
+<!--        <button type="submit">-->
+<!--            Publish Review-->
+<!--        </button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<div th:replace="~{footer :: footer}"></div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Write a Review - AudioJAKH</title>
+    <link rel="stylesheet" href="/main.css" />
+</head>
+
+<div th:replace="~{navbar :: navbar}"></div>
+
+    <p><a th:href="@{/reviews}">&larr; Back to Timeline</a></p>
+    <h1>Write a New Review</h1>
+
+    <form th:action="@{/reviews/new}" method="get">
+        <label>Step 1: Search for a track to review</label><br/>
+        <input type="text" name="query" th:value="${query}" placeholder="Type a song title..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    <form th:action="@{/reviews}" th:object="${review}" method="post" th:if="${not #lists.isEmpty(searchTracks)}">
+        <label for="trackId">Step 2: Select the correct song</label><br/>
+        <select name="trackId" id="trackId" required>
+            <option th:each="track : ${searchTracks}"
+                    th:value="${track.id}"
+                    th:data-img="${track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'"
+                    th:text="${track.name} + ' — By ' + ${track.artists[0].name}">Track option</option>
+            <div class="star-rating-container">
+                <label>Step 3: Give it a star rating</label><br/>
+
+                <input type="hidden" th:field="*{rating}" id="rating-input" required value="" />
+
+                <div class="star-group" id="star-group">
+                    <span class="star-item" data-value="5">★</span>
+                    <span class="star-item" data-value="4">★</span>
+                    <span class="star-item" data-value="3">★</span>
+                    <span class="star-item" data-value="2">★</span>
+                    <span class="star-item" data-value="1">★</span>
+                </div>
+            </div>
+
+        </select>
+
+        <div class="cover-preview-wrapper">
+            <img id="cover-preview" class="cover-preview-image" src="" alt="Album Artwork Preview" />
+        </div>
+
+        <label for="body">Step 3: Share your thoughts</label><br/>
+        <textarea th:field="*{content}" id="body" placeholder="What do you think of this track?..." required></textarea>
+
+        <br/><br/>
+        <button type="submit">
+            Publish Review
+        </button>
+    </form>
+</div>
+
+<div th:replace="~{footer :: footer}"></div>
+
+</body>
+</html>
+

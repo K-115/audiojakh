@@ -8,24 +8,38 @@
 </head>
 <body>
 <div th:replace="~{navbar :: navbar}"></div>
+    <img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"/>
+    <div>
+        <h1 th:text="${album.name}">Album Name</h1>
+        <p th:text="${album.artists[0].name}">Artist Name</p>
+        <p th:text="${album.releaseDate} + ' • ' + ${album.albumType}"></p>
+        <div th:if="${currentUser != null}" style="margin-top: 20px;">
+            <form th:action="@{/favourites/album}" method="post">
+                <input type="hidden" name="id" th:value="${album.id}" />
+                <button type="submit" class="search-action-btn" style="background-color: #1DB954;">
+                    ⭐ Set as my Favourite Album
+                </button>
+            </form>
+        </div>
 
-<h1 id="album-name" th:text="${album.name}">Album name</h1>
+    </div>
 
-<p th:if="${artist}">Artist:
-    <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist name</a>
-</p>
-<p th:if="${album.releaseDate}">
-    Released: <span th:text="${#dates.format(album.releaseDate, 'd MMMM yyyy')}">date</span>
-</p>
 
-<h2>Tracks</h2>
-<ul class="tracks-list">
-    <li th:each="track : ${tracks}" class="track-item">
-        <a class="track-link" th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.name}">Track name</a>
-        <span th:if="${track.formattedDuration != ''}" th:text="' (' + ${track.formattedDuration} + ')'"></span>
+<h2>Tracklist</h2>
+    <li th:each="track, iter : ${tracks}">
+        <div>
+            <span th:text="${iter.index + 1} + '. '">1.</span>
+            <a th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>
+        </div>
+        <span
+              th:with="totalSecs=${track.durationMs / 1000}, mins=${totalSecs / 60}, secs=${totalSecs % 60}"
+              th:text="${mins} + ':' + (${secs < 10} ? '0' + ${secs} : ${secs})">3:45</span>
+
     </li>
-    <li th:if="${tracks.isEmpty()}">No tracks found for this album.</li>
 </ul>
+
+<p><a th:href="@{/songs}">&larr; Back to Music Discovery</a></p>
+</div>
 
 <div th:replace="~{footer :: footer}"></div>
 </body>

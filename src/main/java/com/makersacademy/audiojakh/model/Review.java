@@ -14,6 +14,22 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Column(name = "track_spotify_id")
+    private String trackSpotifyId;
+
+    @Column(name = "album_spotify_id")
+    private String albumSpotifyId;
+
+    @Column(name = "track_name")
+    private String trackName;
+
+    @Column(name = "album_name")
+    private String albumName;
+
+    @Column(name = "artist_name")
+    private String artistName;
+
     private String content;
     private Integer rating;
 
@@ -47,5 +63,6 @@ public class Review {
         this.rating = rating;
         this.user = user;
     }
+
 }
 

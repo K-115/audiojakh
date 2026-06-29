@@ -19,6 +19,7 @@ public class ReviewLike {
     @Column(name = "review_id")
     private Long reviewId;
 
+
     public ReviewLike() {}
     public ReviewLike(Long userId, Long reviewId) {
         this.userId = userId;

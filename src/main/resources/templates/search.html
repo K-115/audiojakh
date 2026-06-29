@@ -6,7 +6,7 @@
   <link rel="stylesheet" th:href="@{/main.css}">
 </head>
 <body>
-<h1>🔍 Find Music via Spotify</h1>
+<h1>Find Music</h1>
 
 <form th:action="@{/search}" method="get">
   <input type="text" name="query" th:value="${query}" placeholder="Search for songs, artists..." required>
@@ -17,8 +17,7 @@
   <h2>Results for "<span th:text="${query}"></span>"</h2>
   <ul>
     <li th:each="track : ${results}">
-      <!-- Clicking this takes them to your song controller which saves it if it's new -->
-      <a th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.title}">Track Name</a>
+      <a th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Track Name</a>
     </li>
   </ul>
 </div>

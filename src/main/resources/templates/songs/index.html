@@ -1,27 +1,151 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html xmlns:th="http://www.thymeleaf.org"&ndash;&gt;-->
+<!--&lt;!&ndash;      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">&ndash;&gt;-->
+<!--&lt;!&ndash;<head lang="en">&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta charset="UTF-8"/>&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>Songs - AudioJAKH</title>&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="stylesheet" href="/main.css" />&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+<!--&lt;!&ndash;<div th:replace="~{navbar :: navbar}"></div>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;<div sec:authorize="isAuthenticated()" id="greeting">&ndash;&gt;-->
+<!--&lt;!&ndash;    Signed in as <span sec:authentication="principal.attributes['email']"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<h1>Songs</h1>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<ul class="songs-list">&ndash;&gt;-->
+<!--&lt;!&ndash;    <li th:each="track : ${tracks}" class="song-card">&ndash;&gt;-->
+<!--&lt;!&ndash;        <a th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.name}">Song name</a>&ndash;&gt;-->
+<!--&lt;!&ndash;    </li>&ndash;&gt;-->
+<!--&lt;!&ndash;</ul>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div th:replace="~{footer :: footer}"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>AudioJAKH - Search Songs</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h1>Discover Music</h1>-->
+
+<!--<div class="search-box">-->
+<!--    <form th:action="@{/songs}" method="get">-->
+<!--        <input type="text" name="query" th:value="${query}" placeholder="Search for tracks, artists, or albums..." required>-->
+<!--        <button type="submit">Search</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<div th:if="${tracks != null && !#lists.isEmpty(tracks)}">-->
+<!--    <h2>Search Results</h2>-->
+<!--    <div th:each="track : ${tracks}" class="track-card">-->
+<!--        <div>-->
+<!--            <a class="track-link" th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>-->
+<!--            <div class="meta-text" th:text="${track.name != null} ? 'By ' + ${track.name} : 'Unknown Artist'">Artist Name</div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <a th:href="@{/songs/{id}(id=${track.id})}" button>View Details</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div th:if="${tracks == null || #lists.isEmpty(tracks)}">-->
+<!--    <p class="meta-text">Type a song name above to query the live Spotify database.</p>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head lang="en">
-    <meta charset="UTF-8"/>
-    <title>Songs - AudioJAKH</title>
-    <link rel="stylesheet" href="/main.css" />
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AudioJAKH - Discover Music</title>
+    <link rel="stylesheet" th:href="@{/main.css}">
 </head>
 <body>
+
 <div th:replace="~{navbar :: navbar}"></div>
 
+<h1>Discover Music</h1>
 
-<div sec:authorize="isAuthenticated()" id="greeting">
-    Signed in as <span sec:authentication="principal.attributes['email']"></span>
+<form th:action="@{/songs}" method="get" class="filter-flex-bar">
+    <input type="text" name="query" th:value="${query}" placeholder="Search track name..." />
+
+    <select name="year">
+        <option value="">Filter by Year</option>
+        <option th:each="y : ${#numbers.sequence(2026, 1970, -1)}"
+                th:value="${y}" th:text="${y}"
+                th:selected="${y == #strings.toString(selectedYear)}">Year</option>
+    </select>
+
+    <select name="genre">
+        <option value="">Filter by Genre</option>
+        <option value="pop" th:selected="${selectedGenre == 'pop'}">Pop</option>
+        <option value="rock" th:selected="${selectedGenre == 'rock'}">Rock</option>
+        <option value="hip-hop" th:selected="${selectedGenre == 'hip-hop'}">Hip-Hop</option>
+        <option value="jazz" th:selected="${selectedGenre == 'jazz'}">Jazz</option>
+        <option value="electronic" th:selected="${selectedGenre == 'electronic'}">Electronic</option>
+    </select>
+
+    <select name="orderBy">
+        <option value="">Order By</option>
+        <option value="name" th:selected="${selectedOrderBy == 'name'}">Track Name (A-Z)</option>
+        <option value="duration" th:selected="${selectedOrderBy == 'duration'}">Longest Duration</option>
+    </select>
+
+    <button type="submit">Apply Filters</button>
+    <a th:href="@{/songs}">Clear</a>
+</form>
+
+<div class="songs-dashboard-section" th:if="${(query != null && !query.isEmpty()) || (selectedYear != null && !selectedYear.isEmpty()) || (selectedGenre != null && !selectedGenre.isEmpty())}">
+    <h2>Filtered Results</h2>
+    <div th:if="${#lists.isEmpty(tracks)}">
+        <p>No tracks matched your specific criteria combinations on Spotify right now.</p>
+    </div>
+    <div th:unless="${#lists.isEmpty(tracks)}" class="songs-grid">
+        <div th:each="track : ${tracks}" class="music-item-card">
+            <img th:src="${track.album != null && track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'" alt="Art" />
+            <h4>
+                <a th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Title</a>
+            </h4>
+            <p th:text="${track.artists != null && track.artists.length > 0} ? ${track.artists[0].name} : 'Unknown Artist'">Artist</p>
+        </div>
+    </div>
 </div>
 
-<h1>Songs</h1>
+<div class="songs-dashboard-section">
+    <h2>Popular This Week</h2>
+    <div class="songs-grid">
+        <div th:each="track : ${popularSongs}" class="music-item-card">
+            <img th:src="${track.album != null && track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'" alt="Art" />
+            <h4>
+                <a th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Title</a>
+            </h4>
+            <p th:text="${track.artists != null && track.artists.length > 0} ? ${track.artists[0].name} : 'Unknown Artist'">Artist</p>
+        </div>
+    </div>
+</div>
 
-<ul class="songs-list">
-    <li th:each="track : ${tracks}" class="song-card">
-        <a th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.name}">Song name</a>
-    </li>
-</ul>
+<div class="songs-dashboard-section">
+    <h2>Hot New Releases</h2>
+    <div class="songs-grid">
+        <div th:each="album : ${hotReleases}" class="music-item-card">
+            <img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'" alt="Art" />
+            <h4>
+                <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album Name</a>
+            </h4>
+            <p th:text="${album.artists != null && album.artists.length > 0} ? ${album.artists[0].name} : 'Unknown Artist'">Artist</p>
+        </div>
+    </div>
+</div>
 
-<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

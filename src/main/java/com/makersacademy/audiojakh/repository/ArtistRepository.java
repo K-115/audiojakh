@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface ArtistRepository extends CrudRepository<Artist, String> {
-    List<Artist> findTop5ByOrderByNameAsc();
+    List<Artist> findTop5ByOrderByArtistNameAsc();
 }
