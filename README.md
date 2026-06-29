@@ -25,6 +25,33 @@ Below, you'll find specific learning objectives for each tool.
 > The database migrations will run automatically at this point
 - Visit `http://localhost:8080/` to sign up
 
+## Styling with Tailwind CSS
+
+This app's CSS is built with **Tailwind CSS** (v4), compiled by the Tailwind CLI
+
+- **Input** (the source file you edit): `src/main/tailwind/app.css`
+- **Output** (generated, served at `/css/app.css`): `src/main/resources/static/css/app.css`
+
+> The generated `app.css` is committed to the repo, so the app is fully styled after a normal `mvn spring-boot:run`. You only need the steps below if you are **editing styles or templates**.
+
+### One-time setup (only if you'll be changing CSS)
+
+- From the project root (the folder containing `pom.xml`), download the CLI binary:
+    - run `curl -sLo tailwindcss https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64`
+- then, make it executable with `chmod +x tailwindcss`
+
+> The `tailwindcss` binary is gitignored, so each developer downloads their own.
+
+### Editing styles
+
+- From the project root, start the Tailwind watcher in its own terminal session: `./tailwindcss -i src/main/tailwind/app.css -o src/main/resources/static/css/app.css --watch`
+- Add or change utility classes in the templates under `src/main/resources/templates/`. The watcher recompiles `app.css` automatically every time you save.
+- **Commit the regenerated `src/main/resources/static/css/app.css` together with your template changes**, otherwise it will be missing the classes your HTML references.
+
+> Run the watcher in one IntelliJ terminal tab and `mvn spring-boot:run` in another.
+
+> Tailwind's base reset ("Preflight") is intentionally disabled for now, so Tailwind can coexist with the legacy `main.css` while pages are migrated one at a time. It will be re-enabled once `main.css` has been fully removed.
+
 ## Running the tests
 
 - Install chromedriver using `brew install chromedriver`
