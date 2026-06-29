@@ -1,84 +1,11 @@
-<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
-<!--&lt;!&ndash;<html xmlns:th="http://www.thymeleaf.org"&ndash;&gt;-->
-<!--&lt;!&ndash;      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">&ndash;&gt;-->
-<!--&lt;!&ndash;<head lang="en">&ndash;&gt;-->
-<!--&lt;!&ndash;    <meta charset="UTF-8"/>&ndash;&gt;-->
-<!--&lt;!&ndash;    <title th:text="${track.name} + ' - AudioJAKH'">Song - AudioJAKH</title>&ndash;&gt;-->
-<!--&lt;!&ndash;    <link rel="stylesheet" href="/main.css" />&ndash;&gt;-->
-<!--&lt;!&ndash;</head>&ndash;&gt;-->
-<!--&lt;!&ndash;<body>&ndash;&gt;-->
-<!--&lt;!&ndash;<div th:replace="~{navbar :: navbar}"></div>&ndash;&gt;-->
-
-
-<!--&lt;!&ndash;<h1 id="song-name" th:text="${track.name}">Song name</h1>&ndash;&gt;-->
-
-<!--&lt;!&ndash;<p th:if="${artist}">Artist:&ndash;&gt;-->
-<!--&lt;!&ndash;    <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist name</a>&ndash;&gt;-->
-<!--&lt;!&ndash;</p>&ndash;&gt;-->
-<!--&lt;!&ndash;<p th:if="${album}">&ndash;&gt;-->
-<!--&lt;!&ndash;    From the album:&ndash;&gt;-->
-<!--&lt;!&ndash;    <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album name</a>&ndash;&gt;-->
-<!--&lt;!&ndash;</p>&ndash;&gt;-->
-<!--&lt;!&ndash;<p th:if="${track.formattedDuration != ''}">Duration: <span th:text="${track.formattedDuration}">0:00</span></p>&ndash;&gt;-->
-<!--&lt;!&ndash;<p th:if="${track.genre}">Genre: <span th:text="${track.genre}">genre</span></p>&ndash;&gt;-->
-
-<!--&lt;!&ndash;<div th:replace="~{footer :: footer}"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;</body>&ndash;&gt;-->
-<!--&lt;!&ndash;</html>&ndash;&gt;-->
-
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title th:text="${track.name} + ' - Details'">Song Details</title>-->
-<!--</head>-->
-<!--<body>-->
-
-<!--<div class="container">-->
-<!--    <h1 th:text="${track.name}">Track Title</h1>-->
-
-<!--    <div class="detail-label">Spotify Code</div>-->
-<!--    <div class="detail-value" th:text="${track.id}">ID String</div>-->
-<!--    <div th:if="${currentUser != null}" >-->
-<!--        <form th:action="@{/favourites/track}" method="post">-->
-<!--            <input type="hidden" name="id" th:value="${track.id}" />-->
-<!--            <button type="submit" class="search-action-btn">-->
-<!--                ⭐ Set as my Favourite Song-->
-<!--            </button>-->
-<!--        </form>-->
-<!--    </div>-->
-
-
-<!--    <div class="detail-label">Artist Info</div>-->
-<!--    <div class="detail-value" th:if="${track.artists != null && track.artists.length > 0}">-->
-<!--        <a th:href="@{/artists/{id}(id=${track.artists[0].id})}"-->
-<!--           th:text="${track.artists[0].name}">Artist Name</a>-->
-<!--    </div>-->
-<!--    <div class="detail-value" th:unless="${track.artists != null && track.artists.length > 0}">-->
-<!--        <span>Unknown Artist</span>-->
-<!--    </div>-->
-
-
-
-<!--    <div class="detail-label">Album Info</div>-->
-<!--    <div class="detail-value">-->
-<!--        <span th:if="${album != null}" th:text="${album.name}">Album Table Record</span>-->
-<!--        <span th:unless="${album != null}">No local album meta cached yet.</span>-->
-<!--    </div>-->
-
-<!--    <a class="back-btn" th:href="@{/songs}">&larr; Back to Music Discovery</a>-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="|${track.name} - Song Details|">Song Details</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+<body class="bg-canvas">
+<div th:replace="~{navbar :: navbar}"></div>
 
 <div class="container" th:if="${track != null}">
 

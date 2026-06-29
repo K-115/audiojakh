@@ -1,77 +1,8 @@
-<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
-<!--&lt;!&ndash;<html xmlns:th="http://www.thymeleaf.org"&ndash;&gt;-->
-<!--&lt;!&ndash;      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">&ndash;&gt;-->
-<!--&lt;!&ndash;<head lang="en">&ndash;&gt;-->
-<!--&lt;!&ndash;    <meta charset="UTF-8"/>&ndash;&gt;-->
-<!--&lt;!&ndash;    <title>Songs - AudioJAKH</title>&ndash;&gt;-->
-<!--&lt;!&ndash;    <link rel="stylesheet" href="/main.css" />&ndash;&gt;-->
-<!--&lt;!&ndash;</head>&ndash;&gt;-->
-<!--&lt;!&ndash;<body>&ndash;&gt;-->
-<!--&lt;!&ndash;<div th:replace="~{navbar :: navbar}"></div>&ndash;&gt;-->
-
-
-<!--&lt;!&ndash;<div sec:authorize="isAuthenticated()" id="greeting">&ndash;&gt;-->
-<!--&lt;!&ndash;    Signed in as <span sec:authentication="principal.attributes['email']"></span>&ndash;&gt;-->
-<!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-<!--&lt;!&ndash;<h1>Songs</h1>&ndash;&gt;-->
-
-<!--&lt;!&ndash;<ul class="songs-list">&ndash;&gt;-->
-<!--&lt;!&ndash;    <li th:each="track : ${tracks}" class="song-card">&ndash;&gt;-->
-<!--&lt;!&ndash;        <a th:href="@{/songs/{id}(id=${track.spotifyId})}" th:text="${track.name}">Song name</a>&ndash;&gt;-->
-<!--&lt;!&ndash;    </li>&ndash;&gt;-->
-<!--&lt;!&ndash;</ul>&ndash;&gt;-->
-
-<!--&lt;!&ndash;<div th:replace="~{footer :: footer}"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;</body>&ndash;&gt;-->
-<!--&lt;!&ndash;</html>&ndash;&gt;-->
-
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>AudioJAKH - Search Songs</title>-->
-<!--</head>-->
-<!--<body>-->
-
-<!--<h1>Discover Music</h1>-->
-
-<!--<div class="search-box">-->
-<!--    <form th:action="@{/songs}" method="get">-->
-<!--        <input type="text" name="query" th:value="${query}" placeholder="Search for tracks, artists, or albums..." required>-->
-<!--        <button type="submit">Search</button>-->
-<!--    </form>-->
-<!--</div>-->
-
-<!--<div th:if="${tracks != null && !#lists.isEmpty(tracks)}">-->
-<!--    <h2>Search Results</h2>-->
-<!--    <div th:each="track : ${tracks}" class="track-card">-->
-<!--        <div>-->
-<!--            <a class="track-link" th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>-->
-<!--            <div class="meta-text" th:text="${track.name != null} ? 'By ' + ${track.name} : 'Unknown Artist'">Artist Name</div>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--            <a th:href="@{/songs/{id}(id=${track.id})}" button>View Details</a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--<div th:if="${tracks == null || #lists.isEmpty(tracks)}">-->
-<!--    <p class="meta-text">Type a song name above to query the live Spotify database.</p>-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>AudioJAKH - Discover Music</title>
-    <link rel="stylesheet" th:href="@{/main.css}">
-</head>
-<body>
-
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+<body class="bg-canvas">
 <div th:replace="~{navbar :: navbar}"></div>
 
 <h1>Discover Music</h1>
@@ -147,5 +78,6 @@
     </div>
 </div>
 
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

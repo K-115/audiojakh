@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head lang="en">
-    <meta charset="UTF-8"/>
-    <title th:text="${album.name} + ' - AudioJAKH'">Album - AudioJAKH</title>
-    <link rel="stylesheet" href="/main.css" />
-</head>
-<body>
+
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+
+<body class="bg-canvas">
 <div th:replace="~{navbar :: navbar}"></div>
     <img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"/>
     <div>
@@ -26,10 +25,11 @@
 
 
 <h2>Tracklist</h2>
-    <li th:each="track, iter : ${tracks}">
+<ul class="brand-card list-none m-0 p-0 overflow-hidden">
+    <li th:each="track, iter : ${tracks}" class="flex items-center justify-between gap-4 px-5 py-3 border-t border-ink-700 first:border-0">>
         <div>
             <span th:text="${iter.index + 1} + '. '">1.</span>
-            <a th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>
+            <a class="text-cream-200 no-underline hover:text-red-300 flex items-center gap-3" th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>
         </div>
         <span
               th:with="totalSecs=${track.durationMs / 1000}, mins=${totalSecs / 60}, secs=${totalSecs % 60}"

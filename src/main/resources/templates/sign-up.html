@@ -1,108 +1,75 @@
 <!DOCTYPE html>
-
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>Sign Up to AudioJAKH</title>
-		<link rel="stylesheet" th:href="@{/main.css}">
-	</head>
+<head th:replace="~{head :: head('Sign up — AudioJAKH')}"></head>
 
-	<body>
+<body class="bg-canvas">
 
-		<div class="main-page-container">
+<main class="min-h-screen grid place-items-center px-5 py-12 box-border">
+    <div class="brand-card w-full max-w-[460px] p-8 box-border">
 
-			<img class="logo" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJACK logo"/>
+        <div class="flex flex-col items-center text-center mb-6">
+            <img class="h-16 w-auto mb-4" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJAKH logo"/>
+            <h1 class="text-3xl m-0">Sync in and sign up!</h1>
+        </div>
 
-			<div>
-				<h1>Sync in and sign up!</h1>
+        <form th:action="@{/sign_up/new}" th:object="${user}"
+              method="post" enctype="multipart/form-data" class="flex flex-col gap-5">
 
-				<form th:action="@{/sign_up/new}" th:object="${user}"
-				      method="post" enctype="multipart/form-data">
+            <div class="flex flex-col gap-1.5">
+                <label th:for="email" class="eyebrow">Email address</label>
+                <input type="email" id="email" name="emailAddress" th:value="${emailAddress}" readonly
+                       class="input-pill w-full box-border opacity-70 cursor-not-allowed"/>
+                <p class="text-green text-sm m-0">✓ Verified with Auth0</p>
+            </div>
 
-					<div class="form-fields">
-						<label th:for="email">Email Address</label>
-						<input
-								type="email"
-								id="email"
-								name="emailAddress"
-								th:value="${emailAddress}"
-								readonly
-								class="read-only">
-						<p class="success">Verified with Auth0</p>
-					</div>
+            <div class="flex flex-col gap-1.5">
+                <label th:for="firstName" class="eyebrow">First name</label>
+                <input type="text" id="firstName" th:field="*{firstName}" placeholder="Enter your first name"
+                       class="input-pill w-full box-border"/>
+                <div class="text-red-400 text-sm" th:if="${firstNamesBlank}">First name is required</div>
+            </div>
 
-					<div class="form-fields">
-						<label th:for="firstName">FirstName</label>
-						<input
-								type="text"
-								id="firstName"
-								th:field="*{firstName}"
-								placeholder="Enter your first name">
-						<div class="error" th:if="${firstNamesBlank}">First name is required</div>
-					</div>
+            <div class="flex flex-col gap-1.5">
+                <label th:for="surname" class="eyebrow">Surname</label>
+                <input type="text" id="surname" th:field="*{surname}" placeholder="Enter your surname"
+                       class="input-pill w-full box-border"/>
+                <div class="text-red-400 text-sm" th:if="${surnamesBlank}">Surname is required</div>
+            </div>
 
-					<div class="form-fields">
-						<label th:for="surname">Surname</label>
-						<input
-								type="text"
-								id="surname"
-								th:field="*{surname}"
-								placeholder="Enter your surname">
-						<div class="error" th:if="${surnamesBlank}">Surname is required</div>
-					</div>
+            <div class="text-red-400 text-sm" th:if="${bothNamesBlank}">Both first and last names are required</div>
 
-					<div class="error" th:if="${bothNamesBlank}">Both first and last names are required</div>
+            <div class="flex flex-col gap-1.5">
+                <label th:for="dob" class="eyebrow">Date of birth</label>
+                <input type="date" id="dob" th:field="*{dob}" required class="input-pill w-full box-border"/>
+                <div class="text-red-400 text-sm" th:if="${dobBlank}">Date of birth is required</div>
+                <div class="text-red-400 text-sm" th:if="${underAge}">You must be at least 16 years old to join AudioJAKH.</div>
+            </div>
 
-					<div class="form-fields">
-						<label th:for="dob">Date of Birth</label>
-						<input
-								type="date"
-								id="dob"
-								th:field="*{dob}"
-								required>
-						<div class="error" th:if="${dobBlank}">Date of birth is required</div>
-						<div class="error" th:if="${underAge}">You must be at least 16 years old to join AudioJAKH.
-						</div>
-					</div>
+            <div class="flex flex-col gap-1.5">
+                <label th:for="username" class="eyebrow">Username</label>
+                <input type="text" id="username" th:field="*{username}" placeholder="Choose a unique username" required
+                       class="input-pill w-full box-border"/>
+                <div class="text-red-400 text-sm" th:if="${usernameBlank}">Username is required</div>
+                <div class="text-red-400 text-sm" th:if="${usernameExists}">
+                    The username <span th:text="${chosenUsername}"></span> is already taken. Try another one.
+                </div>
+            </div>
 
-					<div class="form-fields">
-						<label th:for="username">Username</label>
-						<input
-								type="text"
-								id="username"
-								th:field="*{username}"
-								placeholder="Choose a unique username"
-								required>
-						<div class="error" th:if="${usernameBlank}">
-							Username is required
-						</div>
-						<div class="error" th:if="${usernameExists}">
-							The username <span th:text="${chosenUsername}"></span> is already taken. Try another one.
-						</div>
-					</div>
+            <div class="flex flex-col gap-1.5">
+                <label th:for="profilePicture" class="eyebrow">Profile picture (optional)</label>
+                <input type="file" id="profilePicture" name="profile_picture" accept="image/*"
+                       class="text-cream-400 text-sm file:mr-3 file:rounded-pill file:border-0 file:bg-ink-700 file:text-cream-200 file:px-4 file:py-2 file:cursor-pointer"/>
+                <p class="text-cream-500 text-xs m-0">Max size: 10MB</p>
+                <div class="text-red-400 text-sm" th:if="${imageSize}">Image file is too large. Maximum size is 10MB</div>
+            </div>
 
-					<div class="form-fields">
-						<label th:for="profilePicture">Profile Picture (Optional)</label>
-						<input
-								type="file"
-								id="profilePicture"
-								name="profile_picture"
-								accept="image/*">
-						<p>Max size: 10MB</p>
-						<div class="error" th:if="${imageSize}">Image file is too large. Maximum size is 10MB</div>
-					</div>
+            <div class="text-red-400 text-sm" th:if="${namesBlank}">Name information is required</div>
 
-					<div class="error" th:if="${namesBlank}">
-						Name information is required
-					</div>
+            <button class="btn btn-primary w-full mt-2" type="submit" id="submit">Sync In…</button>
+        </form>
+    </div>
+</main>
 
-					<button class="submit-btn" type="submit" id="submit">Sync In...</button>
-
-				</form>
-			</div>
-
-		</div>
-	</body>
+</body>
 </html>

@@ -1,44 +1,10 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org"-->
-<!--      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">-->
-<!--<head lang="en">-->
-<!--    <meta charset="UTF-8"/>-->
-<!--    <title th:text="${artist.name} + ' - AudioJAKH'">Artist - AudioJAKH</title>-->
-<!--    <link rel="stylesheet" href="/main.css" />-->
-<!--</head>-->
-<!--<body>-->
-<!--<div th:replace="~{navbar :: navbar}"></div>-->
-
-<!--<h1 id="artist-name" th:text="${artist.name}">Artist name</h1>-->
-
-<!--<img id="artist-image" class="artist-image"-->
-<!--     th:src="@{/images/{img}(img=${artist.images})}"-->
-<!--     th:alt="${artist.name}"/>-->
-
-<!--<p id="artist-description"-->
-<!--   th:text="${artist.description} ?: 'No description available yet.'">Description</p>-->
-
-<!--<h2>Albums</h2>-->
-<!--<ul class="albums-list">-->
-<!--    <li th:each="album : ${albums}" class="album-card">-->
-<!--        <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album name</a>-->
-<!--    </li>-->
-<!--    <li th:if="${albums.isEmpty()}">No albums found for this artist.</li>-->
-<!--</ul>-->
-
-<!--<div th:replace="~{footer :: footer}"></div>-->
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org"
-      xmlns:sec="https://thymeleaf.org">
-<head lang="en">
-    <meta charset="UTF-8"/>
-    <title th:text="${artist.name} + ' - AudioJAKH'">Artist - AudioJAKH</title>
-    <link rel="stylesheet" href="/main.css" />
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+<body class="bg-canvas">
 <div th:replace="~{navbar :: navbar}"></div>
 
 <h1 id="artist-name" th:text="${artist.name}">Artist name</h1>

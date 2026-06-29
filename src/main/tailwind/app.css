@@ -1,0 +1,185 @@
+/* tailwind v4 input, is not served. Output goes to static/css/app.css */
+@layer theme, base, components, utilities;
+
+/* Bricolage Grotesque = display, Archivo = UI/body, Space Mono = metadata */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+/* preflight left out on purpose. re-add @import "tailwindcss/preflight.css" layer(base);
+   once main.css is removed */
+
+@source "../resources/templates";
+
+  @theme {
+  /* ---- Ink, warm black canvas & surfaces ---- */
+  --color-ink:     #100807;
+  --color-ink-950: #0a0504;
+  --color-ink-900: #100807;
+  --color-ink-850: #17100d;
+  --color-ink-800: #1f1512;
+  --color-ink-700: #2a1d18;
+  --color-ink-600: #3a2a23;
+  --color-ink-500: #4d3a31;
+  --color-ink-400: #6b554a;
+
+  /* ---- Cream / paper (primary text on dark) ---- */
+  --color-cream:     #e9ceab;
+  --color-cream-50:  #fbf6ee;
+  --color-cream-100: #f5ecdc;
+  --color-cream-200: #e9ceab;
+  --color-cream-300: #d8bd96;
+  --color-cream-400: #c3a47b;
+  --color-cream-500: #a8895f;
+
+  /* ---- Red (vermilion, maroon). ---- */
+  --color-red:     #d2282b;
+  --color-red-300: #e9726f;
+  --color-red-400: #df524f;
+  --color-red-500: #d2282b;
+  --color-red-600: #a81d22;
+  --color-red-700: #7c1719;
+  --color-red-800: #5a1112;
+  --color-red-900: #3d0c0d;
+
+  --color-maroon:  #5a1112;
+
+  /* ---- Accent hues ---- */
+  --color-gold:     #d99e36;   /* ratings / stars */
+  --color-gold-400: #e6b455;
+  --color-green:    #4f9d69;   /* success */
+
+  /* ---- Semantic aliases (use these in markup) ---- */
+  --color-canvas:        #100807;  /* page background */
+  --color-surface:       #1f1512;  /* raised surface */
+  --color-surface-card:  #2a1d18;  /* cards */
+  --color-surface-inset: #17100d;  /* inputs / wells */
+  --color-accent:        #d2282b;  /* the one accent */
+  --color-hairline:      #3a2a23;  /* borders on dark */
+  --color-rating:        #d99e36;
+
+  /* ---- Type families ---- */
+  --font-display: "Bricolage Grotesque", "Archivo", system-ui, sans-serif;
+  --font-sans:    "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* ---- Display sizes (with built-in line-height/tracking) ---- */
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.12em;
+  --text-display: 3.25rem;
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.02em;
+
+  /* ---- Corner radii ---- */
+  --radius-xs:   3px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-pill: 999px;
+
+  /* ---- Shadows (warm-black, deep on dark canvas) ---- */
+  --shadow-card: 0 6px 20px rgba(0,0,0,0.5);
+  --shadow-pop:  0 18px 48px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 0 1px #7c1719, 0 8px 28px rgba(210,40,43,0.28);
+
+  /* ---- Motion ---- */
+  --ease-brand: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-brand: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  /* Brand baseline, scope limited */
+  body.bg-canvas {
+    color: var(--color-cream-200);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  body.bg-canvas :is(h1, h2, h3, h4) {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-cream-200);
+  }
+  body.bg-canvas a       { color: var(--color-red-400); }
+  body.bg-canvas a:hover { color: var(--color-red-300); }
+}
+
+@layer components {
+  /* Eyebrow / tracked uppercase label */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-cream-400);
+  }
+
+  /* Buttons — pill shaped */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background-color .2s var(--ease-brand),
+                border-color .2s var(--ease-brand),
+                transform .12s var(--ease-brand);
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary       { background: var(--color-red-500); color: var(--color-cream-50); }
+  .btn-primary:hover { background: var(--color-red-400); }
+
+  .btn-secondary       { background: transparent; color: var(--color-cream-200); border-color: var(--color-ink-500); }
+  .btn-secondary:hover { border-color: var(--color-red-700); }
+
+  .btn-ghost       { background: transparent; color: var(--color-cream-300); }
+  .btn-ghost:hover { background: var(--color-ink-700); }
+
+  /* Card surface */
+  .brand-card {
+    background: var(--color-surface-card);
+    border: 1.5px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Genre / descriptor chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.7rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--color-hairline);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-cream-400);
+  }
+  .chip:hover { border-color: var(--color-red-700); color: var(--color-cream-200); }
+
+  /* Star rating glyphs (gold). Use on a <span> wrapping ★ chars. */
+  .stars       { color: var(--color-rating); letter-spacing: 0.06em; font-size: 1rem; }
+  .stars-empty { color: var(--color-ink-500); }
+
+  /* Pill input (search, etc.) */
+  .input-pill {
+    background: var(--color-surface-inset);
+    border: 1.5px solid var(--color-hairline);
+    border-radius: var(--radius-pill);
+    color: var(--color-cream-200);
+    padding: 0.5rem 1rem;
+    outline: none;
+    transition: border-color .2s var(--ease-brand);
+  }
+  .input-pill:focus { border-color: var(--color-red-700); }
+}
