@@ -215,8 +215,8 @@
 		<div th:unless="${#lists.isEmpty(trendingReviews)}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
 			<article th:each="review : ${trendingReviews}" class="brand-card p-5">
 				<div class="text-sm text-cream-400 mb-1.5">
-					<img th:src="${review.user != null && review.user.profilePicture != null} ? ${review.user.profilePicture} : '/images/default-avatar.png'"
-					     alt="User Photo" class="w-10 h-10 rounded-full object-fit" />
+                    <img th:src="${review.user != null && review.user.profilePicture != null} ? @{'/images/' + ${review.user.profilePicture}} : @{/images/default-avatar.png}"
+                         alt="User Photo" class="w-10 h-10 rounded-full object-cover" />
 				</div>
 
 				<div style="flex-grow: 1;">
