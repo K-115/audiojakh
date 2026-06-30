@@ -1,39 +1,79 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
 
-<body class="bg-canvas">
+<body class="bg-canvas text-white">
 <div th:replace="~{navbar :: navbar}"></div>
 
-<h1 id="artist-name" th:text="${artist.name}">Artist name</h1>
+<div class="max-w-[1180px] mx-auto px-10 pt-10 pb-24 box-border">
 
-<div th:if="${currentUser != null}">
-    <form th:action="@{/favourites/artist}" method="post">
-        <input type="hidden" name="id" th:value="${artist.id}" />
-        <button type="submit" class="search-action-btn">
-            ⭐ Set as my Favourite Artist
-        </button>
-    </form>
+    <p class="mb-8">
+        <a th:href="@{/songs}" class="text-cream-400 no-underline hover:text-white transition-colors">&larr; Back to Music Discovery</a>
+    </p>
+
+    <div th:if="${artist != null}" class="flex flex-col gap-8">
+
+        <div class="flex flex-col md:flex-row gap-8 items-center md:items-end mb-6 bg-ink-900 border border-ink-800 p-8 rounded-xl shadow-lg">
+
+            <div class="flex-shrink-0">
+                <img id="artist-image" th:src="${artist.images != null && artist.images.length > 0} ? ${artist.images[0].url} : '/images/default-artist.png'"
+                     th:alt="${artist.name}" class="w-56 h-56 object-cover rounded-full shadow-2xl bg-ink-950 border border-ink-700" />
+            </div>
+
+            <div class="flex-grow text-center md:text-left min-w-0">
+                <span class="eyebrow uppercase tracking-widest text-xs font-bold text-red-400">ARTIST</span>
+                <h1 id="artist-name" class="text-4xl md:text-5xl font-extrabold leading-tight mt-1 mb-3 truncate" th:text="${artist.name}">Artist name</h1>
+
+                <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-4" th:if="${artist.genres != null && artist.genres.length > 0}">
+                    <span th:each="genre : ${artist.genres}" th:text="${genre}"
+                          class="bg-ink-950 text-cream-300 border border-ink-800 text-xs px-2.5 py-1 rounded-md font-semibold select-none">Genre</span>
+                </div>
+
+                <p class="text-sm font-semibold font-mono text-cream-400 m-0 mb-5" th:if="${artist.followers != null}">
+                    📈 <span th:text="${#numbers.formatInteger(artist.followers.total, 0, 'COMMA')}">0</span> followers recorded
+                </p>
+
+                <div th:if="${currentUser != null}">
+                    <form th:action="@{/favourites/artist}" method="post" class="m-0">
+                        <input type="hidden" name="id" th:value="${artist.id}" />
+                        <button type="submit" class="bg-red-500 hover:bg-red-400 text-white font-bold px-5 py-2.5 rounded-full border-none shadow-md cursor-pointer transition-colors flex items-center gap-2">
+                            Set as my Favourite Artist
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <section class="mb-14">
+            <h2 class="text-2xl font-bold mb-6 text-cream-100 border-b border-ink-700 pb-2">Discography</h2>
+
+            <div th:if="${albums == null || #lists.isEmpty(albums)}" class="brand-card p-6 text-cream-400 italic">
+                <p class="m-0">No albums found for this artist inside the streaming directory index.</p>
+            </div>
+
+            <div th:unless="${albums == null || #lists.isEmpty(albums)}"
+                 class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+                <article th:each="album : ${albums}"
+                         class="brand-card p-5 flex flex-col text-center hover:bg-ink-800 transition-colors duration-200 group bg-ink-900 border border-ink-800 rounded-lg">
+
+                    <img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
+                         th:alt="${album.name}" class="w-full aspect-square object-cover rounded-md shadow-lg mb-4 group-hover:scale-[1.02] transition-transform duration-200" />
+
+                    <h4 class="m-0 text-base font-bold h-12 line-clamp-2 overflow-hidden mb-1 flex items-center justify-center">
+                        <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}"
+                           class="text-cream-100 no-underline hover:text-red-400 text-center transition-colors">Album name</a>
+                    </h4>
+
+                    <p class="text-cream-400 text-xs font-mono mt-auto pt-2"
+                       th:text="${#strings.length(album.releaseDate) >= 4} ? ${#strings.substring(album.releaseDate, 0, 4)} : ${album.releaseDate}">2026</p>
+                </article>
+            </div>
+        </section>
+
+    </div>
 </div>
-
-
-<img id="artist-image" class="artist-image"
-     th:src="${artist.images != null && artist.images.length > 0} ? ${artist.images[0].url} : '/images/default-artist.png'"
-     th:alt="${artist.name}"/>
-
-
-<h2>Albums</h2>
-<ul class="albums-list">
-    <li th:each="album : ${albums}" class="album-card">
-        <img class="album-cover-art"
-             th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
-             th:alt="${album.name}" />
-        <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album name</a>
-    </li>
-    <li th:if="${albums == null || albums.isEmpty()}">No albums found for this artist.</li>
-</ul>
 
 <div th:replace="~{footer :: footer}"></div>
 </body>

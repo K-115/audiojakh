@@ -159,9 +159,10 @@
 			<div th:unless="${trendingSongs == null || #lists.isEmpty(trendingSongs)}">
 				<ul class="list-none m-0 p-0 flex flex-col gap-2">
 					<li th:each="track : ${trendingSongs}" class="border-b border-gray-800 pb-2 last:border-0 text-sm">
+						<img th:src="${track.album != null && track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'"
+						     alt="Song Art" class="w-11 h-11 rounded object-cover shadow-sm flex-shrink-0 bg-gray-900" />
 						<a th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}" class="text-cream-200 no-underline font-semibold hover:text-red-300">Song Title</a>
-						<span class="text-cream-400 block text-xs mt-0.5"
-						      th:text="${track.artists != null && track.artists.length > 0} ? 'By ' + ${track.artists[0].name} : ''">Artist</span>
+						<span class="text-cream-400 block text-xs mt-0.5" th:text="${track.artists != null && track.artists.length > 0} ? 'By ' + ${track.artists[0].name} : ''">Artist</span>
 					</li>
 				</ul>
 			</div>
@@ -184,7 +185,7 @@
 			<div th:unless="${trendingAlbums == null || #lists.isEmpty(trendingAlbums)}" class="w-full overflow-hidden relative">
 				<div id="carousel-track" class="flex transition-transform duration-500 ease-in-out gap-4" style="transform: translateX(0px);">
 
-					<div th:each="album : ${trendingAlbums}" class="flex-none w-[160px] text-center bg-gray-900 p-3 rounded-lg border border-gray-800 box-border">
+					<div th:each="album : ${trendingAlbums}" class="flex-none w-[450px] text-center bg-gray-900 p-3 rounded-lg border border-gray-800 box-border">
 						<img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
 						     alt="Cover" class="w-full aspect-square object-cover rounded shadow-md mb-2" />
 
@@ -202,7 +203,7 @@
 
 
 	<!-- Trending reviews -->
-	<section class="mb-14">
+	<section class="mb-14 mt-12">
 		<div class="flex items-baseline justify-between mb-4">
 			<h2 class="text-2xl m-0">Trending reviews this week</h2>
 		</div>
@@ -279,7 +280,7 @@
 		let currentIndex = 0;
 		let autoScrollTimer = null;
 
-		const cardWidth = 160;
+		const cardWidth = 450;
 		const gapWidth = 16;
 		const stepSize = cardWidth + gapWidth;
 

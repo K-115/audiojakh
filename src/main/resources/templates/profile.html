@@ -7,6 +7,119 @@
 
 	<body class="bg-canvas">
 
+	<style>
+		.favourites-row-grid {
+			display: grid;
+			grid-template-columns: repeat(1, minmax(0, 1fr));
+			gap: 24px;
+			margin-bottom: 40px;
+		}
+
+		@media (min-width: 768px) {
+			.favourites-row-grid {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+			}
+		}
+
+		.favourites-box {
+			background-color: #181818;
+			border: 1px solid #282828;
+			border-radius: 8px;
+			padding: 24px;
+			color: #ffffff;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+
+		.favourites-header-flex {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 6px;
+			border-bottom: 1px solid #333;
+			padding-bottom: 12px;
+			margin-bottom: 15px;
+			width: 100%;
+		}
+
+		.favourites-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+		}
+
+		.favourite-item-vertical {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+			margin-top: 10px;
+			width: 100%;
+		}
+
+		.favourite-cover-art-large {
+			width: 100%;
+			max-width: 180px;
+			aspect-ratio: 1;
+			object-fit: cover;
+			border-radius: 6px;
+			box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+			margin-bottom: 16px;
+		}
+
+		.favourite-artist-art-large {
+			width: 100%;
+			max-width: 180px;
+			aspect-ratio: 1;
+			object-fit: cover;
+			border-radius: 50%;
+			box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+			margin-bottom: 16px;
+		}
+
+		.favourite-text-group {
+			width: 100%;
+			padding: 0 10px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.favourite-text-group a {
+			color: #b3b3b3;
+			text-decoration: none;
+			font-weight: bold;
+			font-size: 1.1rem;
+			display: block;
+			width: 100%;
+			max-width: 240px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.favourite-text-group a:hover {
+			text-decoration: underline;
+		}
+
+		.item-meta-artist-muted {
+			color: #b3b3b3;
+			font-size: 0.85rem;
+			margin-top: 6px;
+			width: 100%;
+			max-width: 240px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	</style>
+
+
 <div th:replace="~{navbar :: navbar}"></div>
 
 <div class="main-page-container">
@@ -35,84 +148,125 @@
 		</div>
 	</div>
 
-	<div class="favourites-box">
-		<div class="favourites-header-flex">
-			<h3>Favourite Album</h3>
-			<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='album')}" class="search-action-btn">+ Search Albums</a>
+	<div class="favourites-row-grid">
+
+		<div class="favourites-box">
+			<div class="favourites-header-flex">
+				<h3>Favourite Album</h3>
+				<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='album')}" class="search-action-btn">+ Search</a>
+			</div>
+			<div th:if="${#lists.isEmpty(profile.favouriteAlbums)}" class="empty-text">No favourite album added yet.</div>
+			<ul th:unless="${#lists.isEmpty(profile.favouriteAlbums)}" class="favourites-list">
+				<li th:each="album : ${profile.favouriteAlbums}" class="favourite-item-vertical">
+					<img class="favourite-cover-art-large"
+					     th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
+					     alt="Album Cover" />
+					<div class="favourite-text-group">
+						<a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album Name</a>
+						<div class="item-meta-artist-muted" th:text="${album.artists != null && album.artists.length > 0} ? 'Album by ' + ${album.artists[0].name} : ''"></div>
+					</div>
+				</li>
+			</ul>
 		</div>
-		<div th:if="${#lists.isEmpty(profile.favouriteAlbums)}" class="empty-text">No favourite album added yet.</div>
-		<ul th:unless="${#lists.isEmpty(profile.favouriteAlbums)}" class="favourites-list">
-			<li th:each="album : ${profile.favouriteAlbums}" class="favourite-item-flex">
-				<img class="favourite-cover-art"
-				     th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
-				     alt="Album Cover" />
-				<div>
-					<a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album Name</a>
-					<div class="item-meta-artist" th:text="${album.artists != null && album.artists.length > 0} ? 'Album by ' + ${album.artists[0].name} : ''"></div>
-				</div>
-			</li>
-		</ul>
-	</div>
 
-	<div class="favourites-box">
-		<div class="favourites-header-flex">
-			<h3>Favourite Song</h3>
-			<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='track')}" class="search-action-btn">+ Search Songs</a>
+		<div class="favourites-box">
+			<div class="favourites-header-flex">
+				<h3>Favourite Song</h3>
+				<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='track')}" class="search-action-btn">+ Search</a>
+			</div>
+			<div th:if="${#lists.isEmpty(profile.favouriteSongs)}" class="empty-text">No favourite song added yet.</div>
+			<ul th:unless="${#lists.isEmpty(profile.favouriteSongs)}" class="favourites-list">
+				<li th:each="song : ${profile.favouriteSongs}" class="favourite-item-vertical">
+					<img class="favourite-cover-art-large"
+					     th:src="${song.album != null && song.album.images != null && song.album.images.length > 0} ? ${song.album.images[0].url} : '/images/default-album.png'"
+					     alt="Song Cover" />
+					<div class="favourite-text-group">
+						<a th:href="@{/songs/{id}(id=${song.id})}" th:text="${song.name}">Song Name</a>
+						<div class="item-meta-artist-muted" th:text="${song.artists != null && song.artists.length > 0} ? 'Track by ' + ${song.artists[0].name} : ''"></div>
+					</div>
+				</li>
+			</ul>
 		</div>
-		<div th:if="${#lists.isEmpty(profile.favouriteSongs)}" class="empty-text">No favourite song added yet.</div>
-		<ul th:unless="${#lists.isEmpty(profile.favouriteSongs)}" class="favourites-list">
-			<li th:each="song : ${profile.favouriteSongs}" class="favourite-item-flex">
-				<img class="favourite-cover-art"
-				     th:src="${song.album != null && song.album.images != null && song.album.images.length > 0} ? ${song.album.images[0].url} : '/images/default-album.png'"
-				     alt="Song Cover" />
-				<div>
-					<a th:href="@{/songs/{id}(id=${song.id})}" th:text="${song.name}">Song Name</a>
-					<div class="item-meta-artist" th:text="${song.artists != null && song.artists.length > 0} ? 'Track by ' + ${song.artists[0].name} : ''"></div>
-				</div>
-			</li>
-		</ul>
-	</div>
 
-	<div class="favourites-box">
-		<div class="favourites-header-flex">
-			<h3>Favourite Artist</h3>
-			<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='artist')}" class="search-action-btn">+ Search Artists</a>
+		<div class="favourites-box">
+			<div class="favourites-header-flex">
+				<h3>Favourite Artist</h3>
+				<a th:if="${profile.isOwnProfile}" th:href="@{/songs(type='artist')}" class="search-action-btn">+ Search</a>
+			</div>
+			<div th:if="${#lists.isEmpty(profile.favouriteArtists)}" class="empty-text">No favourite artist added yet.</div>
+			<ul th:unless="${#lists.isEmpty(profile.favouriteArtists)}" class="favourites-list">
+				<li th:each="artist : ${profile.favouriteArtists}" class="favourite-item-vertical">
+					<img class="favourite-artist-art-large"
+					     th:src="${artist.images != null && artist.images.length > 0} ? ${artist.images[0].url} : '/images/default-artist.png'"
+					     alt="Artist Profile" />
+					<div class="favourite-text-group">
+						<a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+					</div>
+				</li>
+			</ul>
 		</div>
-		<div th:if="${#lists.isEmpty(profile.favouriteArtists)}" class="empty-text">No favourite artist added yet.</div>
-		<ul th:unless="${#lists.isEmpty(profile.favouriteArtists)}" class="favourites-list">
-			<li th:each="artist : ${profile.favouriteArtists}" class="favourite-item-flex">
-				<img class="favourite-artist-art"
-				     th:src="${artist.images != null && artist.images.length > 0} ? ${artist.images[0].url} : '/images/default-artist.png'"
-				     alt="Artist Profile" />
-				<div>
-					<a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
+
+	</div>
+
+
+	<section class="mt-14">
+		<h3 class="text-2xl font-bold mb-6 text-cream-100 border-b border-ink-700 pb-2">Reviews</h3>
+
+		<div th:if="${#lists.isEmpty(profile.reviews)}" class="brand-card p-6 text-cream-400 italic">
+			<p class="m-0">No reviews posted yet.</p>
+		</div>
+
+		<div th:unless="${#lists.isEmpty(profile.reviews)}" class="flex flex-col gap-4">
+			<article th:each="review : ${profile.reviews}"
+			         class="brand-card p-5 flex gap-4 items-start bg-ink-900 border border-ink-800 rounded-lg text-white">
+
+				<div class="flex-shrink-0">
+					<img th:src="${profile.user != null && profile.user.profilePicture != null} ? ${profile.user.profilePicture} : '/images/default-avatar.png'"
+					     alt="User Avatar" class="w-11 h-11 rounded-full object-cover border border-ink-700 shadow-sm" />
 				</div>
-			</li>
-		</ul>
-	</div>
 
-	<h3>Reviews</h3>
-	<div th:if="${#lists.isEmpty(profile.reviews)}">
-		<p>No reviews posted yet.</p>
-	</div>
+				<div class="flex-grow min-w-0">
+					<div class="flex items-center justify-between gap-4 mb-2">
+						<div class="flex flex-col">
+							<span class="font-semibold text-cream-100" th:text="${profile.user.username}">Username</span>
 
-	<ul th:unless="${#lists.isEmpty(profile.reviews)}">
-		<li th:each="review : ${profile.reviews}">
-			<p th:text="${review.content}" style="font-style: italic;">Review content</p>
-			<small>
-				<span th:text="${review.likes} + ' Likes'">0 Likes</span> |
-				<span th:text="${#temporals.format(review.dateOfReview, 'dd MMM yyyy HH:mm')}">Date</span>
-			</small>
-            <div class="review-actions">
-                <form th:if="${currentUser != null and profile.isOwnProfile}"
-                      th:action="@{/reviews/{id}/edit(id=${review.id})}"
-                      method="get"
-                      style="display: inline;">
-                    <button type="submit">✏️ Edit</button>
-                </form>
-            </div>
-		</li>
-	</ul>
+							<div th:if="${review.rating != null && review.rating > 0}" class="text-yellow-400 text-sm mt-0.5">
+								<span th:each="i : ${#numbers.sequence(1, review.rating)}">★</span>
+							</div>
+						</div>
+
+						<time class="font-mono text-xs text-cream-500"
+						      th:text="${#temporals.format(review.dateOfReview, 'dd MMM yyyy HH:mm')}">Date</time>
+					</div>
+
+					<div class="mb-3 bg-ink-950 px-3 py-1.5 rounded border border-ink-800 inline-block text-xs" th:if="${review.trackName != null}">
+						<span class="text-cream-400">Reviewing: </span>
+						<strong class="text-cream-100" th:text="${review.trackName}">Song Title</strong>
+						<span th:if="${review.artistName != null}" th:text="' by ' + ${review.artistName}" class="text-cream-400 italic">by Artist</span>
+					</div>
+
+					<p th:text="${review.content}" class="italic text-cream-300 leading-relaxed m-0 mb-4 text-base"></p>
+
+					<div class="flex items-center justify-between text-xs font-mono text-cream-400">
+						<span class="text-red-400 font-semibold" th:text="'♥ ' + (${review.likes != null} ? ${review.likes} : 0) + ' likes'">0 Likes</span>
+
+						<div class="review-actions">
+							<form th:if="${currentUser != null and profile.isOwnProfile}"
+							      th:action="@{/reviews/{id}/edit(id=${review.id})}"
+							      method="get"
+							      class="inline">
+								<button type="submit" class="bg-ink-800 hover:bg-ink-700 text-cream-200 hover:text-white px-3 py-1.5 rounded border border-ink-700 font-semibold cursor-pointer transition-colors">
+									✏️ Edit Review
+								</button>
+							</form>
+						</div>
+					</div>
+
+				</div>
+			</article>
+		</div>
+	</section>
+
 </div>
 
 <div th:replace="~{footer :: footer}"></div>
