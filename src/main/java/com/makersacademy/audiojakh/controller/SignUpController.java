@@ -170,7 +170,7 @@ public class SignUpController {
 
         // Profile picture upload - validates file size (10MB limit) and generate uq filename
         if (!image.isEmpty()) {
-            if (image.getSize() < 10000000) {
+            if (image.getSize() < 2000000) {
                 String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
                 Path uploadDir = Paths.get("images");
                 Files.createDirectories((uploadDir));
