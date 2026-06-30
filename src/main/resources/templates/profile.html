@@ -135,18 +135,29 @@
 		</div>
 	</div>
 
-	<div th:if="${currentUser != null && !profile.isOwnProfile}">
+	<div th:if="${currentUser != null && !profile.isOwnProfile}" class="mt-4 mb-6">
+
 		<div th:if="${profile.isFollowing}">
-			<form th:action="@{/profile/{username}/unfollow(username=${profile.user.username})}" method="post">
-				<button type="submit" class="btn-unfollow">Unfollow</button>
+			<form th:action="@{/profile/{username}/unfollow(username=${profile.user.username})}" method="post" class="m-0">
+				<button type="submit"
+				        class="bg-transparent hover:bg-red-500/10 text-red-400 hover:text-red-300 font-bold px-6 py-2 rounded-full border border-red-500/30 hover:border-red-400 cursor-pointer transition-all duration-200 text-sm flex items-center gap-2 group shadow-sm">
+					<span class="group-hover:hidden">✓ Following</span>
+					<span class="hidden group-hover:inline">✕ Unfollow</span>
+				</button>
 			</form>
 		</div>
+
 		<div th:unless="${profile.isFollowing}">
-			<form th:action="@{/profile/{username}/follow(username=${profile.user.username})}" method="post">
-				<button type="submit" class="btn-follow">Follow</button>
+			<form th:action="@{/profile/{username}/follow(username=${profile.user.username})}" method="post" class="m-0">
+				<button type="submit"
+				        class="bg-red-500 hover:bg-red-400 text-white font-bold px-6 py-2 rounded-full border-none shadow-md cursor-pointer transition-colors duration-200 text-sm flex items-center gap-2">
+					＋ Follow
+				</button>
 			</form>
 		</div>
+
 	</div>
+
 
 	<div class="favourites-row-grid">
 
