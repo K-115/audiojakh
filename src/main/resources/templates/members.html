@@ -16,7 +16,7 @@
 
     <ul class="list-none m-0 p-0 grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
         <li th:each="member : ${members}" class="brand-card flex items-center gap-4 p-4 box-border">
-            <img th:if="${member.profilePicture != null}" th:src="${member.profilePicture}" alt=""
+            <img th:if="${member.profilePicture != null}" th:src="@{'/images/' + ${member.profilePicture}}" alt=""
                  class="w-12 h-12 rounded-full object-cover border border-hairline shrink-0"/>
             <img th:unless="${member.profilePicture != null}" th:src="@{/images/default-avatar.png}" alt=""
                  class="w-12 h-12 rounded-full object-cover border border-hairline shrink-0"/>
