@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "REVIEWSLIKES")
-
-public class ReviewLike {
+@Table(name = "COMMENTLIKES")
+public class CommentLikes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,14 +15,13 @@ public class ReviewLike {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "review_id")
-    private Long reviewId;
+    @Column(name = "comment_id")
+    private Long commentId;
 
+    public CommentLikes() {}
 
-    public ReviewLike() {}
-    public ReviewLike(Long userId, Long reviewId) {
+    public CommentLikes(Long userId, Long commentId) {
         this.userId = userId;
-        this.reviewId = reviewId;
+        this.commentId = commentId;
     }
-
 }

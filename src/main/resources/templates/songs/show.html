@@ -1,27 +1,71 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head lang="en">
-    <meta charset="UTF-8"/>
-    <title th:text="${track.name} + ' - AudioJAKH'">Song - AudioJAKH</title>
-    <link rel="stylesheet" href="/main.css" />
-</head>
-<body>
+
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+<body class="bg-canvas">
 <div th:replace="~{navbar :: navbar}"></div>
 
+<div class="container" th:if="${track != null}">
 
-<h1 id="song-name" th:text="${track.name}">Song name</h1>
+    <div class="header-layout">
+        <img class="track-cover-art"
+             th:src="${track.album != null && track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'"
+             alt="Album Artwork" />
+        <div>
+            <h1 th:text="${track.name}">Track Title</h1>
 
-<p th:if="${artist}">Artist:
-    <a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist name</a>
-</p>
-<p th:if="${album}">
-    From the album:
-    <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album name</a>
-</p>
-<p th:if="${track.formattedDuration != ''}">Duration: <span th:text="${track.formattedDuration}">0:00</span></p>
-<p th:if="${track.genre}">Genre: <span th:text="${track.genre}">genre</span></p>
+            <span th:if="${track.getIsExplicit()}" class="badge-explicit">EXPLICIT</span>
 
-<div th:replace="~{footer :: footer}"></div>
+            <div th:if="${currentUser != null}">
+                <form th:action="@{/favourites/track}" method="post">
+                    <input type="hidden" name="id" th:value="${track.id}" />
+                    <button type="submit" class="search-action-btn">
+                        ⭐ Set as my Favourite Song
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-label">Artist Info</div>
+    <div class="detail-value" th:if="${track.artists != null && track.artists.length > 0}">
+        <a th:href="@{/artists/{id}(id=${track.artists[0].id})}"
+           th:text="${track.artists[0].name}"
+           style="font-weight: bold;">Artist Name</a>
+    </div>
+    <div class="detail-value" th:unless="${track.artists != null && track.artists.length > 0}">
+        <span>Unknown Artist</span>
+    </div>
+
+    <div class="detail-label">Album Info</div>
+    <div class="detail-value" th:if="${track.album != null}">
+        <a th:href="@{/albums/{id}(id=${track.album.id})}" th:text="${track.album.name}">Album Name</a>
+    </div>
+    <div class="detail-value" th:unless="${track.album != null}">
+        <span>Single / Independent Release</span>
+    </div>
+
+    <div class="detail-label">Duration</div>
+    <div class="detail-value"
+         th:with="totalSecs=${track.durationMs / 1000}, mins=${totalSecs / 60}, secs=${totalSecs % 60}"
+         th:text="${mins} + ':' + (${secs < 10} ? '0' + ${secs} : ${secs})">0:00</div>
+
+    <div class="detail-label">Spotify Popularity Rating</div>
+    <div class="detail-value">
+        <span th:text="${track.popularity} + ' / 100'">0 / 100</span>
+    </div>
+
+    <div class="detail-label">Disc & Track Configuration</div>
+    <div class="detail-value" th:text="'Disc ' + ${track.discNumber} + ' • Track #' + ${track.trackNumber}">Disc 1 • Track #1</div>
+
+    <div class="detail-label">Spotify Code Identifier</div>
+    <div class="detail-value" th:text="${track.id}">ID String</div>
+
+    <a class="back-btn" th:href="@{/songs}">&larr; Back to Music Discovery</a>
+</div>
+
 </body>
 </html>
+

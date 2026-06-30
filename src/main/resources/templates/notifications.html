@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-	<head>
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="/main.css"/>
+	<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
 
-		<title>Notification</title>
-	</head>
+	<body class="bg-canvas">
 
-	<body>
 		<div th:replace="~{navbar :: navbar}"></div>
 
-		<div class="main-page-container">
+		<div class="max-w-[1180px] mx-auto px-10 pb-24 box-border">
 
 			<h1>Notification's Dashboard</h1>
 
@@ -42,4 +37,5 @@
 		</div>
 	</body>
 
+	<div th:replace="~{footer :: footer}"></div>
 </html>

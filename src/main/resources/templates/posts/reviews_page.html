@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
-<head lang="en">
-  <meta charset="UTF-8"/>
-  <title>AudioJAKH</title>
-  <link rel="stylesheet" href="/main.css" />
-</head>
-<body>
+
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+<body class="bg-canvas">
 
 <div th:replace="~{navbar :: navbar}"></div>
 
@@ -16,61 +14,77 @@
   Signed in as <span sec:authentication="principal.attributes['email']"></span>
 </div>
 
-<div th:if="${errorMessage}">
-  <p th:text="${errorMessage}"></p>
-</div>
+<!--<div th:if="${errorMessage}">-->
+<!--  <p th:text="${errorMessage}"></p>-->
+<!--</div>-->
 
-<form method="get" action="/reviews">
-  <p>
-    1. Select an Album to Review:
-    <select name="albumId" onchange="this.form.submit()">
-      <option value="">-- Choose an Album --</option>
-      <option th:each="album : ${allAlbums}"
-              th:value="${album.spotifyId}"
-              th:text="${album.name}"
-              th:selected="${album.spotifyId == selectedAlbumId}"></option>
-    </select>
-    <button type="submit" th:if="${selectedAlbumId == null}">Next Step</button>
-  </p>
-</form>
+<!--<form method="get" action="/reviews">-->
+<!--  <p>-->
+<!--    1. Select an Album to Review:-->
+<!--    <select name="albumId" onchange="this.form.submit()">-->
+<!--      <option value="">&#45;&#45; Choose an Album &#45;&#45;</option>-->
+<!--      <option th:each="album : ${allAlbums}"-->
+<!--              th:value="${album.spotifyId}"-->
+<!--              th:text="${album.name}"-->
+<!--              th:selected="${album.spotifyId == selectedAlbumId}"></option>-->
+<!--    </select>-->
+<!--    <button type="submit" th:if="${selectedAlbumId == null}">Next Step</button>-->
+<!--  </p>-->
+<!--</form>-->
 
-<form th:if="${selectedAlbumId != null}" th:action="@{/reviews}" th:object="${review}" method="post">
-  <input type="hidden" th:value="${selectedAlbumId}" name="albumId" id="albumId" />
+<!--<form th:if="${selectedAlbumId != null}" th:action="@{/reviews}" th:object="${review}" method="post">-->
+<!--  <input type="hidden" th:value="${selectedAlbumId}" name="albumId" id="albumId" />-->
 
-  <p>Content: <input type="text" th:field="*{content}" required /></p>
+<!--  <p>Content: <input type="text" th:field="*{content}" required /></p>-->
 
-  <p>
-    Rating:
-    <select th:field="*{rating}" required>
-      <option value="" disabled selected>Select stars</option>
-      <option value="1">⭐ (1)</option>
-      <option value="2">⭐⭐ (2)</option>
-      <option value="3">⭐⭐⭐ (3)</option>
-      <option value="4">⭐⭐⭐⭐ (4)</option>
-      <option value="5">⭐⭐⭐⭐⭐ (5)</option>
-    </select>
-  </p>
 
-  <p>
-    2. Choose a Song from this Album (Optional):
-    <select name="trackId">
-      <option value="">-- None (Reviewing the entire album) --</option>
-      <option th:each="track : ${allTracks}"
-              th:value="${track.spotifyId}"
-              th:text="${track.name}"></option>
-    </select>
-  </p>
+<!--  <p>-->
+<!--    Rating:-->
+<!--    <select th:field="*{rating}" required>-->
+<!--      <option value="" disabled selected>Select stars</option>-->
+<!--      <option value="1">⭐ (1)</option>-->
+<!--      <option value="2">⭐⭐ (2)</option>-->
+<!--      <option value="3">⭐⭐⭐ (3)</option>-->
+<!--      <option value="4">⭐⭐⭐⭐ (4)</option>-->
+<!--      <option value="5">⭐⭐⭐⭐⭐ (5)</option>-->
+<!--    </select>-->
+<!--  </p>-->
 
-  <p>
-    <input type="submit" value="Submit Review" />
-  </p>
-</form>
+<!--  <p>-->
+<!--    2. Choose a Song from this Album (Optional):-->
+<!--    <select name="trackId">-->
+<!--      <option value="">&#45;&#45; None (Reviewing the entire album) &#45;&#45;</option>-->
+<!--      <option th:each="track : ${allTracks}"-->
+<!--              th:value="${track.spotifyId}"-->
+<!--              th:text="${track.name}"></option>-->
+<!--    </select>-->
+<!--  </p>-->
 
-<form method="get" action="/reviews" style="display: inline;">
-  <button type="submit">Reset / Change Album</button>
-</form>
+<!--  <p>-->
+<!--    <input type="submit" value="Submit Review" />-->
+<!--  </p>-->
+<!--</form>-->
+
+<!--<form method="get" action="/reviews" style="display: inline;">-->
+<!--  <button type="submit">Reset / Change Album</button>-->
+<!--</form>-->
 
 <!--add profile pic and username-->
+
+        <a th:href="@{/reviews/new}" class="btn">
+            + Write a Review
+        </a>
+
+        <div class="sort-controls">
+            <span>Sort by:</span>
+
+            <a th:href="@{/reviews(sort='recent')}"
+               th:style="${currentSort == 'recent'} ? 'color: #1DB954; font-weight: bold; text-decoration: underline;' : 'color: #b3b3b3; text-decoration: none; margin-right: 10px;'"
+               style="margin-right: 15px;">Most Recent</a>
+
+            <a th:href="@{/reviews(sort='liked')}"
+               th:style="${currentSort == 'liked'} ? 'color: #1DB954; font-weight: bold; text-decoration: underline;' : 'color: #b3b3b3; text-decoration: none;'">Most Liked</a>
+        </div>
 <ul>
     <li th:each="rv : ${reviewViews}">
 
@@ -102,6 +116,9 @@
             </span>
 
             <span class="review-actions">
+                    <a th:if="${currentUser != null and rv.review.user != null and currentUser.id == rv.review.user.id}"
+                       th:href="@{/reviews/{id}/edit(id=${rv.review.id})}">✏️ Edit</a>
+
         <form th:action="@{/reviews/{id}/like(id=${rv.review.id})}" method="post" style="display:inline">
           <button type="submit" class="heart-btn" th:text="${rv.likedByMe} ? '❤️' : '🤍'"></button>
         </form>
@@ -113,9 +130,8 @@
   <div sec:authorize="isAuthenticated()" style="margin-top: 10px;">
     <form th:action="@{/comments}" method="post" style="display: flex; gap: 10px;">
       <input type="hidden" name="reviewId" th:value="${rv.review.id}" />
-      <input type="text" name="content" placeholder="Write a comment..." required
-             style="flex-grow: 1; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
-      <button type="submit" style="padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      <input type="text" name="content" placeholder="Write a comment..." required/>
+      <button type="submit">
         Reply
       </button>
     </form>

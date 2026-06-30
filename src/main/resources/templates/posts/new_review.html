@@ -1,0 +1,244 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html xmlns:th="http://thymeleaf.org">&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>Write a Review - AudioJAKH</title>&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="stylesheet" href="/main.css" />&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+<!--&lt;!&ndash;<div th:replace="~{navbar :: navbar}"></div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <p><a th:href="@{/reviews}">&larr; Back to Timeline</a></p>&ndash;&gt;-->
+<!--&lt;!&ndash;    <h1>Write a New Review</h1>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Flash Error Alert Box &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div th:if="${errorMessage}" th:text="${errorMessage}"></div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Step 1: Spotify Search Form &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <form th:action="@{/reviews/new}" method="get" style="margin-bottom: 30px;">&ndash;&gt;-->
+<!--&lt;!&ndash;        <label>Step 1: Search for a track to review</label><br/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="text" name="query" th:value="${query}" placeholder="Type a song title..." required>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button type="submit">Search</button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </form>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <form th:action="@{/reviews}" th:object="${review}" method="post" th:if="${not #lists.isEmpty(searchTracks)}">&ndash;&gt;-->
+<!--&lt;!&ndash;        <label for="trackId">Step 2: Select the correct song</label><br/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <select name="trackId" id="trackId" required>&ndash;&gt;-->
+<!--&lt;!&ndash;            <option th:each="track : ${searchTracks}"&ndash;&gt;-->
+<!--&lt;!&ndash;                    th:value="${track.id}"&ndash;&gt;-->
+<!--&lt;!&ndash;                    th:text="${track.name} + ' — By ' + ${track.artists[0].name}">Track option</option>&ndash;&gt;-->
+<!--&lt;!&ndash;        </select>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <label for="body">Step 3: Share your thoughts</label><br/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <textarea th:field="*{content}" id="body" placeholder="What do you think of this track?..." required></textarea>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <br/><br/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button type="submit">&ndash;&gt;-->
+<!--&lt;!&ndash;            Publish Review&ndash;&gt;-->
+<!--&lt;!&ndash;        </button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </form>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div th:replace="~{footer :: footer}"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Write a Review - AudioJAKH</title>-->
+<!--    <link rel="stylesheet" href="/main.css" />-->
+<!--</head>-->
+
+<!--<div th:replace="~{navbar :: navbar}"></div>-->
+
+<!--<body>-->
+<!--<div>-->
+
+<!--    <p><a th:href="@{/reviews}">&larr; Back to Timeline</a></p>-->
+<!--    <h1>Write a New Review</h1>-->
+
+<!--    <form th:action="@{/reviews/new}" method="get">-->
+<!--        <label>Step 1: Search for a track to review</label><br/>-->
+<!--        <input type="text" name="query" th:value="${query}" placeholder="Type a song title..." required>-->
+<!--        <button type="submit">Search</button>-->
+<!--    </form>-->
+
+<!--    <form th:action="@{/reviews}" th:object="${review}" method="post" th:if="${not #lists.isEmpty(searchTracks)}">-->
+<!--        <label for="trackId">Step 2: Select the correct song</label><br/>-->
+<!--        <select name="trackId" id="trackId" required>-->
+<!--            <option th:each="track : ${searchTracks}"-->
+<!--                    th:value="${track.id}"-->
+<!--                    th:data-img="${track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'"-->
+<!--                    th:text="${track.name} + ' — By ' + ${track.artists[0].name}">Track option</option>-->
+<!--            <div class="star-rating-container">-->
+<!--                <label>Step 3: Give it a star rating</label><br/>-->
+
+<!--                <input type="hidden" th:field="*{rating}" id="rating-input" required value="" />-->
+
+<!--                <div class="star-group" id="star-group">-->
+<!--                    <span class="star-item" data-value="5">★</span>-->
+<!--                    <span class="star-item" data-value="4">★</span>-->
+<!--                    <span class="star-item" data-value="3">★</span>-->
+<!--                    <span class="star-item" data-value="2">★</span>-->
+<!--                    <span class="star-item" data-value="1">★</span>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </select>-->
+
+<!--        <div class="cover-preview-wrapper">-->
+<!--            <img id="cover-preview" class="cover-preview-image" src="" alt="Album Artwork Preview" />-->
+<!--        </div>-->
+
+<!--        <label for="body">Step 3: Share your thoughts</label><br/>-->
+<!--        <textarea th:field="*{content}" id="body" placeholder="What do you think of this track?..." required></textarea>-->
+
+<!--        <br/><br/>-->
+<!--        <button type="submit">-->
+<!--            Publish Review-->
+<!--        </button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<script th:if="${not #lists.isEmpty(searchTracks)}">-->
+<!--    document.addEventListener("DOMContentLoaded", function() {-->
+<!--        const selectElement = document.getElementById("trackId");-->
+<!--        const coverImage = document.getElementById("cover-preview");-->
+<!--        const ambientBg = document.getElementById("ambient-bg");-->
+
+<!--        function updateVisuals() {-->
+<!--            const selectedOption = selectElement.options[selectElement.selectedIndex];-->
+<!--            if (!selectedOption) return;-->
+
+<!--            const imageUrl = selectedOption.getAttribute("data-img");-->
+
+<!--            if (imageUrl) {-->
+<!--                coverImage.src = imageUrl;-->
+<!--                coverImage.style.display = "block";-->
+
+<!--                ambientBg.style.backgroundImage = "url('" + imageUrl + "')";-->
+<!--            }-->
+<!--        }-->
+
+<!--        selectElement.addEventListener("change", updateVisuals);-->
+
+<!--        updateVisuals();-->
+<!--    });-->
+<!--</script>-->
+
+<!--<div th:replace="~{footer :: footer}"></div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+<body class="bg-canvas">
+
+<div th:replace="~{navbar :: navbar}"></div>
+
+<div class="max-w-[1180px] mx-auto px-10 pb-24 box-border">
+
+
+    <p><a th:href="@{/reviews}">&larr; Back to Timeline</a></p>
+    <h1>Write a New Review</h1>
+
+    <form th:action="@{/reviews/new}" method="get" style="margin-bottom: 30px;">
+        <label>Step 1: Search for a track to review</label><br/>
+        <input type="text" name="query" th:value="${query}" placeholder="Type a song title..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    <form th:action="@{/reviews}" th:object="${review}" method="post" th:if="${not #lists.isEmpty(searchTracks)}">
+
+        <label for="trackId">Step 2: Select the correct song</label><br/>
+        <select name="trackId" id="trackId" required style="width: 100%; padding: 8px; margin-bottom: 20px;">
+            <option th:each="track : ${searchTracks}"
+                    th:value="${track.id}"
+                    th:data-img="${track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'"
+                    th:text="${track.name} + ' — By ' + ${track.artists[0].name}">Track option</option>
+        </select>
+
+        <div class="cover-preview-wrapper" style="margin-bottom: 20px;">
+            <img id="cover-preview" class="cover-preview-image" src="" alt="Album Artwork Preview" style="max-width: 150px; display: none;" />
+        </div>
+
+        <div class="star-rating-container" style="margin-bottom: 20px;">
+            <label>Step 3: Give it a star rating</label><br/>
+            <input type="hidden" th:field="*{rating}" id="rating-input" required />
+            <div class="star-group" id="star-group" style="font-size: 2rem; cursor: pointer;">
+                <span class="star-item" data-value="1">★</span>
+                <span class="star-item" data-value="2">★</span>
+                <span class="star-item" data-value="3">★</span>
+                <span class="star-item" data-value="4">★</span>
+                <span class="star-item" data-value="5">★</span>
+            </div>
+        </div>
+
+        <label for="body">Step 4: Share your thoughts</label><br/>
+        <textarea th:field="*{content}" id="body" placeholder="What do you think of this track?..." style="width: 100%; height: 120px;" required></textarea>
+
+        <br/><br/>
+        <button type="submit" class="btn-submit">
+            Publish Review
+        </button>
+    </form>
+</div>
+
+<script th:if="${not #lists.isEmpty(searchTracks)}">
+    document.addEventListener("DOMContentLoaded", function() {
+        const selectElement = document.getElementById("trackId");
+        const coverImage = document.getElementById("cover-preview");
+        const ambientBg = document.getElementById("ambient-bg");
+
+        function updateVisuals() {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            if (!selectedOption) return;
+
+            const imageUrl = selectedOption.getAttribute("data-img");
+
+            if (imageUrl) {
+                coverImage.src = imageUrl;
+                coverImage.style.display = "block";
+
+                if (ambientBg) {
+                    ambientBg.style.backgroundImage = "url('" + imageUrl + "')";
+                }
+            }
+        }
+
+        selectElement.addEventListener("change", updateVisuals);
+        updateVisuals();
+
+        const starGroup = document.getElementById("star-group");
+        if (starGroup) {
+            const stars = starGroup.querySelectorAll(".star-item");
+            const ratingInput = document.getElementById("rating-input");
+
+            stars.forEach(star => {
+                star.addEventListener("click", function() {
+                    const selectedValue = this.getAttribute("data-value");
+                    ratingInput.value = selectedValue;
+
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute("data-value")) <= parseInt(selectedValue)) {
+                            s.style.color = "#FFD700";
+                        } else {
+                            s.style.color = "#444444";
+                        }
+                    });
+                });
+            });
+        }
+    });
+</script>
+
+<div th:replace="~{footer :: footer}"></div>
+
+</body>
+</html>
+
+
