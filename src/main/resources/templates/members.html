@@ -1,48 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-	<head>
-		<meta charset="UTF-8">
-		<title>AudioJAKH - Members Directory</title>
-		<link rel="stylesheet" th:href="@{/main.css}">
-	</head>
+<head th:replace="~{head :: head('Members — AudioJAKH')}"></head>
 
-	<body>
+<body class="bg-canvas">
+<div th:replace="~{navbar :: navbar}"></div>
 
-		<div th:replace="~{navbar :: navbar}"></div>
+<main class="max-w-[980px] mx-auto px-10 pb-24 box-border">
 
-			<main>
-				<h1>AudioJAKH Members</h1>
+    <header class="mt-12 mb-8">
+        <p class="eyebrow mb-2">The community</p>
+        <h1 class="text-4xl m-0 mb-2">AudioJAKH Members</h1>
+        <p class="text-cream-400 m-0">Find other music lovers to follow and explore their reviews.</p>
+    </header>
 
-				<p>Find other music lovers to follow and explore their reviews.</p>
+    <ul class="list-none m-0 p-0 grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
+        <li th:each="member : ${members}" class="brand-card flex items-center gap-4 p-4 box-border">
+            <img th:if="${member.profilePicture != null}" th:src="${member.profilePicture}" alt=""
+                 class="w-12 h-12 rounded-full object-cover border border-hairline shrink-0"/>
+            <img th:unless="${member.profilePicture != null}" th:src="@{/images/default-avatar.png}" alt=""
+                 class="w-12 h-12 rounded-full object-cover border border-hairline shrink-0"/>
+            <div class="min-w-0">
+                <a th:href="@{/profile/{username}(username=${member.username})}"
+                   th:text="${member.username}"
+                   class="block truncate font-semibold text-cream-200 no-underline hover:text-red-300">Username</a>
+                <span th:if="${currentUser != null && currentUser.id == member.id}" class="chip mt-1">You</span>
+            </div>
+        </li>
+    </ul>
 
-				<div class="members-grid">
-					<ul>
+</main>
 
-						<li th:each="member : ${members}" class="member-card">
-
-							<img th:if="${member.profilePicture != null}" th:src="${member.profilePicture}"/>
-							<img th:unless="${member.profilePicture != null}" th:src="@{/images/default-avatar.png}"/>
-
-							<div class="member-info">
-
-								<a th:href="@{/profile/{username}(username=${member.username})}"
-								   th:text="${member.username}"
-								   class="member-link">Username</a>
-
-
-								<span th:if="${currentUser != null && currentUser.id == member.id}"
-								      class="badge-me">(You)</span>
-							</div>
-
-						</li>
-
-					</ul>
-				</div>
-			</main>
-		</div>
-
-		<div th:replace="~{footer :: footer}"></div>
-
-	</body>
+<div th:replace="~{footer :: footer}"></div>
+</body>
 </html>

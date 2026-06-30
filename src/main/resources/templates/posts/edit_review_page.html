@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+<body class="bg-canvas">
+
+<div th:replace="~{navbar :: navbar}"></div>
+
+<div class="max-w-[1180px] mx-auto px-10 pb-24 box-border">
+
+<h1>Edit Your Review</h1>
+
+<div>
+  <p th:if="${review.track != null}" th:text="'🎵 Song: ' + ${review.track.name}"></p>
+  <p th:if="${review.track == null and review.album != null}" th:text="'💿 Album: ' + ${review.album.name}"></p>
+</div>
+
+<form th:action="@{/reviews/{id}/edit(id=${review.id})}" method="post">
+  <p>Content:
+    <input type="text" name="content" th:value="${review.content}" required style="width: 50%;" />
+  </p>
+
+  <p>Rating:
+    <select name="rating" required>
+      <option value="1" th:selected="${review.rating == 1}">⭐ (1)</option>
+      <option value="2" th:selected="${review.rating == 2}">⭐⭐ (2)</option>
+      <option value="3" th:selected="${review.rating == 3}">⭐⭐⭐ (3)</option>
+      <option value="4" th:selected="${review.rating == 4}">⭐⭐⭐⭐ (4)</option>
+      <option value="5" th:selected="${review.rating == 5}">⭐⭐⭐⭐⭐ (5)</option>
+    </select>
+  </p>
+
+  <p>
+    <button type="submit">Update Review</button>
+    <button type="submit">Cancel</button>
+  </p>
+</form>
+
+<div th:replace="~{footer :: footer}"></div>
+
+</body>
+</html>

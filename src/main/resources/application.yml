@@ -4,4 +4,7 @@ okta:
     client-id: UFPnkCBEM5ioJ0oA5SCCsPlBbTq0K9fK
     client-secret: JlEUp4CGMuUE-f5czQyu7QPs77rkPGRf39l9A3qs_rdv0bnSkJy05SU-OUnFeTny
 
-    
+spotify:
+  client:
+    id: 01ac58f7b149465bab26dd6e5701bd80
+    secret: 8b3977c875894013816426ecb6db597d

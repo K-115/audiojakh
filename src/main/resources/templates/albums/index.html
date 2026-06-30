@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
-<head lang="en">
-    <meta charset="UTF-8"/>
-    <title>Albums - AudioJAKH</title>
-    <link rel="stylesheet" href="/main.css" />
-</head>
-<body>
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+<body class="bg-canvas">
 <div th:replace="~{navbar :: navbar}"></div>
 
 
@@ -18,7 +16,7 @@
 
 <ul class="albums-list">
     <li th:each="album : ${albums}" class="album-card">
-        <a th:href="@{/albums/{id}(id=${album.spotifyId})}" th:text="${album.name}">Album name</a>
+        <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album name</a>
     </li>
 </ul>
 

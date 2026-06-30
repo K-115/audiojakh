@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 public class Artist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    private String name;
+    @Column(name = "artist_name")
+    private String artistName;
 
     @Column(name = "ARTIST_IMAGE")
     private String artistImage;
 
     private String description; //
 
-    public Artist(String name) {
-        this.name = name;
+    public Artist(String artistName ) {
+        this.artistName = artistName;
     }
 }
