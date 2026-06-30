@@ -28,28 +28,38 @@
 				</button>
 			</form>
 
-			<!-- Profile icon + hover dropdown -->
-			<div class="user-menu">
-				<!-- Avatar placeholder  -->
-				<span class="user-img" aria-hidden="true"></span>
+			<div class="navbar-right">
+				<!-- Notification bell  -->
+				<a th:href="@{/notifications}" class="notif-bell-wrap" aria-label="Notifications">
+				   <span class="notif-bell-circle">
+					  <img th:src="@{/images/bell.svg}" alt="notifications icon" class="notif-bell-icon"/>
+					  <span th:if="${hasUnread}" class="unread-dot"></span>
+				   </span>
+				</a>
 
-				<div class="sub-menu-wrap" id="subMenu">
-					<div class="sub-menu">
-						<div class="user-info">
-							<span class="user-img" aria-hidden="true"></span>
-							<p sec:authentication="principal.attributes['email']">user@email.com</p>
+				<!-- Profile icon + hover dropdown -->
+				<div class="user-menu">
+					<!-- Avatar placeholder  -->
+					<span class="user-img" aria-hidden="true"></span>
+
+					<div class="sub-menu-wrap" id="subMenu">
+						<div class="sub-menu">
+							<div class="user-info">
+								<span class="user-img" aria-hidden="true"></span>
+								<p sec:authentication="principal.attributes['email']">user@email.com</p>
+							</div>
+							<hr/>
+							<a th:href="@{/profile/{username}(username=${currentUsername})}" class="sub-menu-link">
+								<img th:src="@{/images/circle-user.svg}" alt="edit profile icon">
+								<p>Profile</p>
+								<span>></span>
+							</a>
+							<a th:href="@{/logout}" class="sub-menu-link" id="sign-out">
+								<img th:src="@{/images/exit.svg}" alt="exit icon" style="transform: scaleX(-1);">
+								<p>Logout</p>
+								<span>></span>
+							</a>
 						</div>
-						<hr/>
-						<a th:href="@{/profile/{username}(username=${currentUsername})}" class="sub-menu-link">
-							<img th:src="@{/images/circle-user.svg}" alt="edit profile icon">
-							<p>Profile</p>
-							<span>></span>
-						</a>
-						<a th:href="@{/logout}" class="sub-menu-link" id="sign-out">
-							<img th:src="@{/images/exit.svg}" alt="exit icon" style="transform: scaleX(-1);">
-							<p>Logout</p>
-							<span>></span>
-						</a>
 					</div>
 				</div>
 			</div>

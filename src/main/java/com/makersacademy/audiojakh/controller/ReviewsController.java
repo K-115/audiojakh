@@ -5,16 +5,17 @@ import com.makersacademy.audiojakh.model.ReviewView;
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.*;
 import com.makersacademy.audiojakh.model.Review;
+import com.makersacademy.audiojakh.service.CurrentUserService;
+import com.makersacademy.audiojakh.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import com.makersacademy.audiojakh.service.CurrentUserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,6 @@ public class ReviewsController {
     ReviewRepository reviewRepository;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     TrackRepository trackRepository;
 
     @Autowired
@@ -37,18 +35,18 @@ public class ReviewsController {
     @Autowired
     ReviewLikeRepository reviewLikeRepository;
 
-    private User currentUser() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !(auth.getPrincipal() instanceof DefaultOidcUser oidc)) {
-            return null;
-        }
-        String email = (String) oidc.getAttributes().get("email");
-        return userRepository.findUserByEmailAddress(email).orElse(null);
-    }
+    @Autowired
+    FollowRepository followRepository;
+
+    @Autowired
+    NotificationService notificationService;
+
+    @Autowired
+    CurrentUserService currentUserService;
 
     @GetMapping("/reviews")
     public String index(@RequestParam(value = "albumId", required = false) String albumId, Model model, @ModelAttribute("errorMessage") String errorMessage) {
-        User me = currentUser();
+        User me = currentUserService.get();
         model.addAttribute("currentUser", me);
         Iterable<Review> reviews = reviewRepository.findAll();
         model.addAttribute("reviews", reviews);
@@ -84,7 +82,7 @@ public class ReviewsController {
                                @ModelAttribute Review review,
                                @AuthenticationPrincipal OAuth2User principal,
                                RedirectAttributes redirectAttributes) {
-        User currentUser = currentUser();
+        User currentUser = currentUserService.get();
         if (principal == null) {
             return new RedirectView("/login");
         }
@@ -126,14 +124,20 @@ public class ReviewsController {
 
         review.setUser(currentUser);
         review.setLikes(0);
-        reviewRepository.save(review);
+
+        Review savedReview = reviewRepository.save(review);
+
+        List<User> followers = followRepository.findFollowersByUserId(currentUser.getId());
+        for (User follower : followers) {
+            notificationService.createReviewNotification(follower, currentUser, savedReview);
+        }
 
         return new RedirectView("/reviews");
     }
 
     @PostMapping("/reviews/{id}/like")
     public RedirectView like(@PathVariable Long id) {
-        User me = currentUser();
+        User me = currentUserService.get();
         if (me != null) {
             reviewLikeRepository.findByReviewIdAndUserId(id, me.getId()).ifPresentOrElse(
                     reviewLikeRepository::delete,                                  // already liked -> unlike
