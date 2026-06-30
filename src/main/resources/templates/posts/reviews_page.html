@@ -74,7 +74,6 @@
         <a th:href="@{/reviews/new}" class="btn">
             + Write a Review
         </a>
-    </div>
 
         <div class="sort-controls">
             <span>Sort by:</span>
@@ -86,7 +85,6 @@
             <a th:href="@{/reviews(sort='liked')}"
                th:style="${currentSort == 'liked'} ? 'color: #1DB954; font-weight: bold; text-decoration: underline;' : 'color: #b3b3b3; text-decoration: none;'">Most Liked</a>
         </div>
-    </div>
 <ul>
     <li th:each="rv : ${reviewViews}">
 

@@ -117,8 +117,8 @@ public class HomeController {
 			model.addAttribute("trendingAlbums", trendingAlbums);
 
 			List<Review> trendingReviews = reviewRepository.findAllByOrderByLikesDesc();
-			if (trendingReviews.size() > 5) {
-				trendingReviews = trendingReviews.subList(0, 5);
+			if (trendingReviews.size() > 6) {
+				trendingReviews = trendingReviews.subList(0, 6);
 			}
 			model.addAttribute("trendingReviews", trendingReviews);
 		return "home";

@@ -151,11 +151,10 @@
 
 package com.makersacademy.audiojakh.controller;
 
-import com.makersacademy.audiojakh.model.ReviewLike;
-import com.makersacademy.audiojakh.model.ReviewView;
-import com.makersacademy.audiojakh.model.User;
+//import com.makersacademy.audiojakh.DTOs.DTOCommentUserJoin;
+import com.makersacademy.audiojakh.DTOs.DTOProfileJoin;
+import com.makersacademy.audiojakh.model.*;
 import com.makersacademy.audiojakh.repository.*;
-import com.makersacademy.audiojakh.model.Review;
 import com.makersacademy.audiojakh.service.SpotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -164,6 +163,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import se.michaelthelin.spotify.model_objects.specification.Album;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 
@@ -184,6 +184,12 @@ public class ReviewsController {
 
     @Autowired
     private SpotifyService spotifyService;
+
+    @Autowired
+    CommentRepository commentRepository;
+
+    @Autowired
+    CommentLikeRepository commentLikeRepository;
 
     private User currentUser() {
 		var auth = SecurityContextHolder.getContext().getAuthentication();
@@ -249,10 +255,17 @@ public class ReviewsController {
                          @ModelAttribute Review review,
                          RedirectAttributes redirectAttributes) {
         User currentUser = currentUser();
+        User me = currentUser();
         if (currentUser == null) {
             return "redirect:/login";
         }
-
+//        List<CommentView> commentViews = new ArrayList<>();
+//        for (DTOCommentUserJoin comments : commentRepository.commentsJoin((int) (long) review.getId())) {
+//            long commentCount = commentLikeRepository.countByCommentId(comments.getId());
+//            boolean commentLiked = me != null &&
+//                    commentLikeRepository.existsByCommentIdAndUserId(comments.getId(), me.getId());
+//            commentViews.add(new CommentView(comments, commentCount, commentLiked, comments.getId()));
+//        }
         if (trackId != null && !trackId.trim().isEmpty()) {
             review.setTrackSpotifyId(trackId);
 

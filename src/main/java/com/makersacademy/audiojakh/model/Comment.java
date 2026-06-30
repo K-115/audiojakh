@@ -22,7 +22,7 @@ public class Comment {
     @Column(name = "review")
     private Long reviewId;
     private Long likes = 0L;
-
+    
     @Column(name = "date_of_comment")
     private LocalDateTime dateOfComment;
 

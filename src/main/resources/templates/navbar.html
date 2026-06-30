@@ -16,13 +16,14 @@
 
     <ul class="flex items-center gap-1.5 list-none m-0 p-0 text-sm font-semibold">
         <li><a th:href="@{/}"        class="px-3 py-2 rounded-md text-cream-200 no-underline hover:bg-ink-700 transition-colors">Home</a></li>
-        <li><a th:href="@{/songs}"   class="px-3 py-2 rounded-md text-cream-400 no-underline hover:bg-ink-700 hover:text-cream-200 transition-colors">Songs</a></li>
+        <li><a th:href="@{/songs}"   class="px-3 py-2 rounded-md text-cream-400 no-underline hover:bg-ink-700 hover:text-cream-200 transition-colors">Music</a></li>
+        <li><a th:href="@{/reviews}"   class="px-3 py-2 rounded-md text-cream-400 no-underline hover:bg-ink-700 hover:text-cream-200 transition-colors">Reviews</a></li>
         <li><a th:href="@{/members}" class="px-3 py-2 rounded-md text-cream-400 no-underline hover:bg-ink-700 hover:text-cream-200 transition-colors">Members</a></li>
     </ul>
 
     <!-- Member search -->
     <form class="relative inline-flex items-center w-full max-w-[220px]" th:action="@{/search}" method="get">
-        <input type="text" name="query" minlength="3" placeholder="Search for members…" required
+        <input type="text" name="query" minlength="3" placeholder="Search…" required
                class="w-full bg-surface-inset border border-hairline rounded-pill text-cream-200 text-[13px] pl-4 pr-9 py-2 outline-none focus:border-red-700 placeholder:text-ink-400"/>
         <button class="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-0 p-0 text-cream-400 hover:text-cream-200 cursor-pointer flex" type="submit" aria-label="Search">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
