@@ -73,6 +73,87 @@ html, body {
     background-color: #000;
 }
 
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ===== Notification bell ===== */
+.notif-bell-wrap {
+    display: inline-flex;
+    align-items: center;
+}
+
+.notif-bell-circle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #888;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.notif-bell-circle:hover {
+    background: #777;
+}
+
+.notif-bell-icon {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) invert(1); /* makes a dark svg render white on the grey circle */
+}
+
+.unread-dot {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 10px;
+    height: 10px;
+    background-color: #e53935;
+    border-radius: 50%;
+    border: 2px solid #1a1a1a; /* matches navbar background so dot looks "cut out" */
+}
+
+/* ===== Notifications page ===== */
+.notification-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-list li {
+    border-bottom: 1px solid #eee;
+}
+
+.notification-form {
+    margin: 0;
+}
+
+.notification-button {
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    padding: 0.75rem;
+    font: inherit;
+}
+
+.notification-unread {
+    background-color: #f0f7ff;
+    font-weight: 600;
+}
+
+.notification-read {
+    background-color: transparent;
+    font-weight: 400;
+}
+
 /* ===== Profile dropdown (hover) ===== */
 .user-menu {
     position: relative;

@@ -32,6 +32,15 @@
         </button>
     </form>
 
+			<div class="navbar-right">
+				<!-- Notification bell  -->
+				<a th:href="@{/notifications}" class="notif-bell-wrap" aria-label="Notifications">
+				   <span class="notif-bell-circle">
+					  <img th:src="@{/images/bell.svg}" alt="notifications icon" class="notif-bell-icon"/>
+					  <span th:if="${hasUnread}" class="unread-dot"></span>
+				   </span>
+				</a>
+
     <!-- Profile icon + hover dropdown (only when logged in) -->
     <div class="relative group" sec:authorize="isAuthenticated()">
         <span class="inline-block w-10 h-10 rounded-full bg-surface ring-2 ring-red cursor-pointer" aria-hidden="true"></span>
