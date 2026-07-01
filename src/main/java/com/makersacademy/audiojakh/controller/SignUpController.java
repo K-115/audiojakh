@@ -2,12 +2,14 @@ package com.makersacademy.audiojakh.controller;
 
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.UserRepository;
+import jakarta.servlet.annotation.HandlesTypes;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -206,6 +208,13 @@ public class SignUpController {
         }
 
         return new RedirectView("/");
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public RedirectView handleOversizeImage(HttpSession session) {
+        session.setAttribute("imageSize", true);
+
+        return new RedirectView("/sign-up");
     }
 }
 
