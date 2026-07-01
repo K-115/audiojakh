@@ -2,6 +2,7 @@ package com.makersacademy.audiojakh.config;
 
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,4 +37,10 @@ public class GlobalModelAdvice {
         User user = userRepository.findUserByEmailAddress(email).orElse(null);
         return user == null ? null : user.getProfilePicture();
     }
+
+    @ModelAttribute("currentPath")
+    public String currentPath(HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
 }
