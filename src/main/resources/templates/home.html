@@ -184,7 +184,7 @@
 			<div th:unless="${trendingAlbums == null || #lists.isEmpty(trendingAlbums)}" class="w-full overflow-hidden relative">
 				<div id="carousel-track" class="flex transition-transform duration-500 ease-in-out gap-4" style="transform: translateX(0px);">
 
-					<div th:each="album : ${trendingAlbums}" class="flex-none w-[160px] text-center bg-gray-900 p-3 rounded-lg border border-gray-800 box-border">
+					<div th:each="album : ${trendingAlbums}" class="flex-none w-[160px] text-center bg-red-800 p-3 rounded-lg border border-red-900 box-border">
 						<img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
 						     alt="Cover" class="w-full aspect-square object-cover rounded shadow-md mb-2" />
 
@@ -202,7 +202,7 @@
 
 
 	<!-- Trending reviews -->
-	<section class="mb-14">
+	<section class="mt-14 mb-14">
 		<div class="flex items-baseline justify-between mb-4">
 			<h2 class="text-2xl m-0">Trending reviews this week</h2>
 		</div>
@@ -318,4 +318,5 @@
 		carouselSection.addEventListener("mouseenter", stopAutoScroll);carouselSection.addEventListener("mouseleave", startAutoScroll);
 		window.addEventListener("resize", updateCarouselPosition);
 		updateCarouselPosition();startAutoScroll();});
-	</script>
+</script>
+</div>
