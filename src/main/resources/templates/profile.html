@@ -170,6 +170,7 @@
 			<div th:if="${#lists.isEmpty(profile.favouriteAlbums)}" class="empty-text">No favourite album added yet.</div>
 			<ul th:unless="${#lists.isEmpty(profile.favouriteAlbums)}" class="favourites-list">
 				<li th:each="album : ${profile.favouriteAlbums}" class="favourite-item-vertical">
+					<a th:href="@{/albums/{id}(id=${album.id})}">
 					<img class="favourite-cover-art-large"
 					     th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
 					     alt="Album Cover" />
@@ -177,6 +178,7 @@
 						<a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album Name</a>
 						<div class="item-meta-artist-muted" th:text="${album.artists != null && album.artists.length > 0} ? 'Album by ' + ${album.artists[0].name} : ''"></div>
 					</div>
+					</a>
 				</li>
 			</ul>
 		</div>
@@ -189,6 +191,7 @@
 			<div th:if="${#lists.isEmpty(profile.favouriteSongs)}" class="empty-text">No favourite song added yet.</div>
 			<ul th:unless="${#lists.isEmpty(profile.favouriteSongs)}" class="favourites-list">
 				<li th:each="song : ${profile.favouriteSongs}" class="favourite-item-vertical">
+					<a th:href="@{/songs/{id}(id=${song.id})}">
 					<img class="favourite-cover-art-large"
 					     th:src="${song.album != null && song.album.images != null && song.album.images.length > 0} ? ${song.album.images[0].url} : '/images/default-album.png'"
 					     alt="Song Cover" />
@@ -196,6 +199,7 @@
 						<a th:href="@{/songs/{id}(id=${song.id})}" th:text="${song.name}">Song Name</a>
 						<div class="item-meta-artist-muted" th:text="${song.artists != null && song.artists.length > 0} ? 'Track by ' + ${song.artists[0].name} : ''"></div>
 					</div>
+					</a>
 				</li>
 			</ul>
 		</div>
@@ -208,12 +212,14 @@
 			<div th:if="${#lists.isEmpty(profile.favouriteArtists)}" class="empty-text">No favourite artist added yet.</div>
 			<ul th:unless="${#lists.isEmpty(profile.favouriteArtists)}" class="favourites-list">
 				<li th:each="artist : ${profile.favouriteArtists}" class="favourite-item-vertical">
+					<a th:href="@{/artists/{id}(id=${artist.id})}">
 					<img class="favourite-artist-art-large"
 					     th:src="${artist.images != null && artist.images.length > 0} ? ${artist.images[0].url} : '/images/default-artist.png'"
 					     alt="Artist Profile" />
 					<div class="favourite-text-group">
 						<a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
 					</div>
+					</a>
 				</li>
 			</ul>
 		</div>

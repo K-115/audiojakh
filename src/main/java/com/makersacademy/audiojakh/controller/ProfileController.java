@@ -69,14 +69,17 @@ public class ProfileController {
         List<String> favouriteArtistIds = favouriteArtistRepository.findArtistIdsByUserId(userIdKey);
 
         List<se.michaelthelin.spotify.model_objects.specification.Album> favAlbums = favouriteAlbumIds.stream()
+                .limit(1)
                 .map(id -> spotifyService.getAlbum(id))
                 .toList();
 
         List<se.michaelthelin.spotify.model_objects.specification.Track> favSongs = favouriteTrackIds.stream()
+                .limit(1)
                 .map(id -> spotifyService.getTrack(id))
                 .toList();
 
         List<se.michaelthelin.spotify.model_objects.specification.Artist> favArtists = favouriteArtistIds.stream()
+                .limit(1)
                 .map(id -> spotifyService.getArtist(id))
                 .toList();
 

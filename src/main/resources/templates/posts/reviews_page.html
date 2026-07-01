@@ -48,7 +48,7 @@
                      alt="Music Cover Art" />
 
                 <a th:if="${rv.review.user != null}" th:href="@{/profile/{username}(username=${rv.review.user.username})}">
-                    <img th:src="${rv.review.user.profilePicture != null} ? ${rv.review.user.profilePicture} : 'https://imgur.com'"
+                    <img th:src="${rv.review.user.profilePicture != null && rv.review.user.profilePicture != null} ? @{'/images/' + ${rv.review.user.profilePicture}} : @{/images/default-avatar.png}"
                          alt="Avatar" class="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full object-cover border-2 border-cream-700/40 bg-ink-800 shadow-md transition-transform duration-200 hover:scale-105" />
                 </a>
                 <img th:if="${rv.review.user == null}" src="https://imgur.com"

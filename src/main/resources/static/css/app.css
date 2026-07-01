@@ -118,6 +118,9 @@
   .top-full {
     top: 100%;
   }
+  .-right-0 {
+    right: 0;
+  }
   .-right-1 {
     right: calc(var(--spacing) * -1);
   }
@@ -129,6 +132,9 @@
   }
   .right-\[-10px\] {
     right: -10px;
+  }
+  .-bottom-0 {
+    bottom: 0;
   }
   .-bottom-1 {
     bottom: calc(var(--spacing) * -1);
@@ -198,6 +204,9 @@
   }
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
+  }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
   }
   .mt-8 {
     margin-top: calc(var(--spacing) * 8);

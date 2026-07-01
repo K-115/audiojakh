@@ -34,7 +34,7 @@ public interface FollowRepository extends CrudRepository<User, Long> {
             nativeQuery = true)
     long countFollowingByUserId(@Param("userId") Long userId);
 
-    @Query(value = "SELECT u.* FROM users u INNER JOIN  follows f ON u.id = f.follower_id WHERE f.followee_id AND f.followed = true",
+    @Query(value = "SELECT u.* FROM users u INNER JOIN  follows f ON u.id = f.follower_id WHERE f.followee_id = :userId AND f.followed = true",
             nativeQuery = true)
     List<User> findFollowersByUserId(@Param("userId") Long userId);
 

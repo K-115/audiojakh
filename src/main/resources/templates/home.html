@@ -89,10 +89,20 @@
 		</div>
 
 		<div th:unless="${#lists.isEmpty(trendingReviews)}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-			<article th:each="review : ${trendingReviews}" class="brand-card p-5">
-				<div class="text-sm text-cream-400 mb-1.5">
-                    <img th:src="${review.user != null && review.user.profilePicture != null} ? @{'/images/' + ${review.user.profilePicture}} : @{/images/default-avatar.png}"
-                         alt="User Photo" class="w-10 h-10 rounded-full object-cover" />
+			<article th:each="review : ${trendingReviews}" class="brand-card p-5 flex flex-col md:flex-row gap-6 items-start">
+				<div class="relative w-20 h-20 flex-shrink-0 select-none mx-auto md:mx-0">
+<!--				<div class="text-sm text-cream-400 mb-1.5">-->
+					<img class="w-20 h-20 object-cover rounded-md shadow-md bg-ink-950 border border-ink-800"
+					     th:src="${review.imageUrl}" alt=""/>
+
+<!--                    <img th:src="${review.user != null && review.user.profilePicture != null} ? @{'/images/' + ${review.user.profilePicture}} : @{/images/default-avatar.png}"-->
+<!--                         alt="User Photo" class="w-10 h-10 rounded-full object-cover" />-->
+
+					<a th:if="${review.user != null}" th:href="@{/profile/{username}(username=${review.user.username})}">
+<!--						<img th:src="${review.user.profilePicture != null} ? ${review.user.profilePicture} : @{/images/default-avatar.png}"-->
+						<img th:src="${review.user != null && review.user.profilePicture != null} ? @{'/images/' + ${review.user.profilePicture}} : @{/images/default-avatar.png}"
+						     alt="Avatar" class="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full object-cover border-2 border-cream-700/40 bg-ink-800 shadow-md transition-transform duration-200 hover:scale-105" />
+					</a>
 				</div>
 
 				<div style="flex-grow: 1;">
@@ -136,13 +146,20 @@
 					</div>
 				</div>
 
-				<div class="review-actions mt-2">
-					<form th:if="${currentUser != null and review.user != null and currentUser.id == review.user.id}"
-					      th:action="@{/reviews/{id}/edit(id=${review.id})}"
-					      method="get"
-					      style="display: inline;">
-						<button type="submit" class="text-xs text-cream-400 hover:text-white">✏️ Edit</button>
-					</form>
+<!--				<div class="review-actions mt-2">-->
+<!--					<form th:if="${currentUser != null and review.user != null and currentUser.id == review.user.id}"-->
+<!--					      th:action="@{/reviews/{id}/edit(id=${review.id})}"-->
+<!--					      method="get"-->
+<!--					      style="display: inline;">-->
+<!--						<button type="submit" class="text-xs text-cream-400 hover:text-white">✏️ Edit</button>-->
+<!--					</form>-->
+				<div class="flex items-center gap-4 text-xs font-mono text-cream-400 border-b border-ink-800 pb-4 mb-4 justify-center md:justify-start">
+
+					<a th:if="${currentUser != null and review.user != null and currentUser.id == review.user.id}"
+					   th:href="@{/reviews/{id}/edit(id=${review.id})}"
+					   class="text-cream-400 no-underline hover:text-white font-semibold flex items-center gap-1 transition-colors">
+						✏️ Edit
+					</a>
 				</div>
 			</article>
 		</div>

@@ -4,6 +4,7 @@ import com.makersacademy.audiojakh.model.Review;
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.ReviewRepository;
 import com.makersacademy.audiojakh.repository.UserRepository;
+import com.makersacademy.audiojakh.service.CurrentUserService;
 import com.makersacademy.audiojakh.service.SpotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +27,9 @@ public class HomeController {
 	@Autowired
 	private SpotifyService spotifyService;
 
+	@Autowired
+	CurrentUserService currentUserService;
+
 	private User currentUser() {
 		var auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null || !(auth.getPrincipal() instanceof DefaultOidcUser oidc)) {
@@ -38,7 +42,8 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String index(Model model) {
-		User me = currentUser();
+//		User me = currentUser();
+		User me = currentUserService.get();
 		model.addAttribute("currentUser", me);
 
 			List<se.michaelthelin.spotify.model_objects.specification.Track> trendingSongs = spotifyService.getTrendingSongsThisWeek();

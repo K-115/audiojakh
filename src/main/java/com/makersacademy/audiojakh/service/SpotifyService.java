@@ -5,12 +5,22 @@ import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.model_objects.specification.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class SpotifyService {
+    private List<Track> cachedPopularSongs = new ArrayList<>();
+    private List<Track> cachedTrendingSongs = new ArrayList<>();
+    private List<AlbumSimplified> cachedNewReleases = new ArrayList<>();
+    private LocalDateTime cacheExpirationTime = null;
+
+    private boolean isCacheExpired() {
+        return cacheExpirationTime == null || cacheExpirationTime.isBefore(LocalDateTime.now().minusMinutes(10));
+    }
 
     private final SpotifyApi spotifyApi;
 
@@ -95,18 +105,34 @@ public class SpotifyService {
         }
     }
 
+//    public List<AlbumSimplified> getNewReleases() {
+//        authenticate();
+//        try {
+//            var searchAlbumsRequest = spotifyApi.searchAlbums("year:2026 new releases")
+//                    .limit(5)
+//                    .build();
+//            return Arrays.asList(searchAlbumsRequest.execute().getItems());
+//        } catch (Exception e) {
+//            System.err.println("Fallback New Releases Error: " + e.getMessage());
+//            return List.of();
+//        }
+//    }
+
     public List<AlbumSimplified> getNewReleases() {
+        if (!cachedNewReleases.isEmpty() && !isCacheExpired()) {
+            return cachedNewReleases;
+        }
         authenticate();
         try {
-            var searchAlbumsRequest = spotifyApi.searchAlbums("year:2026 new releases")
-                    .limit(5)
-                    .build();
-            return Arrays.asList(searchAlbumsRequest.execute().getItems());
+            var request = spotifyApi.searchAlbums("year:2026 new releases").limit(6).build();
+            cachedNewReleases = Arrays.asList(request.execute().getItems());
+            return cachedNewReleases;
         } catch (Exception e) {
-            System.err.println("Fallback New Releases Error: " + e.getMessage());
-            return List.of();
+            System.err.println("Rate Limited. Serving cached albums: " + e.getMessage());
+            return cachedNewReleases;
         }
     }
+
 
 
     public List<Artist> searchArtists(String query) {
@@ -174,31 +200,64 @@ public class SpotifyService {
         }
     }
 
+//    public List<Track> getTrendingSongsThisWeek() {
+//        authenticate();
+//        try {
+//            var searchTracksRequest = spotifyApi.searchTracks("Viral Hits 2026")
+//                    .limit(6)
+//                    .build();
+//            return Arrays.asList(searchTracksRequest.execute().getItems());
+//        } catch (Exception e) {
+//            System.err.println("Trending Service Error: " + e.getMessage());
+//            return List.of();
+//        }
+//    }
+
     public List<Track> getTrendingSongsThisWeek() {
+        if (!cachedTrendingSongs.isEmpty() && !isCacheExpired()) {
+            return cachedTrendingSongs;
+        }
         authenticate();
         try {
-            var searchTracksRequest = spotifyApi.searchTracks("Viral Hits 2026")
-                    .limit(6)
-                    .build();
-            return Arrays.asList(searchTracksRequest.execute().getItems());
+            var request = spotifyApi.searchTracks("Viral Hits").limit(6).build();
+            cachedTrendingSongs = Arrays.asList(request.execute().getItems());
+            return cachedTrendingSongs;
         } catch (Exception e) {
-            System.err.println("Trending Service Error: " + e.getMessage());
-            return List.of();
+            System.err.println("Rate Limited. Serving cached trending songs: " + e.getMessage());
+            return cachedTrendingSongs;
         }
     }
 
+
+//    public List<Track> getMostPopularSongs() {
+//        authenticate();
+//        try {
+//            var searchTracksRequest = spotifyApi.searchTracks("top global hits")
+//                    .limit(5)
+//                    .build();
+//            return Arrays.asList(searchTracksRequest.execute().getItems());
+//        } catch (Exception e) {
+//            System.err.println("Fallback Popular Error: " + e.getMessage());
+//            return List.of();
+//        }
+//    }
+
     public List<Track> getMostPopularSongs() {
+        if (!cachedPopularSongs.isEmpty() && !isCacheExpired()) {
+            return cachedPopularSongs; // ⚡ Serves from RAM instantly, ZERO API hits!
+        }
         authenticate();
         try {
-            var searchTracksRequest = spotifyApi.searchTracks("top global hits")
-                    .limit(5)
-                    .build();
-            return Arrays.asList(searchTracksRequest.execute().getItems());
+            var request = spotifyApi.searchTracks("top global hits").limit(6).build();
+            cachedPopularSongs = Arrays.asList(request.execute().getItems());
+            cacheExpirationTime = LocalDateTime.now();
+            return cachedPopularSongs;
         } catch (Exception e) {
-            System.err.println("Fallback Popular Error: " + e.getMessage());
-            return List.of();
+            System.err.println("Rate Limited. Serving cached popular hits: " + e.getMessage());
+            return cachedPopularSongs; // Safe backup fallback
         }
     }
+
 
 
 
