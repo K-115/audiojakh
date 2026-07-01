@@ -3,6 +3,7 @@ package com.makersacademy.audiojakh.controller;
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.UserRepository;
 import jakarta.servlet.annotation.HandlesTypes;
+import org.springframework.beans.factory.annotation.Value;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +27,8 @@ import java.time.LocalDate;
 public class SignUpController {
     @Autowired
     UserRepository userRepository;
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     @GetMapping("/sign_up")
     public ModelAndView signUp(HttpSession session){
