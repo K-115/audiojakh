@@ -14,6 +14,8 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
 
     Iterable<Comment> findAllByReviewId(Integer reviewId);
 
+    List<Comment> findByReviewId(Long id);
+
 //    @Query(
 //            value = "SELECT comments.id, comments.content, comments.post, comments.date_of_comment, users.first_name, users.surname, users.profile_picture FROM comments LEFT JOIN users on comments.poster = users.id WHERE comments.post = :postID;",
 //            nativeQuery = true

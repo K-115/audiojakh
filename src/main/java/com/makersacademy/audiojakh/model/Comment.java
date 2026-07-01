@@ -1,32 +1,53 @@
 package com.makersacademy.audiojakh.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "comments")
-@Getter
-@Setter
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String content;
-    private Long poster;
-    @Column(name = "review")
-    private Long reviewId;
-    private Long likes = 0L;
-    
-    @Column(name = "date_of_comment")
+
+    @Column(name = "likes")
+    private Integer likes = 0;
+
+    @Column(name = "date_of_comment", nullable = false)
     private LocalDateTime dateOfComment;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "poster", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review", nullable = false)
+    private Review review;
+
+    @PrePersist
+    protected void onCreate() {
+        this.dateOfComment = LocalDateTime.now();
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
+
+    public Integer getLikes() { return likes; }
+    public void setLikes(Integer likes) { this.likes = likes; }
+
+    public LocalDateTime getDateOfComment() { return dateOfComment; }
+    public void setDateOfComment(LocalDateTime dateOfComment) { this.dateOfComment = dateOfComment; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    public Review getReview() { return review; }
+    public void setReview(Review review) { this.review = review; }
 }
