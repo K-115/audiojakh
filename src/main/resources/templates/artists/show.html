@@ -57,6 +57,7 @@
                  class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
                 <article th:each="album : ${albums}"
                          class="brand-card p-5 flex flex-col text-center hover:bg-ink-800 transition-colors duration-200 group bg-ink-900 border border-ink-800 rounded-lg">
+                    <a th:href="@{/albums/{id}(id=${album.id})}">
 
                     <img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
                          th:alt="${album.name}" class="w-full aspect-square object-cover rounded-md shadow-lg mb-4 group-hover:scale-[1.02] transition-transform duration-200" />
@@ -68,6 +69,7 @@
 
                     <p class="text-cream-400 text-xs font-mono mt-auto pt-2"
                        th:text="${#strings.length(album.releaseDate) >= 4} ? ${#strings.substring(album.releaseDate, 0, 4)} : ${album.releaseDate}">2026</p>
+                    </a>
                 </article>
             </div>
         </section>

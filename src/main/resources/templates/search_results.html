@@ -27,12 +27,14 @@
 			<div th:unless="${#lists.isEmpty(userResults)}" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
 				<article th:each="member : ${userResults}"
 				         class="brand-card p-4 flex flex-col items-center text-center hover:bg-ink-800 transition-colors duration-200">
+					<a th:href="@{/profile/{username}(username=${member.username})}" >
 					<img th:src="${member.profilePicture != null} ? ${member.profilePicture} : '/images/default-avatar.png'"
 					     alt="Member Avatar" class="w-20 h-20 rounded-full object-cover border border-ink-700 shadow-md mb-3" />
 					<h4 class="m-0 text-sm font-bold truncate w-full">
 						<a th:href="@{/profile/{username}(username=${member.username})}" th:text="${member.username}"
 						   class="text-cream-100 no-underline hover:text-red-400 transition-colors">Username</a>
 					</h4>
+					</a>
 				</article>
 			</div>
 		</section>
@@ -46,6 +48,7 @@
 			<div th:unless="${#lists.isEmpty(trackResults)}" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
 				<article th:each="track : ${trackResults}"
 				         class="brand-card p-4 flex flex-col text-center hover:bg-ink-800 transition-colors duration-200 group">
+					<a th:href="@{/songs/{id}(id=${track.id})}">
 					<img th:src="${track.album != null && track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].getUrl()
 					} : '/images/default-album.png'"
 					     alt="Cover" class="w-full aspect-square object-cover rounded-md shadow-md mb-3 group-hover:scale-[1.02] transition-transform duration-200" />
@@ -56,6 +59,7 @@
 					</h4>
 					<p th:text="${track.artists != null && track.artists.length > 0} ? ${track.artists[0].getName()} : 'Unknown Artist'"
 					   class="text-cream-400 text-xs mt-auto pt-1 truncate">Artist</p>
+					</a>
 				</article>
 			</div>
 		</section>
@@ -69,12 +73,14 @@
 			<div th:unless="${#lists.isEmpty(artistResults)}" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
 				<article th:each="artist : ${artistResults}"
 				         class="brand-card p-4 flex flex-col items-center text-center hover:bg-ink-800 transition-colors duration-200 group">
+					<a th:href="@{/artists/{id}(id=${artist.id})}">
 					<img th:src="${artist.images != null && artist.images.length > 0} ? ${artist.images[0].getUrl()} : '/images/default-artist.png'"
 					     alt="Artist Portrait" class="w-24 h-24 rounded-full object-cover border border-ink-700 shadow-md mb-3 group-hover:scale-[1.02] transition-transform duration-200" />
 					<h4 class="m-0 text-sm font-bold truncate w-full">
 						<a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}"
 						   class="text-cream-100 no-underline hover:text-red-400 transition-colors">Artist Name</a>
 					</h4>
+					</a>
 				</article>
 			</div>
 		</section>
@@ -88,6 +94,7 @@
 			<div th:unless="${#lists.isEmpty(albumResults)}" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
 				<article th:each="album : ${albumResults}"
 				         class="brand-card p-4 flex flex-col text-center hover:bg-ink-800 transition-colors duration-200 group">
+					<a th:href="@{/albums/{id}(id=${album.id})}">
 					<img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].getUrl()} : '/images/default-album.png'"
 					     alt="Cover" class="w-full aspect-square object-cover rounded-md shadow-md mb-3 group-hover:scale-[1.02] transition-transform duration-200" />
 
@@ -97,6 +104,7 @@
 					</h4>
 					<p th:text="${album.artists != null && album.artists.length > 0} ? ${album.artists[0].name} : 'Unknown Artist'"
 					   class="text-cream-400 text-xs mt-auto pt-1 truncate">Artist</p>
+					</a>
 				</article>
 			</div>
 		</section>
