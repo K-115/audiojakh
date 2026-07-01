@@ -27,7 +27,7 @@ public class CommentsController {
     private UserRepository userRepository;
 
     @Autowired
-    private ReviewRepository reviewRepository; // ADDED: Required to look up the parent review entity
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private CommentLikeRepository commentLikeRepository;
@@ -40,6 +40,7 @@ public class CommentsController {
         String email = (String) oidc.getAttributes().get("email");
         return userRepository.findUserByEmailAddress(email).orElse(null);
     }
+
 
     @PostMapping("/comments")
     public String createComment(@RequestParam("reviewId") Long reviewId,
@@ -58,16 +59,17 @@ public class CommentsController {
 
         Review review = reviewRepository.findById(reviewId).orElse(null);
         if (review == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "The review you are commenting on no longer exists.");
+            redirectAttributes.addFlashAttribute("errorMessage", "The review no longer exists.");
             return "redirect:/reviews?sort=" + sort;
         }
 
         try {
             Comment comment = new Comment();
             comment.setContent(content.trim());
+            comment.setLikes(0);
+
             comment.setUser(me);
-            comment.setReviewId(review.getId());
-            comment.setLikes(0L);
+            comment.setReview(review);
 
             commentRepository.save(comment);
         } catch (Exception e) {
@@ -77,6 +79,7 @@ public class CommentsController {
 
         return "redirect:/reviews?sort=" + sort;
     }
+
 
     @PostMapping("/reviews/{id}/comment-likes")
     public String commentLikes(@PathVariable("id") Long commentId,
@@ -92,7 +95,7 @@ public class CommentsController {
         );
 
         commentRepository.findById(commentId).ifPresent(c -> {
-            c.setLikes((long) commentLikeRepository.countByCommentId(commentId));
+            c.setLikes((int) commentLikeRepository.countByCommentId(commentId));
             commentRepository.save(c);
         });
 

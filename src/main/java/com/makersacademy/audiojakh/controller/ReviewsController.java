@@ -1,6 +1,4 @@
 package com.makersacademy.audiojakh.controller;
-
-import com.makersacademy.audiojakh.DTOs.DTOProfileJoin;
 import com.makersacademy.audiojakh.model.*;
 import com.makersacademy.audiojakh.repository.*;
 import com.makersacademy.audiojakh.model.Review;
@@ -68,26 +66,37 @@ public class ReviewsController {
                         Model model) {
         User me = currentUserService.get();
         model.addAttribute("currentUser", me);
-
-        List<Review> reviews;
-        if ("liked".equalsIgnoreCase(sort)) {
-            reviews = reviewRepository.findAllByOrderByLikesDesc();
-        } else {
-            reviews = reviewRepository.findAllByOrderByIdDesc();
-        }
-
-        List<ReviewView> reviewViews = new ArrayList<>();
-        for (Review r : reviews) {
-            long count = reviewLikeRepository.countByReviewId(r.getId());
-            boolean liked = me != null && reviewLikeRepository.existsByReviewIdAndUserId(r.getId(), me.getId());
-            reviewViews.add(new ReviewView(r, count, liked));
-        }
-
-        model.addAttribute("reviewViews", reviewViews);
         model.addAttribute("currentSort", sort);
 
-        return "posts/reviews_page";
+    List<Review> reviews;
+    if ("liked".equalsIgnoreCase(sort)) {
+        reviews = reviewRepository.findAllByOrderByLikesDesc();
+    } else {
+        reviews = reviewRepository.findAllByOrderByIdDesc();
     }
+
+    List<ReviewView> reviewViews = new ArrayList<>();
+    for (Review r : reviews) {
+        long count = reviewLikeRepository.countByReviewId(r.getId());
+        boolean liked = me != null && reviewLikeRepository.existsByReviewIdAndUserId(r.getId(), me.getId());
+
+        List<Comment> rawComments = commentRepository.findByReviewId(r.getId());
+        List<CommentView> commentViews = new ArrayList<>();
+
+        for (Comment c : rawComments) {
+            long commentLikes = commentLikeRepository.countByCommentId(c.getId());
+            boolean commentLikedByMe = me != null && commentLikeRepository.existsByCommentIdAndUserId(c.getId(), me.getId());
+
+            commentViews.add(new CommentView(c, commentLikes, commentLikedByMe));
+        }
+
+        reviewViews.add(new ReviewView(r, count, liked, commentViews));
+    }
+
+    model.addAttribute("reviewViews", reviewViews);
+
+    return "posts/reviews_page";
+}
 
     @GetMapping("/reviews/new")
     public String showCreateForm(@RequestParam(value = "query", required = false) String query, Model model) {
@@ -124,14 +133,22 @@ public class ReviewsController {
 
         if (trackId != null && !trackId.trim().isEmpty()) {
             review.setTrackSpotifyId(trackId);
+            try {
+                se.michaelthelin.spotify.model_objects.specification.Track spTrack = spotifyService.getTrack(trackId);
+                review.setTrackName(spTrack.getName());
 
-            se.michaelthelin.spotify.model_objects.specification.Track spTrack = spotifyService.getTrack(trackId);
-            review.setTrackName(spTrack.getName());
+                if (spTrack.getArtists() != null && spTrack.getArtists().length > 0) {
+                    review.setArtistName(spTrack.getArtists()[0].getName());
+                }
 
-            if (spTrack.getArtists() != null && spTrack.getArtists().length > 0) {
-                review.setArtistName(spTrack.getArtists()[0].getName());
+                if (spTrack.getAlbum() != null && spTrack.getAlbum().getImages() != null && spTrack.getAlbum().getImages().length > 0) {
+                    review.setImageUrl(spTrack.getAlbum().getImages()[0].getUrl());
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to fetch track image/meta from Spotify: " + e.getMessage());
             }
         }
+
 
         if (trackId != null && !trackId.trim().isEmpty()) {
             if (reviewRepository.existsByUserIdAndTrackSpotifyId(currentUser.getId(), trackId)) {
@@ -142,14 +159,15 @@ public class ReviewsController {
             Track spTrack = spotifyService.getTrack(trackId);
             review.setTrackName(spTrack.getName());
 
-        } else if (albumId != null && !albumId.trim().isEmpty()) {
+        }
+        else if (albumId != null && !albumId.trim().isEmpty()) {
             if (reviewRepository.existsByUserIdAndAlbumSpotifyId(currentUser.getId(), albumId)) {
                 redirectAttributes.addFlashAttribute("errorMessage", "You have already reviewed this album!");
                 return "redirect:/reviews/new";
             }
             review.setAlbumSpotifyId(albumId);
-            Album spAlbum = spotifyService.getAlbum(albumId);
-            review.setAlbumName(spAlbum.getName());
+                Album spAlbum = spotifyService.getAlbum(albumId);
+                review.setAlbumName(spAlbum.getName());
         }
 
         review.setUser(currentUser);

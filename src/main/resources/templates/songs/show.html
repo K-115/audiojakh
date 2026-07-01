@@ -1,71 +1,99 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
 
-<body class="bg-canvas">
+<body class="bg-canvas text-white">
 <div th:replace="~{navbar :: navbar}"></div>
 
-<div class="container" th:if="${track != null}">
+<div class="max-w-[1180px] mx-auto px-10 pt-10 pb-24 box-border">
 
-    <div class="header-layout">
-        <img class="track-cover-art"
-             th:src="${track.album != null && track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'"
-             alt="Album Artwork" />
-        <div>
-            <h1 th:text="${track.name}">Track Title</h1>
+    <p class="mb-8">
+        <a th:href="@{/songs}" class="text-cream-400 no-underline hover:text-white transition-colors">&larr; Back to Music Discovery</a>
+    </p>
 
-            <span th:if="${track.getIsExplicit()}" class="badge-explicit">EXPLICIT</span>
+    <div th:if="${track != null}" class="flex flex-col gap-8">
 
-            <div th:if="${currentUser != null}">
-                <form th:action="@{/favourites/track}" method="post">
-                    <input type="hidden" name="id" th:value="${track.id}" />
-                    <button type="submit" class="search-action-btn">
-                        ⭐ Set as my Favourite Song
-                    </button>
-                </form>
+        <div class="flex flex-col md:flex-row gap-8 items-center md:items-end bg-ink-900 border border-ink-800 p-8 rounded-xl shadow-lg">
+
+            <div class="flex-shrink-0">
+                <img th:src="${track.album != null && track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].url} : '/images/default-album.png'"
+                     alt="Album Artwork" class="w-56 h-56 object-cover rounded-md shadow-2xl bg-ink-950 border border-ink-700" />
+            </div>
+
+            <div class="flex-grow text-center md:text-left min-w-0">
+                <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-2">
+                    <span class="eyebrow uppercase tracking-widest text-xs font-bold text-red-400">SONG</span>
+                    <span th:if="${track.getIsExplicit()}" class="bg-red-500 text-white font-mono text-[10px] font-bold px-1.5 py-0.5 rounded select-none tracking-normal">EXPLICIT</span>
+                </div>
+
+                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight m-0 mb-3 truncate" th:text="${track.name}">Track Title</h1>
+
+                <p class="text-lg font-medium text-cream-200 m-0 mb-5" th:if="${track.artists != null && track.artists.length > 0}">
+                    By <a th:href="@{/artists/{id}(id=${track.artists[0].id})}" th:text="${track.artists[0].name}"
+                          class="text-white font-bold no-underline hover:text-red-400 transition-colors">Artist Name</a>
+                </p>
+
+                <div th:if="${currentUser != null}">
+                    <form th:action="@{/favourites/track}" method="post" class="m-0">
+                        <input type="hidden" name="id" th:value="${track.id}" />
+                        <button type="submit" class="bg-red-500 hover:bg-red-400 text-white font-bold px-5 py-2.5 rounded-full border-none shadow-md cursor-pointer transition-colors flex items-center gap-2">
+                            Set as my Favourite Song
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
+
+        <section class="brand-card p-6 bg-ink-900 border border-ink-800 rounded-lg shadow-sm">
+            <h2 class="text-xl font-bold mb-6 text-cream-100 border-b border-ink-800 pb-2">Track Specifications</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+
+                <div class="flex flex-col border-b border-ink-800 pb-3">
+                    <span class="text-xs uppercase font-bold tracking-wider text-cream-500 mb-1">Album Context</span>
+                    <span th:if="${track.album != null}">
+                        <a th:href="@{/albums/{id}(id=${track.album.id})}" th:text="${track.album.name}"
+                           class="text-cream-100 font-semibold no-underline hover:text-red-400 text-base transition-colors">Album Name</a>
+                    </span>
+                    <span th:unless="${track.album != null}" class="text-cream-300 font-medium text-base">Single / Independent Release</span>
+                </div>
+
+                <div class="flex flex-col border-b border-ink-800 pb-3">
+                    <span class="text-xs uppercase font-bold tracking-wider text-cream-500 mb-1">Duration</span>
+                    <span class="font-mono text-cream-100 font-semibold text-base"
+                          th:with="totalSecs=${track.durationMs / 1000}, mins=${totalSecs / 60}, secs=${totalSecs % 60}"
+                          th:text="${mins} + ':' + (${secs < 10} ? '0' + ${secs} : ${secs})">0:00</span>
+                </div>
+
+                <div class="flex flex-col border-b border-ink-800 pb-3">
+                    <span class="text-xs uppercase font-bold tracking-wider text-cream-500 mb-1">Disc & Position Config</span>
+                    <span class="text-cream-200 font-medium text-base" th:text="'Disc ' + ${track.discNumber} + ' • Track #' + ${track.trackNumber}">Disc 1 • Track #1</span>
+                </div>
+
+                <div class="flex flex-col border-b border-ink-800 pb-3">
+                    <span class="text-xs uppercase font-bold tracking-wider text-cream-500 mb-1">Spotify Identifier Code</span>
+                    <span class="font-mono text-sm text-cream-400 tracking-tight break-all" th:text="${track.id}">ID String</span>
+                </div>
+
+                <div class="flex flex-col md:col-span-2 pb-1">
+                    <span class="text-xs uppercase font-bold tracking-wider text-cream-500 mb-1.5">Platform Popularity Index</span>
+                    <div class="flex items-center gap-4">
+                        <div class="w-full bg-ink-950 h-2.5 rounded-full overflow-hidden border border-ink-800">
+                            <div class="bg-red-500 h-full rounded-full transition-all duration-500"
+                                 th:style="'width: ' + ${track.popularity} + '%;'"></div>
+                        </div>
+                        <span class="font-mono text-sm font-bold text-cream-200 min-w-[50px]" th:text="${track.popularity} + ' / 100'">0 / 100</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
     </div>
-
-    <div class="detail-label">Artist Info</div>
-    <div class="detail-value" th:if="${track.artists != null && track.artists.length > 0}">
-        <a th:href="@{/artists/{id}(id=${track.artists[0].id})}"
-           th:text="${track.artists[0].name}"
-           style="font-weight: bold;">Artist Name</a>
-    </div>
-    <div class="detail-value" th:unless="${track.artists != null && track.artists.length > 0}">
-        <span>Unknown Artist</span>
-    </div>
-
-    <div class="detail-label">Album Info</div>
-    <div class="detail-value" th:if="${track.album != null}">
-        <a th:href="@{/albums/{id}(id=${track.album.id})}" th:text="${track.album.name}">Album Name</a>
-    </div>
-    <div class="detail-value" th:unless="${track.album != null}">
-        <span>Single / Independent Release</span>
-    </div>
-
-    <div class="detail-label">Duration</div>
-    <div class="detail-value"
-         th:with="totalSecs=${track.durationMs / 1000}, mins=${totalSecs / 60}, secs=${totalSecs % 60}"
-         th:text="${mins} + ':' + (${secs < 10} ? '0' + ${secs} : ${secs})">0:00</div>
-
-    <div class="detail-label">Spotify Popularity Rating</div>
-    <div class="detail-value">
-        <span th:text="${track.popularity} + ' / 100'">0 / 100</span>
-    </div>
-
-    <div class="detail-label">Disc & Track Configuration</div>
-    <div class="detail-value" th:text="'Disc ' + ${track.discNumber} + ' • Track #' + ${track.trackNumber}">Disc 1 • Track #1</div>
-
-    <div class="detail-label">Spotify Code Identifier</div>
-    <div class="detail-value" th:text="${track.id}">ID String</div>
-
-    <a class="back-btn" th:href="@{/songs}">&larr; Back to Music Discovery</a>
 </div>
 
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>
-

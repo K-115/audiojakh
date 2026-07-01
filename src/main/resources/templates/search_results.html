@@ -1,68 +1,115 @@
 <!DOCTYPE html>
-
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-    <head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+<head th:replace="~{head :: head('AudioJAKH - Search Results')}"></head>
 
-	<body class="bg-canvas">
-		<div th:replace="~{navbar :: navbar}"></div>
+<body class="bg-canvas text-white">
 
-<div class="main-page-container">
+<div th:replace="~{navbar :: navbar}"></div>
 
-	<h1>Search Results</h1>
-	<p th:if="${query}" class="result-item-meta" th:text="|Showing results matching: '${query}'|"></p>
+<div class="max-w-[1180px] mx-auto px-10 pt-10 pb-24 box-border">
 
+	<h1 class="text-5xl font-bold leading-[1.04] mt-4 mb-4">Search Results</h1>
+	<p th:if="${query}" class="font-mono text-sm text-cream-400 mb-10" th:text="|Showing results matching: '${query}'|"></p>
 
-	<div th:if="${query == null}" class="search-section-box">
-		<p>Type a name, song title, or album in the navigation bar search input to discover items.</p>
+	<div th:if="${query == null}" class="brand-card p-6 text-cream-400 italic">
+		<p class="m-0">Type a name, song title, or album in the navigation bar search input to discover items.</p>
 	</div>
 
-	<div th:if="${query != null}">
+	<div th:if="${query != null}" class="flex flex-col gap-12">
 
-		<div class="search-section-box">
-			<h2>Members</h2>
-			<p th:if="${#lists.isEmpty(userResults)}" class="result-item-meta">No platform profiles match your request.</p>
-			<ul th:unless="${#lists.isEmpty(userResults)}">
-				<li th:each="member : ${userResults}">
-					<a class="result-item-link" th:href="@{/profile/{username}(username=${member.username})}" th:text="${member.username}">Username</a>
-				</li>
-			</ul>
-		</div>
+		<section>
+			<h2 class="text-2xl font-bold mb-4 text-cream-100 border-b border-ink-700 pb-2">Members</h2>
+			<div th:if="${#lists.isEmpty(userResults)}" class="brand-card p-6 text-cream-400 italic">
+				<p class="m-0">No platform profiles match your request.</p>
+			</div>
 
-		<div class="search-section-box">
-			<h2>Songs</h2>
-			<p th:if="${#lists.isEmpty(trackResults)}" class="result-item-meta">No matching tracks discovered.</p>
-			<ul th:unless="${#lists.isEmpty(trackResults)}">
-				<li th:each="track : ${trackResults}">
-					<a class="result-item-link" th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>
-					<div class="result-item-meta" th:text="${track.artists != null && track.artists.length > 0} ? 'Track by ' + ${track.artists[0].name} : 'Unknown Artist'">Artist</div>
-				</li>
-			</ul>
-		</div>
+			<div th:unless="${#lists.isEmpty(userResults)}" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+				<article th:each="member : ${userResults}"
+				         class="brand-card p-4 flex flex-col items-center text-center hover:bg-ink-800 transition-colors duration-200">
+					<a th:href="@{/profile/{username}(username=${member.username})}" >
+					<img th:src="${member.profilePicture != null} ? ${member.profilePicture} : '/images/default-avatar.png'"
+					     alt="Member Avatar" class="w-20 h-20 rounded-full object-cover border border-ink-700 shadow-md mb-3" />
+					<h4 class="m-0 text-sm font-bold truncate w-full">
+						<a th:href="@{/profile/{username}(username=${member.username})}" th:text="${member.username}"
+						   class="text-cream-100 no-underline hover:text-red-400 transition-colors">Username</a>
+					</h4>
+					</a>
+				</article>
+			</div>
+		</section>
 
-		<div class="search-section-box">
-			<h2>Artists</h2>
-			<p th:if="${#lists.isEmpty(artistResults)}" class="result-item-meta">No matching artists found.</p>
-			<ul th:unless="${#lists.isEmpty(artistResults)}">
-				<li th:each="artist : ${artistResults}">
-					<a class="result-item-link" th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}">Artist Name</a>
-				</li>
-			</ul>
-		</div>
+		<section>
+			<h2 class="text-2xl font-bold mb-4 text-cream-100 border-b border-ink-700 pb-2">Songs</h2>
+			<div th:if="${#lists.isEmpty(trackResults)}" class="brand-card p-6 text-cream-400 italic">
+				<p class="m-0">No matching tracks discovered.</p>
+			</div>
 
-		<div class="search-section-box">
-			<h2>Albums</h2>
-			<p th:if="${#lists.isEmpty(albumResults)}" class="result-item-meta">No matching albums found.</p>
-			<ul th:unless="${#lists.isEmpty(albumResults)}">
-				<li th:each="album : ${albumResults}">
-					<a class="result-item-link" th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}">Album Name</a>
-					<div class="result-item-meta" th:text="${album.artists != null && album.artists.length > 0} ? 'Album by ' + ${album.artists[0].name} : ''">Artist</div>
-				</li>
-			</ul>
-		</div>
+			<div th:unless="${#lists.isEmpty(trackResults)}" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+				<article th:each="track : ${trackResults}"
+				         class="brand-card p-4 flex flex-col text-center hover:bg-ink-800 transition-colors duration-200 group">
+					<a th:href="@{/songs/{id}(id=${track.id})}">
+					<img th:src="${track.album != null && track.album.images != null && track.album.images.length > 0} ? ${track.album.images[0].getUrl()
+					} : '/images/default-album.png'"
+					     alt="Cover" class="w-full aspect-square object-cover rounded-md shadow-md mb-3 group-hover:scale-[1.02] transition-transform duration-200" />
+
+					<h4 class="m-0 text-sm font-bold h-10 line-clamp-2 overflow-hidden flex items-center justify-center">
+						<a th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}"
+						   class="text-cream-100 no-underline hover:text-red-400 transition-colors">Song Title</a>
+					</h4>
+					<p th:text="${track.artists != null && track.artists.length > 0} ? ${track.artists[0].getName()} : 'Unknown Artist'"
+					   class="text-cream-400 text-xs mt-auto pt-1 truncate">Artist</p>
+					</a>
+				</article>
+			</div>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-bold mb-4 text-cream-100 border-b border-ink-700 pb-2">Artists</h2>
+			<div th:if="${#lists.isEmpty(artistResults)}" class="brand-card p-6 text-cream-400 italic">
+				<p class="m-0">No matching artists found.</p>
+			</div>
+
+			<div th:unless="${#lists.isEmpty(artistResults)}" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+				<article th:each="artist : ${artistResults}"
+				         class="brand-card p-4 flex flex-col items-center text-center hover:bg-ink-800 transition-colors duration-200 group">
+					<a th:href="@{/artists/{id}(id=${artist.id})}">
+					<img th:src="${artist.images != null && artist.images.length > 0} ? ${artist.images[0].getUrl()} : '/images/default-artist.png'"
+					     alt="Artist Portrait" class="w-24 h-24 rounded-full object-cover border border-ink-700 shadow-md mb-3 group-hover:scale-[1.02] transition-transform duration-200" />
+					<h4 class="m-0 text-sm font-bold truncate w-full">
+						<a th:href="@{/artists/{id}(id=${artist.id})}" th:text="${artist.name}"
+						   class="text-cream-100 no-underline hover:text-red-400 transition-colors">Artist Name</a>
+					</h4>
+					</a>
+				</article>
+			</div>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-bold mb-4 text-cream-100 border-b border-ink-700 pb-2">Albums</h2>
+			<div th:if="${#lists.isEmpty(albumResults)}" class="brand-card p-6 text-cream-400 italic">
+				<p class="m-0">No matching albums found.</p>
+			</div>
+
+			<div th:unless="${#lists.isEmpty(albumResults)}" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+				<article th:each="album : ${albumResults}"
+				         class="brand-card p-4 flex flex-col text-center hover:bg-ink-800 transition-colors duration-200 group">
+					<a th:href="@{/albums/{id}(id=${album.id})}">
+					<img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].getUrl()} : '/images/default-album.png'"
+					     alt="Cover" class="w-full aspect-square object-cover rounded-md shadow-md mb-3 group-hover:scale-[1.02] transition-transform duration-200" />
+
+					<h4 class="m-0 text-sm font-bold h-10 line-clamp-2 overflow-hidden flex items-center justify-center">
+						<a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}"
+						   class="text-cream-100 no-underline hover:text-red-400 transition-colors">Album Name</a>
+					</h4>
+					<p th:text="${album.artists != null && album.artists.length > 0} ? ${album.artists[0].name} : 'Unknown Artist'"
+					   class="text-cream-400 text-xs mt-auto pt-1 truncate">Artist</p>
+					</a>
+				</article>
+			</div>
+		</section>
 
 	</div>
-
 </div>
 
 <div th:replace="~{footer :: footer}"></div>

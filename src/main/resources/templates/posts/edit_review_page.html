@@ -1,41 +1,95 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+<head th:replace="~{head :: head('AudioJAKH - Edit Your Review')}"></head>
 
-<body class="bg-canvas">
+<body class="bg-canvas text-white">
 
 <div th:replace="~{navbar :: navbar}"></div>
 
 <div class="max-w-[1180px] mx-auto px-10 pb-24 box-border">
 
-<h1>Edit Your Review</h1>
+  <p class="mt-8"><a th:href="@{/reviews}" class="text-cream-400 no-underline hover:text-white transition-colors">&larr; Back to Timeline</a></p>
+  <h1 class="text-5xl font-bold leading-[1.04] mt-4 mb-10">Edit Your Review</h1>
 
-<div>
-  <p th:if="${review.track != null}" th:text="'🎵 Song: ' + ${review.track.name}"></p>
-  <p th:if="${review.track == null and review.album != null}" th:text="'💿 Album: ' + ${review.album.name}"></p>
+  <div class="brand-card p-6 flex flex-col sm:flex-row items-center gap-6 bg-ink-900 border border-ink-800 rounded-xl shadow-md mb-8">
+    <div class="flex-shrink-0">
+      <img th:src="${review.imageUrl != null && !review.imageUrl.isEmpty()} ? ${review.imageUrl} : 'https://spotify.com'"
+           alt="Music Cover Art" class="w-32 h-32 object-cover rounded-md shadow-lg bg-ink-950 border border-ink-800" />
+    </div>
+    <div class="text-center sm:text-left min-w-0">
+      <span class="eyebrow uppercase tracking-widest text-xs font-bold text-red-400">Review Target</span>
+      <h2 class="text-2xl font-bold mt-1 mb-2 truncate" th:text="${review.trackName != null} ? ${review.trackName} : ${review.albumName}">Item Name</h2>
+      <p class="m-0 text-sm text-cream-400 font-medium" th:if="${review.artistName != null}" th:text="'By ' + ${review.artistName}">Artist Name</p>
+    </div>
+  </div>
+
+  <form th:action="@{/reviews/{id}/edit(id=${review.id})}" method="post" class="flex flex-col gap-6 max-w-[600px]">
+
+    <div class="star-rating-container flex flex-col gap-1.5">
+      <label class="font-semibold text-cream-200">Adjust your star rating</label>
+      <input type="hidden" name="rating" id="rating-input" th:value="${review.rating}" required />
+
+      <div class="star-group flex gap-1 font-sans" id="star-group" style="font-size: 2.5rem; cursor: pointer; width: max-content;">
+        <span class="star-item transition-colors duration-150" data-value="1">★</span>
+        <span class="star-item transition-colors duration-150" data-value="2">★</span>
+        <span class="star-item transition-colors duration-150" data-value="3">★</span>
+        <span class="star-item transition-colors duration-150" data-value="4">★</span>
+        <span class="star-item transition-colors duration-150" data-value="5">★</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="body" class="font-semibold text-cream-200">Update your thoughts</label>
+      <textarea name="content" id="body" placeholder="What do you think of this track now?..."
+                class="bg-ink-950 text-white placeholder-cream-600 border border-ink-800 px-4 py-3 rounded-lg outline-none focus:border-red-500 transition-colors w-full h-36 resize-y leading-relaxed text-base"
+                th:text="${review.content}" required></textarea>
+    </div>
+
+    <div class="flex items-center gap-4 mt-2">
+      <button type="submit" class="bg-red-500 hover:bg-red-400 text-white font-bold px-6 py-2.5 rounded-full border-none shadow-md cursor-pointer transition-colors text-sm">
+        Update Review
+      </button>
+      <a th:href="@{/reviews}" class="bg-ink-800 hover:bg-ink-700 text-cream-200 hover:text-white font-bold px-6 py-2.5 rounded-full border border-ink-700 text-center no-underline cursor-pointer transition-colors text-sm">
+        Cancel
+      </a>
+    </div>
+  </form>
+
 </div>
 
-<form th:action="@{/reviews/{id}/edit(id=${review.id})}" method="post">
-  <p>Content:
-    <input type="text" name="content" th:value="${review.content}" required style="width: 50%;" />
-  </p>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const starGroup = document.getElementById("star-group");
 
-  <p>Rating:
-    <select name="rating" required>
-      <option value="1" th:selected="${review.rating == 1}">⭐ (1)</option>
-      <option value="2" th:selected="${review.rating == 2}">⭐⭐ (2)</option>
-      <option value="3" th:selected="${review.rating == 3}">⭐⭐⭐ (3)</option>
-      <option value="4" th:selected="${review.rating == 4}">⭐⭐⭐⭐ (4)</option>
-      <option value="5" th:selected="${review.rating == 5}">⭐⭐⭐⭐⭐ (5)</option>
-    </select>
-  </p>
+    if (starGroup) {
+      const stars = starGroup.querySelectorAll(".star-item");
+      const ratingInput = document.getElementById("rating-input");
 
-  <p>
-    <button type="submit">Update Review</button>
-    <button type="submit">Cancel</button>
-  </p>
-</form>
+      function colorStars(selectedValue) {
+        stars.forEach(s => {
+          if (parseInt(s.getAttribute("data-value")) <= parseInt(selectedValue)) {
+            s.style.color = "#FFD700";
+          } else {
+            s.style.color = "#444444";
+          }
+        });
+      }
+
+      if (ratingInput && ratingInput.value) {
+        colorStars(ratingInput.value);
+      }
+
+      stars.forEach(star => {
+        star.addEventListener("click", function() {
+          const selectedValue = this.getAttribute("data-value");
+          ratingInput.value = selectedValue;
+          colorStars(selectedValue);
+        });
+      });
+    }
+  });
+</script>
 
 <div th:replace="~{footer :: footer}"></div>
 

@@ -51,5 +51,20 @@ ALTER TABLE favourite_albums ADD CONSTRAINT unique_user_favourite_album UNIQUE (
 ALTER TABLE favourite_artists ADD CONSTRAINT unique_user_favourite_artist UNIQUE (user_id);
 ALTER TABLE favourite_tracks DROP CONSTRAINT IF EXISTS favourite_tracks_spotify_id_fkey;
 ALTER TABLE favourite_albums DROP CONSTRAINT IF EXISTS favourite_albums_spotify_id_fkey;
-
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS image_url VARCHAR(500);
+DELETE FROM commentLikes;
+DELETE FROM comments;
+ALTER TABLE comments ADD COLUMN IF NOT EXISTS user_id BIGINT NOT NULL;
+ALTER TABLE comments
+DROP CONSTRAINT IF EXISTS fk_comments_user,
+ADD CONSTRAINT fk_comments_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+DELETE FROM commentLikes;
+DELETE FROM comments;
+ALTER TABLE comments DROP COLUMN IF EXISTS poster;
+ALTER TABLE comments ADD COLUMN IF NOT EXISTS user_id BIGINT;
+UPDATE comments SET user_id = 1 WHERE user_id IS NULL;
+ALTER TABLE comments ALTER COLUMN user_id SET NOT NULL;
+ALTER TABLE comments
+DROP CONSTRAINT IF EXISTS fk_comments_user,
+ADD CONSTRAINT fk_comments_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 

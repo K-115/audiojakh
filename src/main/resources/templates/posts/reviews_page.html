@@ -1,147 +1,153 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+<head th:replace="~{head :: head('AudioJAKH - Reviews Timeline')}"></head>
 
-<body class="bg-canvas">
+<body class="bg-canvas text-white">
 
 <div th:replace="~{navbar :: navbar}"></div>
 
-<h1>Reviews</h1>
+<div class="max-w-[1180px] mx-auto px-10 pt-10 pb-24 box-border">
 
-<div sec:authorize="isAuthenticated()" id="greeting">
-  Signed in as <span sec:authentication="principal.attributes['email']"></span>
-</div>
-
-<!--<div th:if="${errorMessage}">-->
-<!--  <p th:text="${errorMessage}"></p>-->
-<!--</div>-->
-
-<!--<form method="get" action="/reviews">-->
-<!--  <p>-->
-<!--    1. Select an Album to Review:-->
-<!--    <select name="albumId" onchange="this.form.submit()">-->
-<!--      <option value="">&#45;&#45; Choose an Album &#45;&#45;</option>-->
-<!--      <option th:each="album : ${allAlbums}"-->
-<!--              th:value="${album.spotifyId}"-->
-<!--              th:text="${album.name}"-->
-<!--              th:selected="${album.spotifyId == selectedAlbumId}"></option>-->
-<!--    </select>-->
-<!--    <button type="submit" th:if="${selectedAlbumId == null}">Next Step</button>-->
-<!--  </p>-->
-<!--</form>-->
-
-<!--<form th:if="${selectedAlbumId != null}" th:action="@{/reviews}" th:object="${review}" method="post">-->
-<!--  <input type="hidden" th:value="${selectedAlbumId}" name="albumId" id="albumId" />-->
-
-<!--  <p>Content: <input type="text" th:field="*{content}" required /></p>-->
+    <h1 class="text-5xl font-bold leading-[1.04] mt-4 mb-4">Reviews</h1>
 
 
-<!--  <p>-->
-<!--    Rating:-->
-<!--    <select th:field="*{rating}" required>-->
-<!--      <option value="" disabled selected>Select stars</option>-->
-<!--      <option value="1">⭐ (1)</option>-->
-<!--      <option value="2">⭐⭐ (2)</option>-->
-<!--      <option value="3">⭐⭐⭐ (3)</option>-->
-<!--      <option value="4">⭐⭐⭐⭐ (4)</option>-->
-<!--      <option value="5">⭐⭐⭐⭐⭐ (5)</option>-->
-<!--    </select>-->
-<!--  </p>-->
-
-<!--  <p>-->
-<!--    2. Choose a Song from this Album (Optional):-->
-<!--    <select name="trackId">-->
-<!--      <option value="">&#45;&#45; None (Reviewing the entire album) &#45;&#45;</option>-->
-<!--      <option th:each="track : ${allTracks}"-->
-<!--              th:value="${track.spotifyId}"-->
-<!--              th:text="${track.name}"></option>-->
-<!--    </select>-->
-<!--  </p>-->
-
-<!--  <p>-->
-<!--    <input type="submit" value="Submit Review" />-->
-<!--  </p>-->
-<!--</form>-->
-
-<!--<form method="get" action="/reviews" style="display: inline;">-->
-<!--  <button type="submit">Reset / Change Album</button>-->
-<!--</form>-->
-
-<!--add profile pic and username-->
-
-        <a th:href="@{/reviews/new}" class="btn">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 pb-4 border-b border-ink-800">
+        <a th:href="@{/reviews/new}" class="bg-red-500 hover:bg-red-400 text-white font-bold px-6 py-2.5 rounded-full border-none shadow-md cursor-pointer transition-colors no-underline inline-block text-sm">
             + Write a Review
         </a>
 
-        <div class="sort-controls">
-            <span>Sort by:</span>
+        <div class="flex items-center gap-3 font-medium text-sm">
+            <span class="text-cream-500">Sort by:</span>
 
             <a th:href="@{/reviews(sort='recent')}"
-               th:style="${currentSort == 'recent'} ? 'color: #1DB954; font-weight: bold; text-decoration: underline;' : 'color: #b3b3b3; text-decoration: none; margin-right: 10px;'"
-               style="margin-right: 15px;">Most Recent</a>
+               th:class="${currentSort == 'recent'} ? 'text-white font-bold underline decoration-red-500 decoration-2 underline-offset-4' : 'text-cream-400 no-underline hover:text-white transition-colors'">
+                Most Recent
+            </a>
+
+            <span class="text-ink-700">|</span>
 
             <a th:href="@{/reviews(sort='liked')}"
-               th:style="${currentSort == 'liked'} ? 'color: #1DB954; font-weight: bold; text-decoration: underline;' : 'color: #b3b3b3; text-decoration: none;'">Most Liked</a>
-        </div>
-<ul>
-    <li th:each="rv : ${reviewViews}">
-
-        <div>
-            <a th:if="${rv.review.user != null}"
-               th:href="@{/profile/{username}(username=${rv.review.user.username})}">
-                <img th:if="${rv.review.user.profilePicture != null}"
-                     th:src="@{'/images/' + ${rv.review.user.profilePicture}}" alt="Avatar"/>
+               th:class="${currentSort == 'liked'} ? 'text-white font-bold underline decoration-red-500 decoration-2 underline-offset-4' : 'text-cream-400 no-underline hover:text-white transition-colors'">
+                Most Liked
             </a>
-            <img th:if="${rv.review.user == null or rv.review.user.profilePicture == null}"
-                 th:src="@{/images/default-avatar.png}" alt="Default Avatar"/>
         </div>
+    </div>
 
-        <div>
-      <span th:if="${rv.review.user != null}">
-        <a th:href="@{/profile/{username}(username=${rv.review.user.username})}">
-          <strong th:text="${rv.review.user.username}"></strong>
-        </a>
-      </span>
+    <div th:if="${reviewViews == null || #lists.isEmpty(reviewViews)}" class="brand-card p-6 text-cream-400 italic">
+        <p class="m-0">No community reviews have been posted to this feed tab segment yet.</p>
+    </div>
 
-            <p th:text="${rv.review.content}"></p>
+    <ul th:unless="${reviewViews == null || #lists.isEmpty(reviewViews)}" class="list-none p-0 m-0 flex flex-col gap-6">
+        <li th:each="rv : ${reviewViews}" class="brand-card p-6 flex flex-col md:flex-row gap-6 items-start bg-ink-900 border border-ink-800 rounded-xl text-white shadow-sm">
 
-            <div>
-                <span th:if="${rv.review.track != null}" th:text="'🎵 Song: ' + ${rv.review.track.name}"></span>
-                <span th:if="${rv.review.track == null and rv.review.album != null}" th:text="'💿 Album: ' + ${rv.review.album.name}"></span>
+            <div class="relative w-20 h-20 flex-shrink-0 select-none mx-auto md:mx-0">
+                <img class="w-20 h-20 object-cover rounded-md shadow-md bg-ink-950 border border-ink-800"
+                     th:src="${rv.review.imageUrl != null && !rv.review.imageUrl.isEmpty()} ? ${rv.review.imageUrl} : 'https://spotify.com'"
+                     alt="Music Cover Art" />
+
+                <a th:if="${rv.review.user != null}" th:href="@{/profile/{username}(username=${rv.review.user.username})}">
+                    <img th:src="${rv.review.user.profilePicture != null} ? ${rv.review.user.profilePicture} : 'https://imgur.com'"
+                         alt="Avatar" class="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full object-cover border-2 border-cream-700/40 bg-ink-800 shadow-md transition-transform duration-200 hover:scale-105" />
+                </a>
+                <img th:if="${rv.review.user == null}" src="https://imgur.com"
+                     alt="Default Avatar" class="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full object-cover border-2 border-cream-700/40 bg-ink-800 shadow-md" />
             </div>
-            <span th:if="${rv.review.rating != null}" th:text="' (' + ${rv.review.rating} + '★)'">
 
-            </span>
+            <div class="flex-grow min-w-0 w-full">
 
-            <span class="review-actions">
+                <div class="flex items-baseline gap-2 mb-1 text-sm justify-center md:justify-start">
+                    <span th:if="${rv.review.user != null}">
+                        <a th:href="@{/profile/{username}(username=${rv.review.user.username})}"
+                           class="text-cream-200 font-bold no-underline hover:text-red-400 transition-colors" th:text="${rv.review.user.username}">Username</a>
+                    </span>
+                    <span th:if="${rv.review.user == null}" class="text-cream-400 font-bold">Anonymous</span>
+
+                    <span th:if="${rv.review.rating != null && rv.review.rating > 0}" class="text-yellow-400 text-xs font-sans ml-1"
+                          th:text="${#strings.repeat('★', rv.review.rating)}"></span>
+                </div>
+
+                <div class="mb-3 bg-ink-950 px-3 py-1.5 rounded border border-ink-800 inline-block text-xs w-full sm:w-auto text-center sm:text-left"
+                     th:if="${rv.review.trackName != null || rv.review.albumName != null}">
+                    <span th:if="${rv.review.trackName != null}">
+                        <span class="text-cream-500">🎵 Song: </span>
+                        <a th:href="@{/songs/{id}(id=${rv.review.trackSpotifyId})}" th:text="${rv.review.trackName}" class="text-cream-100 font-bold no-underline hover:underline">Song Name</a>
+                        <span th:if="${rv.review.artistName != null}" th:text="' by ' + ${rv.review.artistName}" class="text-cream-400 italic">by Artist</span>
+                    </span>
+                    <span th:if="${rv.review.trackName == null && rv.review.albumName != null}">
+                        <span class="text-cream-500">💿 Album: </span>
+                        <a th:href="@{/albums/{id}(id=${rv.review.albumSpotifyId})}" th:text="${rv.review.albumName}" class="text-cream-100 font-bold no-underline hover:underline">Album Name</a>
+                    </span>
+                </div>
+
+                <p th:text="${rv.review.content}" class="italic text-cream-300 leading-relaxed m-0 mb-4 text-base text-center md:text-left"></p>
+
+                <div class="flex items-center gap-4 text-xs font-mono text-cream-400 border-b border-ink-800 pb-4 mb-4 justify-center md:justify-start">
+
                     <a th:if="${currentUser != null and rv.review.user != null and currentUser.id == rv.review.user.id}"
-                       th:href="@{/reviews/{id}/edit(id=${rv.review.id})}">✏️ Edit</a>
+                       th:href="@{/reviews/{id}/edit(id=${rv.review.id})}"
+                       class="text-cream-400 no-underline hover:text-white font-semibold flex items-center gap-1 transition-colors">
+                        ✏️ Edit
+                    </a>
 
-        <form th:action="@{/reviews/{id}/like(id=${rv.review.id})}" method="post" style="display:inline">
-          <button type="submit" class="heart-btn" th:text="${rv.likedByMe} ? '❤️' : '🤍'"></button>
-        </form>
-        <span class="like-count" th:text="${rv.likeCount}"></span> likes
-      </span>
-        </div>
+                    <div class="flex items-center gap-1.5">
+                        <form th:action="@{/reviews/{id}/like(id=${rv.review.id}, sort=${currentSort})}" method="post" class="inline m-0">
 
+                            <button type="submit" class="bg-transparent border-none p-0 cursor-pointer text-sm outline-none transition-transform active:scale-95"
+                                    th:text="${rv.liked} ? '❤️' : '🤍'"></button>
+                        </form>
+                        <span th:text="${rv.likeCount}" class="font-bold text-cream-200">0</span>
+                        <span class="text-cream-500">likes</span>
+                    </div>
+                </div>
 
-  <div sec:authorize="isAuthenticated()" style="margin-top: 10px;">
-    <form th:action="@{/comments}" method="post" style="display: flex; gap: 10px;">
-      <input type="hidden" name="reviewId" th:value="${rv.review.id}" />
-      <input type="text" name="content" placeholder="Write a comment..." required/>
-      <button type="submit">
-        Reply
-      </button>
-    </form>
-  </div>
-    </li>
+                <div class="mt-4 pl-4 border-l-2 border-ink-800 flex flex-col gap-3">
+                    <div th:if="${#lists.isEmpty(rv.comments)}" class="text-xs text-cream-500 italic">
+                        No comments posted on this review yet.
+                    </div>
 
-</ul>
+                    <div th:unless="${#lists.isEmpty(rv.comments)}" th:each="cv : ${rv.comments}"
+                         class="bg-ink-950 p-3 rounded-md border border-ink-800 text-sm flex justify-between items-start gap-4">
 
+                        <div class="min-w-0 flex-grow">
+                            <div class="mb-1 text-left">
+                                <a th:href="@{/profile/{username}(username=${cv.comment.user.username})}"
+                                   class="text-cream-200 font-bold no-underline text-xs hover:text-red-400" th:text="${cv.comment.user.username}">User</a>
+                                <span class="text-cream-400 font-normal pl-2" th:text="${cv.comment.content}">Comment text</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1.5 font-mono text-xs text-cream-400 flex-shrink-0">
+                            <form th:action="@{/reviews/{id}/comment-likes(id=${cv.comment.id}, sort=${currentSort})}" method="post" class="inline m-0">
+                                <button type="submit" class="bg-transparent border-none p-0 cursor-pointer text-sm outline-none transition-transform active:scale-95"
+                                        th:text="${cv.liked} ? '❤️' : '🤍'"></button>
+                            </form>
+                            <span th:text="${cv.likeCount}" class="font-bold text-cream-300">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div sec:authorize="isAuthenticated()" class="mt-4 w-full">
+                    <form th:action="@{/comments}" method="post" class="flex gap-3 items-center m-0">
+                        <input type="hidden" name="reviewId" th:value="${rv.review.id}" />
+                        <input type="hidden" name="sort" th:value="${currentSort}" />
+
+                        <input type="text" name="content" placeholder="Write a comment reply..." required
+                               class="bg-ink-950 text-white placeholder-cream-600 border border-ink-800 px-4 py-2 text-sm rounded-md outline-none focus:border-red-500 transition-colors flex-grow min-w-0" />
+
+                        <button type="submit" class="bg-ink-800 hover:bg-ink-700 text-cream-200 hover:text-white text-xs font-bold px-4 py-2 rounded-md border border-ink-700 cursor-pointer transition-colors shadow-sm whitespace-nowrap">
+                            Reply
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
 <div th:replace="~{footer :: footer}"></div>
-
 </body>
 </html>
+
+
 

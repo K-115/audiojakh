@@ -1,44 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
 
-
-<body class="bg-canvas">
+<body class="bg-canvas text-white">
 <div th:replace="~{navbar :: navbar}"></div>
-    <img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"/>
-    <div>
-        <h1 th:text="${album.name}">Album Name</h1>
-        <p th:text="${album.artists[0].name}">Artist Name</p>
-        <p th:text="${album.releaseDate} + ' • ' + ${album.albumType}"></p>
-        <div th:if="${currentUser != null}" style="margin-top: 20px;">
-            <form th:action="@{/favourites/album}" method="post">
-                <input type="hidden" name="id" th:value="${album.id}" />
-                <button type="submit" class="search-action-btn" style="background-color: #1DB954;">
-                    ⭐ Set as my Favourite Album
-                </button>
-            </form>
+
+<div class="max-w-[1180px] mx-auto px-10 pt-10 pb-24 box-border">
+
+    <p class="mb-8">
+        <a th:href="@{/songs}" class="text-cream-400 no-underline hover:text-white transition-colors">&larr; Back to Music Discovery</a>
+    </p>
+
+    <div class="flex flex-col md:flex-row gap-8 items-center md:items-end mb-14 bg-ink-900 border border-ink-800 p-8 rounded-xl shadow-lg">
+
+        <div class="flex-shrink-0">
+            <img th:src="${album.images != null && album.images.length > 0} ? ${album.images[0].url} : '/images/default-album.png'"
+                 alt="Album Cover" class="w-56 h-56 object-cover rounded-md shadow-2xl bg-ink-950 border border-ink-700" />
         </div>
 
+        <div class="flex-grow text-center md:text-left min-w-0">
+            <span class="eyebrow uppercase tracking-widest text-xs font-bold text-red-400" th:text="${album.albumType}">ALBUM</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mt-1 mb-2 truncate" th:text="${album.name}">Album Name</h1>
+
+            <p class="text-lg font-medium text-cream-200 m-0 mb-4">
+                By <strong class="text-white" th:text="${album.artists[0].name}">Artist Name</strong>
+                <span class="text-cream-400 mx-2">•</span>
+                <span th:text="${#strings.length(album.releaseDate) >= 4} ? ${#strings.substring(album.releaseDate, 0, 4)} : ${album.releaseDate}">2026</span>
+            </p>
+
+            <div th:if="${currentUser != null}">
+                <form th:action="@{/favourites/album}" method="post" class="m-0">
+                    <input type="hidden" name="id" th:value="${album.id}" />
+                    <button type="submit" class="bg-red-500 hover:bg-red-400 text-white font-bold px-5 py-2.5 rounded-full border-none shadow-md cursor-pointer transition-colors flex items-center gap-2">
+                        Set as my Favourite Album
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
+    <section class="mb-14">
+        <h2 class="text-2xl font-bold mb-4 text-cream-100 border-b border-ink-700 pb-2">Tracklist</h2>
 
-<h2>Tracklist</h2>
-<ul class="brand-card list-none m-0 p-0 overflow-hidden">
-    <li th:each="track, iter : ${tracks}" class="flex items-center justify-between gap-4 px-5 py-3 border-t border-ink-700 first:border-0">>
-        <div>
-            <span th:text="${iter.index + 1} + '. '">1.</span>
-            <a class="text-cream-200 no-underline hover:text-red-300 flex items-center gap-3" th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>
+        <div th:if="${tracks == null || #lists.isEmpty(tracks)}" class="brand-card p-6 text-cream-400 italic">
+            <p class="m-0">No tracks found inside this album's listing directory index catalog.</p>
         </div>
-        <span
-              th:with="totalSecs=${track.durationMs / 1000}, mins=${totalSecs / 60}, secs=${totalSecs % 60}"
-              th:text="${mins} + ':' + (${secs < 10} ? '0' + ${secs} : ${secs})">3:45</span>
 
-    </li>
-</ul>
+        <ul th:unless="${tracks == null || #lists.isEmpty(tracks)}" class="brand-card list-none m-0 p-0 overflow-hidden bg-ink-900 border border-ink-800 rounded-lg shadow-sm">
+            <li th:each="track, iter : ${tracks}"
+                class="flex items-center justify-between gap-4 px-6 py-4 border-t border-ink-800 first:border-0 hover:bg-ink-800 transition-colors duration-150">
 
-<p><a th:href="@{/songs}">&larr; Back to Music Discovery</a></p>
+                <div class="flex items-center gap-4 min-w-0">
+                    <span class="font-mono text-sm text-cream-500 w-6 text-right select-none" th:text="${iter.index + 1}">1</span>
+                    <a class="text-cream-100 font-semibold no-underline truncate hover:text-red-400 text-base"
+                       th:href="@{/songs/{id}(id=${track.id})}" th:text="${track.name}">Song Title</a>
+                </div>
+
+                <span class="font-mono text-sm text-cream-400 flex-shrink-0"
+                      th:with="totalSecs=${track.durationMs / 1000}, mins=${totalSecs / 60}, secs=${totalSecs % 60}"
+                      th:text="${mins} + ':' + (${secs < 10} ? '0' + ${secs} : ${secs})">3:45</span>
+            </li>
+        </ul>
+    </section>
+
 </div>
 
 <div th:replace="~{footer :: footer}"></div>

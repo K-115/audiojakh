@@ -30,6 +30,11 @@ public class Review {
     @Column(name = "artist_name")
     private String artistName;
 
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+
     private String content;
     private Integer rating;
 
@@ -58,10 +63,11 @@ public class Review {
 
     public Review() {}
 
-    public Review(String content, Integer rating, User user) {
+    public Review(String content, Integer rating, User user, String imageUrl) {
         this.content = content;
         this.rating = rating;
         this.user = user;
+        this.imageUrl = imageUrl;
     }
 
 }
