@@ -27,11 +27,15 @@ public class NotificationTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         driver.get("http://localhost:8081/");
+
+        wait.until(
+                ExpectedConditions.elementToBeClickable(By.linkText("Sync in"))
+        ).click();
+
         WebElement username = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.name("username"))
         );
 
-        driver.get("http://localhost:8081/");
         WebElement password = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.name("password"))
         );
