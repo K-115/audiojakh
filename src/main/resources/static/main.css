@@ -24,6 +24,22 @@ html, body {
 }
 
 /* ===== Navbar ===== */
+
+nav {
+    overflow: visible;
+}
+
+nav::after {
+    content: '';
+    position: absolute;
+    bottom: -75px;
+    left: 0;
+    right: 0;
+    height: 75px;
+    background: linear-gradient(to bottom, #0a0504, transparent);
+    pointer-events: none;
+}
+
 .navbar {
     background: #1a1a1a;
     width: 100%;
@@ -77,6 +93,17 @@ html, body {
     display: flex;
     align-items: center;
     gap: 16px;
+}
+
+/* ==== Sign in button ==== */
+.btn-signin {
+    background-color: #5a1112;
+    color: #e9ceab;
+}
+
+.btn-signin:hover {
+    background-color: #430d0d;
+    color: #e9ceab;
 }
 
 /* ===== Notification bell ===== */
