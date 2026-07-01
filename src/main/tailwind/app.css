@@ -52,7 +52,7 @@
   /* ---- Semantic aliases (use these in markup) ---- */
   --color-canvas:        #100807;  /* page background */
   --color-surface:       #1f1512;  /* raised surface */
-  --color-surface-card:  #2a1d18;  /* cards */
+  --color-surface-card:  #0a0504;  /* cards */
   --color-surface-inset: #17100d;  /* inputs / wells */
   --color-accent:        #d2282b;  /* the one accent */
   --color-hairline:      #3a2a23;  /* borders on dark */
@@ -95,6 +95,18 @@
     color: var(--color-cream-200);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+
+     /* placeholder for actual img url */
+      --bg-image: url('/images/audiojakh-bg-img.jpeg');
+
+     /* low opacity block over img */
+      background-image:
+        linear-gradient(180deg, rgba(16, 8, 7, 0.55), rgba(16, 8, 7, 0.90)),
+        var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
   }
   body.bg-canvas :is(h1, h2, h3, h4) {
     font-family: var(--font-display);
