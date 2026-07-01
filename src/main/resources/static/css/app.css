@@ -10,6 +10,8 @@
     --color-red-400: #df524f;
     --color-red-500: #d2282b;
     --color-red-700: #7c1719;
+    --color-red-800: #5a1112;
+    --color-red-900: #3d0c0d;
     --color-yellow-400: oklch(85.2% 0.199 91.936);
     --color-gray-700: oklch(37.3% 0.034 259.733);
     --color-gray-800: oklch(27.8% 0.033 256.848);
@@ -68,7 +70,7 @@
     --color-green: #4f9d69;
     --color-canvas: #100807;
     --color-surface: #1f1512;
-    --color-surface-card: #2a1d18;
+    --color-surface-card: #0a0504;
     --color-surface-inset: #17100d;
     --color-hairline: #3a2a23;
     --color-rating: #d99e36;
@@ -278,9 +280,6 @@
   .block {
     display: block;
   }
-  .block\! {
-    display: block !important;
-  }
   .contents {
     display: contents;
   }
@@ -407,23 +406,11 @@
   .w-\[160px\] {
     width: 160px;
   }
-  .w-\[190px\] {
-    width: 190px;
-  }
-  .w-\[250px\] {
-    width: 250px;
-  }
   .w-\[280px\] {
     width: 280px;
   }
-  .w-\[400px\] {
-    width: 400px;
-  }
   .w-\[450px\] {
     width: 450px;
-  }
-  .w-\[500px\] {
-    width: 500px;
   }
   .w-auto {
     width: auto;
@@ -661,6 +648,9 @@
       border-color: color-mix(in oklab, var(--color-red-500) 30%, transparent);
     }
   }
+  .border-red-900 {
+    border-color: var(--color-red-900);
+  }
   .bg-canvas {
     background-color: var(--color-canvas);
   }
@@ -693,6 +683,9 @@
   }
   .bg-red-500 {
     background-color: var(--color-red-500);
+  }
+  .bg-red-800 {
+    background-color: var(--color-red-800);
   }
   .bg-surface {
     background-color: var(--color-surface);
@@ -1487,6 +1480,12 @@
     color: var(--color-cream-200);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    --bg-image: url('/images/audiojakh-bg-img.jpeg');
+    background-image: linear-gradient(180deg, rgba(16, 8, 7, 0.55), rgba(16, 8, 7, 0.90)), var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
   body.bg-canvas :is(h1, h2, h3, h4) {
     font-family: var(--font-display);
