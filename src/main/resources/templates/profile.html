@@ -126,6 +126,8 @@
 
     <img th:if="${profile.user.profilePicture != null}"
          th:src="@{'/images/' + ${profile.user.profilePicture}}" alt="" class="w-20 h-20 rounded-full object-cover"/>
+    <img th:unless="${profile.user.profilePicture != null}"
+         th:src="@{/images/default-avatar.png}" alt="" class="w-20 h-20 rounded-full object-cover"/>
 	<div>
 		<h1 th:text="${profile.isOwnProfile} ? 'Your Profile' : |${profile.user.username}'s Profile|">User Profile</h1>
 
@@ -226,6 +228,7 @@
 
 		<div th:if="${#lists.isEmpty(profile.reviews)}" class="brand-card p-6 text-cream-400 italic">
 			<p class="m-0">No reviews posted yet.</p>
+            <img th:src="${profile.user != null && profile.user.profilePicture != null} ? @{'/images/' + ${profile.user.profilePicture}} : @{/images/default-avatar.png}" ... />
 		</div>
 
 		<div th:unless="${#lists.isEmpty(profile.reviews)}" class="flex flex-col gap-4">
