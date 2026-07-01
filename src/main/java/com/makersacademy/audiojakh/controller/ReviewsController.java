@@ -5,6 +5,7 @@ import com.makersacademy.audiojakh.model.Review;
 import com.makersacademy.audiojakh.service.CurrentUserService;
 import com.makersacademy.audiojakh.service.NotificationService;
 import com.makersacademy.audiojakh.service.SpotifyService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -244,4 +245,46 @@ public class ReviewsController {
 
         return new RedirectView("/reviews");
     }
+
+    @PostMapping("/reviews/{id}/delete")
+    @Transactional
+    public String deleteReview(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        User me = currentUserService.get();
+        if (me == null) {
+            return "redirect:/login";
+        }
+
+        reviewRepository.findById(id).ifPresentOrElse(review -> {
+            if (!review.getUser().getId().equals(me.getId())) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Unauthorized action.");
+                return;
+            }
+
+            // 1️⃣ Get all comments for this review
+            List<Comment> comments = commentRepository.findByReviewId(id);
+            List<Long> commentIds = comments.stream().map(Comment::getId).toList();
+
+            // 2️⃣ Delete comment likes
+            if (!commentIds.isEmpty()) {
+                commentLikeRepository.deleteByCommentIds(commentIds);
+            }
+
+            // 3️⃣ Delete comments
+            commentRepository.deleteByReviewId(id);
+
+            // 4️⃣ Delete review likes
+            reviewLikeRepository.deleteByReviewId(id);
+
+            // 6️⃣ Delete the review
+            reviewRepository.deleteById(id);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Review deleted successfully.");
+
+        }, () -> redirectAttributes.addFlashAttribute("errorMessage", "Review not found."));
+
+        return "redirect:/reviews";
+    }
+
+
+
 }
