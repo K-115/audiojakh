@@ -1,8 +1,13 @@
 package com.makersacademy.audiojakh.controller;
 import com.makersacademy.audiojakh.model.*;
 import com.makersacademy.audiojakh.repository.*;
+import com.makersacademy.audiojakh.model.Review;
+import com.makersacademy.audiojakh.service.CurrentUserService;
+import com.makersacademy.audiojakh.service.NotificationService;
 import com.makersacademy.audiojakh.service.SpotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
@@ -10,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import com.makersacademy.audiojakh.service.CurrentUserService;
 import se.michaelthelin.spotify.model_objects.specification.Album;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 
@@ -37,22 +43,30 @@ public class ReviewsController {
     @Autowired
     CommentLikeRepository commentLikeRepository;
 
+    @Autowired
+    FollowRepository followRepository;
+
+    @Autowired
+    NotificationService notificationService;
+
+    @Autowired
+    CurrentUserService currentUserService;
+
     private User currentUser() {
-		var auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth == null || !(auth.getPrincipal() instanceof DefaultOidcUser oidc)) {
-			return null;
-		}
-		String email = (String) oidc.getAttributes().get("email");
-		return userRepository.findUserByEmailAddress(email).orElse(null);
-	}
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof DefaultOidcUser oidc)) {
+            return null;
+        }
+        String email = (String) oidc.getAttributes().get("email");
+        return userRepository.findUserByEmailAddress(email).orElse(null);
+    }
 
-
-@GetMapping("/reviews")
-public String index(@RequestParam(value = "sort", required = false, defaultValue = "recent") String sort,
-                    Model model) {
-    User me = currentUser();
-    model.addAttribute("currentUser", me);
-    model.addAttribute("currentSort", sort);
+    @GetMapping("/reviews")
+    public String index(@RequestParam(value = "sort", required = false, defaultValue = "recent") String sort,
+                        Model model) {
+        User me = currentUserService.get();
+        model.addAttribute("currentUser", me);
+        model.addAttribute("currentSort", sort);
 
     List<Review> reviews;
     if ("liked".equalsIgnoreCase(sort)) {
@@ -108,13 +122,13 @@ public String index(@RequestParam(value = "sort", required = false, defaultValue
 
     @PostMapping("/reviews")
     public String create(@RequestParam(value = "trackId", required = false) String trackId,
-                         @RequestParam(value = "albumId", required = false) String albumId,
-                         @ModelAttribute Review review,
-                         RedirectAttributes redirectAttributes) {
-        User currentUser = currentUser();
-        User me = currentUser();
-        if (currentUser == null) {
-            return "redirect:/login";
+                               @RequestParam(value = "albumId", required = false) String albumId,
+                               @ModelAttribute Review review,
+                               @AuthenticationPrincipal OAuth2User principal,
+                               RedirectAttributes redirectAttributes) {
+        User currentUser = currentUserService.get();
+        if (principal == null) {
+            return "/login";
         }
 
         if (trackId != null && !trackId.trim().isEmpty()) {
@@ -134,7 +148,6 @@ public String index(@RequestParam(value = "sort", required = false, defaultValue
                 System.err.println("Failed to fetch track image/meta from Spotify: " + e.getMessage());
             }
         }
-
 
 
         if (trackId != null && !trackId.trim().isEmpty()) {
@@ -159,14 +172,20 @@ public String index(@RequestParam(value = "sort", required = false, defaultValue
 
         review.setUser(currentUser);
         review.setLikes(0);
-        reviewRepository.save(review);
+
+        Review savedReview = reviewRepository.save(review);
+
+        List<User> followers = followRepository.findFollowersByUserId(currentUser.getId());
+        for (User follower : followers) {
+            notificationService.createReviewNotification(follower, currentUser, savedReview);
+        }
 
         return "redirect:/reviews";
     }
 
     @PostMapping("/reviews/{id}/like")
     public String like(@PathVariable Long id) {
-        User me = currentUser();
+        User me = currentUserService.get();
         if (me != null) {
             reviewLikeRepository.findByReviewIdAndUserId(id, me.getId()).ifPresentOrElse(
                     reviewLikeRepository::delete,
@@ -225,5 +244,4 @@ public String index(@RequestParam(value = "sort", required = false, defaultValue
 
         return new RedirectView("/reviews");
     }
-
 }

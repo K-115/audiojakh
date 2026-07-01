@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{head :: head('AudioJAKH - Discover Music')}"></head>
+
+	<body class="bg-canvas">
+
+		<div th:replace="~{navbar :: navbar}"></div>
+
+		<div class="max-w-[1180px] mx-auto px-10 pb-24 box-border">
+
+			<h1>Notification's Dashboard</h1>
+
+			<div th:if="${#lists.isEmpty(notifications)}">
+				<p>You have no notifications yet.</p>
+			</div>
+
+			<ul class="notification-list" th:unless="${#lists.isEmpty(notifications)}">
+				<li th:each="n : ${notifications}"
+				    th:classappend="${!n.read} ? 'notification-unread' : 'notification-read'">
+
+					<form th:action="@{/notifications/{id}/read(id=${n.id})}" method="post" class="notification-form">
+						<button type="submit" class="notification-button">
+							<span th:if="${n.type.name() == 'FOLLOW'}"
+							      th:text="${n.message}">Someone followed you</span>
+							<span th:if="${n.type.name() == 'REVIEW'}"
+							      th:text="${n.message}">Someone left a review</span>
+							<br/>
+							<small th:text="${#temporals.format(n.createdAt, 'dd MMM yyyy, HH:mm')}">date</small>
+						</button>
+					</form>
+
+				</li>
+
+			</ul>
+
+		</div>
+	</body>
+
+	<div th:replace="~{footer :: footer}"></div>
+</html>
