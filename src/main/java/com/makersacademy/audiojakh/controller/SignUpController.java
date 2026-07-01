@@ -173,13 +173,13 @@ public class SignUpController {
             return new RedirectView("/sign_up");
         }
 
-        // Profile picture upload - validates file size (10MB limit) and generate uq filename
-        if (!image.isEmpty()) {
-            if (image.getSize() < 2000000) {
+    // Profile pic size is capped by the 1 MB multipart limit, oversize is caught by handleOversizeImage above
+        // generates unique filename
+            if (!image.isEmpty()) {
                 String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-                Path uploadDir = Paths.get("images");
-                Files.createDirectories((uploadDir));
-                Path filePath = uploadDir.resolve(filename);
+                Path uploadPath = Paths.get(uploadDir);
+                Files.createDirectories(uploadPath);
+                Path filePath = uploadPath.resolve(filename);
                 Files.copy(
                         image.getInputStream(),
                         filePath,
@@ -187,14 +187,9 @@ public class SignUpController {
                 );
                 user.setProfilePicture(filename);
             } else {
-                session.setAttribute("imageSize", true);
-                return new RedirectView("/sign_up");
+                // Set default profile pic if user doesn't provide one
+                user.setProfilePicture("default-avatar.png");
             }
-
-        } else {
-            //Set default profile picture if user doesn't provide one
-            user.setProfilePicture("default-avatar.png");
-        }
 
         // Set email from Auth0
         user.setEmailAddress(principal.getEmail());
