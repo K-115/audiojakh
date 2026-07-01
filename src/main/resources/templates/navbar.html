@@ -53,34 +53,46 @@
 				Sync in...
 			</a>
 
-			<!-- Profile icon + hover dropdown (only when logged in) -->
-			<div class="relative group" sec:authorize="isAuthenticated()">
+			<div class="navbar-right">
+				<!-- Notification bell  -->
+				<a sec:authorize="isAuthenticated()"
+				   th:href="@{/notifications}" class="notif-bell-wrap" aria-label="Notifications">
+				   <span class="notif-bell-circle">
+					  <img th:src="@{/images/bell.svg}" alt="notifications icon" class="notif-bell-icon"/>
+					  <span th:if="${hasUnread}" class="unread-dot"></span>
+				   </span>
+				</a>
+
+				<!-- Profile icon + hover dropdown (only when logged in) -->
+				<div class="relative group" sec:authorize="isAuthenticated()">
 				<span class="inline-block w-10 h-10 rounded-full bg-surface ring-2 ring-red cursor-pointer"
 				      aria-hidden="true"></span>
 
-				<div class="absolute top-full right-[-10px] w-[280px] max-h-0 overflow-hidden transition-[max-height] duration-500 group-hover:max-h-[400px] z-[1000]">
-					<div class="bg-surface border border-hairline rounded-lg shadow-pop p-5 m-2.5">
-						<div class="flex items-center gap-2.5">
-							<span class="inline-block w-10 h-10 rounded-full bg-ink-700" aria-hidden="true"></span>
-							<p class="m-0 text-sm text-cream-300" sec:authentication="principal.attributes['email']">
-								user@email.com</p>
+					<div class="absolute top-full right-[-10px] w-[280px] max-h-0 overflow-hidden transition-[max-height] duration-500 group-hover:max-h-[400px] z-[1000]">
+						<div class="bg-surface border border-hairline rounded-lg shadow-pop p-5 m-2.5">
+							<div class="flex items-center gap-2.5">
+								<span class="inline-block w-10 h-10 rounded-full bg-ink-700" aria-hidden="true"></span>
+								<p class="m-0 text-sm text-cream-300"
+								   sec:authentication="principal.attributes['email']">
+									user@email.com</p>
+							</div>
+							<hr class="border-0 h-px bg-hairline my-3"/>
+							<a th:href="@{/profile/{username}(username=${currentUsername})}"
+							   class="flex items-center text-cream-300 no-underline my-3 group/link">
+								<img th:src="@{/images/circle-user.svg}" alt="profile icon"
+								     class="w-7 h-7 object-contain bg-ink-700 p-2 rounded-full mr-4 box-content">
+								<p class="w-full m-0 group-hover/link:font-semibold">Profile</p>
+								<span class="text-xl transition-transform group-hover/link:translate-x-1">&gt;</span>
+							</a>
+							<a th:href="@{/logout}" id="sign-out"
+							   class="flex items-center text-cream-300 no-underline my-3 group/link">
+								<img th:src="@{/images/exit.svg}" alt="exit icon"
+								     class="w-7 h-7 object-contain bg-ink-700 p-2 rounded-full mr-4 box-content"
+								     style="transform: scaleX(-1);">
+								<p class="w-full m-0 group-hover/link:font-semibold">Logout</p>
+								<span class="text-xl transition-transform group-hover/link:translate-x-1">&gt;</span>
+							</a>
 						</div>
-						<hr class="border-0 h-px bg-hairline my-3"/>
-						<a th:href="@{/profile/{username}(username=${currentUsername})}"
-						   class="flex items-center text-cream-300 no-underline my-3 group/link">
-							<img th:src="@{/images/circle-user.svg}" alt="profile icon"
-							     class="w-7 h-7 object-contain bg-ink-700 p-2 rounded-full mr-4 box-content">
-							<p class="w-full m-0 group-hover/link:font-semibold">Profile</p>
-							<span class="text-xl transition-transform group-hover/link:translate-x-1">&gt;</span>
-						</a>
-						<a th:href="@{/logout}" id="sign-out"
-						   class="flex items-center text-cream-300 no-underline my-3 group/link">
-							<img th:src="@{/images/exit.svg}" alt="exit icon"
-							     class="w-7 h-7 object-contain bg-ink-700 p-2 rounded-full mr-4 box-content"
-							     style="transform: scaleX(-1);">
-							<p class="w-full m-0 group-hover/link:font-semibold">Logout</p>
-							<span class="text-xl transition-transform group-hover/link:translate-x-1">&gt;</span>
-						</a>
 					</div>
 				</div>
 			</div>

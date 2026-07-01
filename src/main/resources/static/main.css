@@ -120,13 +120,13 @@ nav::after {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #888;
+    background: #22110f;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .notif-bell-circle:hover {
-    background: #777;
+    background: #321916;
 }
 
 .notif-bell-icon {

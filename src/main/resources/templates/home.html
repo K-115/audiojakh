@@ -9,7 +9,7 @@
 
 		<div class="max-w-[1180px] mx-auto px-10 pb-24 box-border">
 
-			<header class="mt-8">
+			<header style="margin-top: 5rem;">
 				<div th:if="${currentUser != null}">
 					<p id="greeting" class="eyebrow">Welcome back,
 						<a th:href="@{/profile/{username}(username=${currentUser.username})}"
@@ -19,7 +19,7 @@
 				</div>
 			</header>
 
-			<h1 class="text-5xl leading-[1.04] mt-0 mb-10" style="margin-top: 5rem;">Trending right now</h1>
+			<h1 class="text-5xl leading-[1.04] mt-0 mb-10" style="margin-top: 4rem;">Trending right now</h1>
 
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
