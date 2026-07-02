@@ -53,7 +53,9 @@ public class NotificationService {
         notification.setType(NotificationType.REVIEW);
         notification.setTargetId(review.getId());
 
-        String itemTitle = (review.getTrack() != null ? review.getTrack().getName() : review.getAlbum().getSpotifyId());
+        String itemTitle = review.getTrackName() != null ? review.getTrackName()
+                : review.getAlbumName() != null ? review.getAlbumName()
+                : "a release";
         notification.setMessage(reviewer.getUsername() + " left a review for " + itemTitle);
 
         notification.setCreatedAt(LocalDateTime.now());
