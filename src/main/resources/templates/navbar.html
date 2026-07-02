@@ -48,6 +48,7 @@
 
 			<!-- Sign in button (only shown when logged out -->
 			<a sec:authorize="!isAuthenticated()"
+               id="sign-in"
 			   th:href="@{/oauth2/authorization/okta}"
 			   class="btn-signin relative z-10 px-4 py-2 rounded-md no-underline text-sm font-semibold transition-colors">
 				Sync in...
@@ -65,14 +66,14 @@
 
 				<!-- Profile icon + hover dropdown (only when logged in) -->
 				<div class="relative group" sec:authorize="isAuthenticated()">
-				<span class="inline-block w-10 h-10 rounded-full bg-surface ring-2 ring-red cursor-pointer"
-				      aria-hidden="true"></span>
+                    <img th:src="${currentProfilePicture != null} ? @{'/images/' + ${currentProfilePicture}} : @{/images/default-avatar.png}"
+                         alt="Your avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-red cursor-pointer"/>
 
 					<div class="absolute top-full right-[-10px] w-[280px] max-h-0 overflow-hidden transition-[max-height] duration-500 group-hover:max-h-[400px] z-[1000]">
 						<div class="bg-surface border border-hairline rounded-lg shadow-pop p-5 m-2.5">
 							<div class="flex items-center gap-2.5">
-								<span class="inline-block w-10 h-10 rounded-full bg-ink-700" aria-hidden="true"></span>
-								<p class="m-0 text-sm text-cream-300"
+                                <img th:src="${currentProfilePicture != null} ? @{'/images/' + ${currentProfilePicture}} : @{/images/default-avatar.png}"
+                                     alt="Your avatar" class="w-10 h-10 rounded-full object-cover"/>								<p class="m-0 text-sm text-cream-300"
 								   sec:authentication="principal.attributes['email']">
 									user@email.com</p>
 							</div>
