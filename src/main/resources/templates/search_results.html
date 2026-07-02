@@ -28,7 +28,7 @@
 				<article th:each="member : ${userResults}"
 				         class="brand-card p-4 flex flex-col items-center text-center hover:bg-ink-800 transition-colors duration-200">
 					<a th:href="@{/profile/{username}(username=${member.username})}" >
-					<img th:src="${member.profilePicture != null} ? ${member.profilePicture} : '/images/default-avatar.png'"
+                        <img th:src="${member.profilePicture != null} ? @{'/images/' + ${member.profilePicture}} : @{/images/default-avatar.png}"
 					     alt="Member Avatar" class="w-20 h-20 rounded-full object-cover border border-ink-700 shadow-md mb-3" />
 					<h4 class="m-0 text-sm font-bold truncate w-full">
 						<a th:href="@{/profile/{username}(username=${member.username})}" th:text="${member.username}"

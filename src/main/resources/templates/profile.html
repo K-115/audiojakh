@@ -228,7 +228,6 @@
 
 		<div th:if="${#lists.isEmpty(profile.reviews)}" class="brand-card p-6 text-cream-400 italic">
 			<p class="m-0">No reviews posted yet.</p>
-            <img th:src="${profile.user != null && profile.user.profilePicture != null} ? @{'/images/' + ${profile.user.profilePicture}} : @{/images/default-avatar.png}" ... />
 		</div>
 
 		<div th:unless="${#lists.isEmpty(profile.reviews)}" class="flex flex-col gap-4">
@@ -236,8 +235,8 @@
 			         class="brand-card p-5 flex gap-4 items-start bg-ink-900 border border-ink-800 rounded-lg text-white">
 
 				<div class="flex-shrink-0">
-					<img th:src="${profile.user != null && profile.user.profilePicture != null} ? ${profile.user.profilePicture} : '/images/default-avatar.png'"
-					     alt="User Avatar" class="w-11 h-11 rounded-full object-cover border border-ink-700 shadow-sm" />
+                    <img th:src="${profile.user != null && profile.user.profilePicture != null} ? @{'/images/' + ${profile.user.profilePicture}} : @{/images/default-avatar.png}"
+                         alt="User Avatar" class="w-11 h-11 rounded-full object-cover border border-ink-700 shadow-sm" />
 				</div>
 
 				<div class="flex-grow min-w-0">

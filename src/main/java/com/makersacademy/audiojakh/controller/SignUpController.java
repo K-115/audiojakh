@@ -2,7 +2,6 @@ package com.makersacademy.audiojakh.controller;
 
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.UserRepository;
-import jakarta.servlet.annotation.HandlesTypes;
 import org.springframework.beans.factory.annotation.Value;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -212,7 +211,7 @@ public class SignUpController {
     public RedirectView handleOversizeImage(HttpSession session) {
         session.setAttribute("imageSize", true);
 
-        return new RedirectView("/sign-up");
+        return new RedirectView("/sign_up");
     }
 }
 
