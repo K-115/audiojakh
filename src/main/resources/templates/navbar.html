@@ -1,73 +1,104 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<!-- audioJAKH navbar — Tailwind. Replaces templates/navbar.html. -->
-<body>
+	<!-- audioJAKH navbar — Tailwind. Replaces templates/navbar.html. -->
+	<body>
 
-<nav th:fragment="navbar"
-     class="sticky top-0 z-[1000] flex items-center gap-10 px-10 py-3.5 bg-ink-950/85 backdrop-blur border-b border-hairline box-border">
+		<nav th:fragment="navbar"
+		     class="sticky top-0 z-[1000] flex items-center gap-10 px-10 py-3.5 border-b border-hairline box-border"
+		     style="background-color: #0a0504;">
 
-    <!-- Logo / home -->
-    <a th:href="@{/}" class="mr-auto flex items-center gap-2.5 no-underline">
-        <img class="w-11 h-11 rounded-full object-cover" th:src="@{/images/audioJAKH_logo.gif}" alt="audioJAKH logo"/>
-        <span class="font-display font-extrabold text-xl tracking-tight text-cream-200">audio<span class="text-red">JAKH</span></span>
-    </a>
+			<!-- Logo / home -->
+			<a th:href="@{/}" class="mr-auto flex items-center gap-2.5 no-underline">
+				<img class="w-11 h-11 rounded-full object-cover" th:src="@{/images/audioJAKH_logo.gif}"
+				     alt="audioJAKH logo"/>
+				<span class="font-display font-extrabold text-xl tracking-tight text-cream-200">audio<span
+						class="text-red">JAKH</span></span>
+			</a>
 
 
-    <ul class="flex items-center gap-1.5 list-none m-0 p-0 text-sm font-semibold">
-        <li><a th:href="@{/}"
-               th:classappend="${currentPath == '/'} ? 'text-cream-200' : 'text-cream-400 hover:text-cream-200'"
-               class="px-3 py-2 rounded-md no-underline hover:bg-ink-700 transition-colors">Home</a></li>
-        <li><a th:href="@{/songs}"
-               th:classappend="${#strings.startsWith(currentPath, '/songs')} ? 'text-cream-200' : 'text-cream-400 hover:text-cream-200'"
-               class="px-3 py-2 rounded-md no-underline hover:bg-ink-700 transition-colors">Music</a></li>
-        <li><a th:href="@{/reviews}"
-               th:classappend="${#strings.startsWith(currentPath, '/reviews')} ? 'text-cream-200' : 'text-cream-400 hover:text-cream-200'"
-               class="px-3 py-2 rounded-md no-underline hover:bg-ink-700 transition-colors">Reviews</a></li>
-        <li><a th:href="@{/members}"
-               th:classappend="${#strings.startsWith(currentPath, '/members')} ? 'text-cream-200' : 'text-cream-400 hover:text-cream-200'"
-               class="px-3 py-2 rounded-md no-underline hover:bg-ink-700 transition-colors">Members</a></li>
-    </ul>
+			<ul class="flex items-center gap-1.5 list-none m-0 p-0 text-sm font-semibold">
+				<li><a th:href="@{/}"
+				       th:classappend="${currentPath == '/'} ? 'text-cream-200' : 'text-cream-400 hover:text-cream-200'"
+				       class="px-3 py-2 rounded-md no-underline hover:bg-ink-700 transition-colors">Home</a></li>
+				<li><a th:href="@{/songs}"
+				       th:classappend="${#strings.startsWith(currentPath, '/songs')} ? 'text-cream-200' : 'text-cream-400 hover:text-cream-200'"
+				       class="px-3 py-2 rounded-md no-underline hover:bg-ink-700 transition-colors">Music</a></li>
+				<li><a th:href="@{/reviews}"
+				       th:classappend="${#strings.startsWith(currentPath, '/reviews')} ? 'text-cream-200' : 'text-cream-400 hover:text-cream-200'"
+				       class="px-3 py-2 rounded-md no-underline hover:bg-ink-700 transition-colors">Reviews</a></li>
+				<li><a th:href="@{/members}"
+				       th:classappend="${#strings.startsWith(currentPath, '/members')} ? 'text-cream-200' : 'text-cream-400 hover:text-cream-200'"
+				       class="px-3 py-2 rounded-md no-underline hover:bg-ink-700 transition-colors">Members</a></li>
+			</ul>
 
-    <!-- Member search -->
-    <form class="relative inline-flex items-center w-full max-w-[220px]" th:action="@{/search}" method="get">
-        <input type="text" name="query" minlength="3" placeholder="Search…" required
-               class="w-full bg-surface-inset border border-hairline rounded-pill text-cream-200 text-[13px] pl-4 pr-9 py-2 outline-none focus:border-red-700 placeholder:text-ink-400"/>
-        <button class="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-0 p-0 text-cream-400 hover:text-cream-200 cursor-pointer flex" type="submit" aria-label="Search">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-            </svg>
-        </button>
-    </form>
+			<!-- Search bar -->
+			<form class="relative inline-flex items-center w-full max-w-[220px]" th:action="@{/search}" method="get">
+				<input type="text" name="query" minlength="3" placeholder="Search…" required
+				       class="w-full border border-hairline rounded-pill text-cream-200 text-[13px] pl-4 pr-9 py-2 outline-none focus:border-red-700 placeholder:text-ink-400"
+				       style="background-color: #0a0504;"/>
+				<button class="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-0 p-0 text-cream-400 hover:text-cream-200 cursor-pointer flex"
+				        type="submit" aria-label="Search">
+					<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+					     viewBox="0 0 16 16">
+						<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+					</svg>
+				</button>
+			</form>
 
-    <!-- Profile icon + hover dropdown (only when logged in) -->
-    <div class="relative group" sec:authorize="isAuthenticated()">
-        <span class="inline-block w-10 h-10 rounded-full bg-surface ring-2 ring-red cursor-pointer" aria-hidden="true"></span>
+			<!-- Sign in button (only shown when logged out -->
+			<a sec:authorize="!isAuthenticated()"
+			   th:href="@{/oauth2/authorization/okta}"
+			   class="btn-signin relative z-10 px-4 py-2 rounded-md no-underline text-sm font-semibold transition-colors">
+				Sync in...
+			</a>
 
-        <div class="absolute top-full right-[-10px] w-[280px] max-h-0 overflow-hidden transition-[max-height] duration-500 group-hover:max-h-[400px] z-[1000]">
-            <div class="bg-surface border border-hairline rounded-lg shadow-pop p-5 m-2.5">
-                <div class="flex items-center gap-2.5">
-                    <span class="inline-block w-10 h-10 rounded-full bg-ink-700" aria-hidden="true"></span>
-                    <p class="m-0 text-sm text-cream-300" sec:authentication="principal.attributes['email']">user@email.com</p>
-                </div>
-                <hr class="border-0 h-px bg-hairline my-3"/>
-                <a th:href="@{/profile/{username}(username=${currentUsername})}"
-                   class="flex items-center text-cream-300 no-underline my-3 group/link">
-                    <img th:src="@{/images/circle-user.svg}" alt="profile icon" class="w-7 h-7 object-contain bg-ink-700 p-2 rounded-full mr-4 box-content">
-                    <p class="w-full m-0 group-hover/link:font-semibold">Profile</p>
-                    <span class="text-xl transition-transform group-hover/link:translate-x-1">&gt;</span>
-                </a>
-                <a th:href="@{/logout}" id="sign-out"
-                   class="flex items-center text-cream-300 no-underline my-3 group/link">
-                    <img th:src="@{/images/exit.svg}" alt="exit icon" class="w-7 h-7 object-contain bg-ink-700 p-2 rounded-full mr-4 box-content" style="transform: scaleX(-1);">
-                    <p class="w-full m-0 group-hover/link:font-semibold">Logout</p>
-                    <span class="text-xl transition-transform group-hover/link:translate-x-1">&gt;</span>
-                </a>
-            </div>
-        </div>
-    </div>
+			<div class="navbar-right">
+				<!-- Notification bell  -->
+				<a sec:authorize="isAuthenticated()"
+				   th:href="@{/notifications}" class="notif-bell-wrap" aria-label="Notifications">
+				   <span class="notif-bell-circle">
+					  <img th:src="@{/images/bell.svg}" alt="notifications icon" class="notif-bell-icon"/>
+					  <span th:if="${hasUnread}" class="unread-dot"></span>
+				   </span>
+				</a>
 
-</nav>
+				<!-- Profile icon + hover dropdown (only when logged in) -->
+				<div class="relative group" sec:authorize="isAuthenticated()">
+				<span class="inline-block w-10 h-10 rounded-full bg-surface ring-2 ring-red cursor-pointer"
+				      aria-hidden="true"></span>
 
-</body>
+					<div class="absolute top-full right-[-10px] w-[280px] max-h-0 overflow-hidden transition-[max-height] duration-500 group-hover:max-h-[400px] z-[1000]">
+						<div class="bg-surface border border-hairline rounded-lg shadow-pop p-5 m-2.5">
+							<div class="flex items-center gap-2.5">
+								<span class="inline-block w-10 h-10 rounded-full bg-ink-700" aria-hidden="true"></span>
+								<p class="m-0 text-sm text-cream-300"
+								   sec:authentication="principal.attributes['email']">
+									user@email.com</p>
+							</div>
+							<hr class="border-0 h-px bg-hairline my-3"/>
+							<a th:href="@{/profile/{username}(username=${currentUsername})}"
+							   class="flex items-center text-cream-300 no-underline my-3 group/link">
+								<img th:src="@{/images/circle-user.svg}" alt="profile icon"
+								     class="w-7 h-7 object-contain bg-ink-700 p-2 rounded-full mr-4 box-content">
+								<p class="w-full m-0 group-hover/link:font-semibold">Profile</p>
+								<span class="text-xl transition-transform group-hover/link:translate-x-1">&gt;</span>
+							</a>
+							<a th:href="@{/logout}" id="sign-out"
+							   class="flex items-center text-cream-300 no-underline my-3 group/link">
+								<img th:src="@{/images/exit.svg}" alt="exit icon"
+								     class="w-7 h-7 object-contain bg-ink-700 p-2 rounded-full mr-4 box-content"
+								     style="transform: scaleX(-1);">
+								<p class="w-full m-0 group-hover/link:font-semibold">Logout</p>
+								<span class="text-xl transition-transform group-hover/link:translate-x-1">&gt;</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</nav>
+
+
+	</body>
 </html>
