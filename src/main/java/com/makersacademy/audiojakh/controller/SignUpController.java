@@ -2,12 +2,14 @@ package com.makersacademy.audiojakh.controller;
 
 import com.makersacademy.audiojakh.model.User;
 import com.makersacademy.audiojakh.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -24,6 +26,8 @@ import java.time.LocalDate;
 public class SignUpController {
     @Autowired
     UserRepository userRepository;
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     @GetMapping("/sign_up")
     public ModelAndView signUp(HttpSession session){
@@ -168,13 +172,13 @@ public class SignUpController {
             return new RedirectView("/sign_up");
         }
 
-        // Profile picture upload - validates file size (10MB limit) and generate uq filename
-        if (!image.isEmpty()) {
-            if (image.getSize() < 2000000) {
+    // Profile pic size is capped by the 1 MB multipart limit, oversize is caught by handleOversizeImage above
+        // generates unique filename
+            if (!image.isEmpty()) {
                 String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-                Path uploadDir = Paths.get("images");
-                Files.createDirectories((uploadDir));
-                Path filePath = uploadDir.resolve(filename);
+                Path uploadPath = Paths.get(uploadDir);
+                Files.createDirectories(uploadPath);
+                Path filePath = uploadPath.resolve(filename);
                 Files.copy(
                         image.getInputStream(),
                         filePath,
@@ -182,14 +186,9 @@ public class SignUpController {
                 );
                 user.setProfilePicture(filename);
             } else {
-                session.setAttribute("imageSize", true);
-                return new RedirectView("/sign_up");
+                // Set default profile pic if user doesn't provide one
+                user.setProfilePicture("default-avatar.png");
             }
-
-        } else {
-            //Set default profile picture if user doesn't provide one
-            user.setProfilePicture("default-avatar.png");
-        }
 
         // Set email from Auth0
         user.setEmailAddress(principal.getEmail());
@@ -206,6 +205,13 @@ public class SignUpController {
         }
 
         return new RedirectView("/");
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public RedirectView handleOversizeImage(HttpSession session) {
+        session.setAttribute("imageSize", true);
+
+        return new RedirectView("/sign_up");
     }
 }
 
